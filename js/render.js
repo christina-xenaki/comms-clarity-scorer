@@ -227,13 +227,7 @@ function renderResults(r) {
   }
 
   // Worst offenders
-  var ranked = r.sentenceData.map(function (d) {
-    var overBy = Math.max(0, d.wordCount - r.limit);
-    var badness = overBy + d.buzz * 3 + d.hedge * 2 + d.superlative * 2 + d.nominal * 2 + d.acronym;
-    return { d: d, badness: badness, overBy: overBy };
-  }).filter(function (x) { return x.badness > 0; })
-    .sort(function (a, b) { return b.badness - a.badness; })
-    .slice(0, 5);
+  var ranked = rankWorstOffenders(r);
 
   elWorstList.innerHTML = "";
   if (ranked.length === 0) {
@@ -258,35 +252,54 @@ function renderResults(r) {
   renderRewriteSuggestions(r);
   elAnnotated.innerHTML = buildAnnotatedHtml(r);
   lastReportText = buildReportText(r);
+  lastResult = r;
 
   elAnnouncer.textContent = "Analysis complete. Grade " + overallGradeInfo.ariaLabel.replace("Grade ", "") + ", score " + r.overall + " out of 100. " + elHeadline.textContent;
 }
 
+function rankWorstOffenders(r) {
+  return r.sentenceData.map(function (d) {
+    var overBy = Math.max(0, d.wordCount - r.limit);
+    var badness = overBy + d.buzz * 3 + d.hedge * 2 + d.superlative * 2 + d.nominal * 2 + d.acronym;
+    return { d: d, badness: badness, overBy: overBy };
+  }).filter(function (x) { return x.badness > 0; })
+    .sort(function (a, b) { return b.badness - a.badness; })
+    .slice(0, 5);
+}
+
 // Reuses the same rewrite candidates as renderRewriteSuggestions() — just matched
 // back to a specific worst-offender sentence by position, instead of listed loose.
-function rewriteHtmlForSentence(r, sentence) {
+function findRewriteForSentence(r, sentence) {
   function within(x) { return x.start >= sentence.start && x.end <= sentence.end; }
   var found = null;
   r.passiveSplit.withAgent.concat(r.nominalRewrites, r.wordSwapRewrites).some(function (x) {
-    if (within(x)) { found = "<span class=\"rewrite-tier\">Suggested rewrite</span><br>" +
-      "<span class=\"rewrite-original\">" + escapeHtml(x.original) + "</span> <span class=\"rewrite-arrow\">&rarr;</span> <span class=\"rewrite-new\">" + escapeHtml(x.rewrite) + "</span>"; }
+    if (within(x)) { found = { kind: "rewrite", original: x.original, rewrite: x.rewrite }; }
     return found;
   });
   if (!found) {
     r.passiveSplit.noAgent.some(function (x) {
-      if (within(x)) { found = "<span class=\"rewrite-tier\">Worth asking yourself</span><br>" +
-        "<span class=\"rewrite-question\">Who did it? If you'd rather not say, make that a deliberate choice rather than an accident of grammar.</span>"; }
+      if (within(x)) { found = { kind: "question", question: "Who did it? If you'd rather not say, make that a deliberate choice rather than an accident of grammar." }; }
       return found;
     });
   }
   if (!found) {
     r.emptyQuotes.some(function (q) {
-      if (within(q)) { found = "<span class=\"rewrite-tier\">Worth asking yourself</span><br>" +
-        "<span class=\"rewrite-question\">A useful quote gives a reason, a number, or a next step. This gives none. Ask your spokesperson why you actually did this.</span>"; }
+      if (within(q)) { found = { kind: "question", question: "A useful quote gives a reason, a number, or a next step. This gives none. Ask your spokesperson why you actually did this." }; }
       return found;
     });
   }
-  return found ? "<div class=\"worst-rewrite\">" + found + "</div>" : "";
+  return found;
+}
+
+function rewriteHtmlForSentence(r, sentence) {
+  var found = findRewriteForSentence(r, sentence);
+  if (!found) return "";
+  var inner = found.kind === "rewrite"
+    ? "<span class=\"rewrite-tier\">Suggested rewrite</span><br>" +
+      "<span class=\"rewrite-original\">" + escapeHtml(found.original) + "</span> <span class=\"rewrite-arrow\">&rarr;</span> <span class=\"rewrite-new\">" + escapeHtml(found.rewrite) + "</span>"
+    : "<span class=\"rewrite-tier\">Worth asking yourself</span><br>" +
+      "<span class=\"rewrite-question\">" + escapeHtml(found.question) + "</span>";
+  return "<div class=\"worst-rewrite\">" + inner + "</div>";
 }
 
 function renderRewriteSuggestions(r) {
@@ -404,7 +417,8 @@ function buildAnnotatedHtml(r) {
     var nonPlain = active.filter(function (a) { return !a.plain; });
     var tipId = nonPlain.length ? "hl-tip-" + (tipCounter++) : null;
     nonPlain.forEach(function (rr) {
-      open += "<mark class=\"hl " + rr.cls + "\" tabindex=\"0\" role=\"button\"" + (tipId ? " aria-describedby=\"" + tipId + "\"" : "") + ">";
+      var isFirstFragment = segStart === rr.start;
+      open += "<mark class=\"hl " + rr.cls + "\" tabindex=\"0\" role=\"button\"" + (tipId ? " aria-describedby=\"" + tipId + "\"" : "") + (isFirstFragment ? " data-first-frag=\"true\"" : "") + ">";
       close = "</mark>" + close;
     });
     if (wrapBoilerplate) close += "</span>";
@@ -439,10 +453,7 @@ function buildReportText(r) {
   if (r.regulatedEnabled) lines.push("Regulated claims (not counted in the overall grade): " + Math.round(r.regulatedScore) + "/100 — " + r.regulatedMatches.length + " term(s)");
   lines.push("");
   lines.push("Top fixes:");
-  var ranked = r.sentenceData.map(function (d) {
-    var overBy = Math.max(0, d.wordCount - r.limit);
-    return { d: d, badness: overBy + d.buzz * 3 + d.hedge * 2 + d.superlative * 2 + d.nominal * 2 + d.acronym };
-  }).filter(function (x) { return x.badness > 0; }).sort(function (a, b) { return b.badness - a.badness; }).slice(0, 5);
+  var ranked = rankWorstOffenders(r);
   if (ranked.length === 0) lines.push("- None — nice and tight.");
   else ranked.forEach(function (item, i) { lines.push((i + 1) + ". " + item.d.clippedText.trim()); });
   lines.push("");

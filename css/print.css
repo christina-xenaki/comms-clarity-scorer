@@ -1,0 +1,49 @@
+@media print {
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; color-adjust: exact; }
+
+  /* No navigation, no buttons. */
+  .sector-bar,
+  #input-section > label,
+  #input-section textarea,
+  .variant-row,
+  #analyze-btn,
+  .privacy-note,
+  .config-status,
+  .tap-hint,
+  #view-level-group,
+  #copy-report-btn,
+  .export-actions,
+  .share-actions,
+  .why-toggle,
+  mark.hl .tip {
+    display: none !important;
+  }
+
+  /* Show the full report on paper regardless of the on-screen detail level. */
+  #results-panel,
+  #boilerplate-note,
+  #sub-scores,
+  #worst-offenders,
+  #rewrite-suggestions,
+  #annotated-text-section {
+    display: block !important;
+  }
+  .why-panel[hidden] { display: block !important; }
+  .why-panel { border-left-color: #000; opacity: 1; }
+
+  body { padding: 0 !important; background: #fff !important; color: #000 !important; }
+  .layout { display: block !important; max-width: 100% !important; padding: 0 !important; }
+  .col-scores { position: static !important; }
+  section { margin-bottom: 1rem; }
+
+  a[href]::after { content: " (" attr(href) ")"; font-size: 0.75em; font-weight: normal; }
+
+  /* Word/phrase-level highlights already carry their category in the underline
+     pattern (dotted/wavy/dashed/double), not colour alone, so they survive
+     greyscale as-is. The two container-level categories rely on background tint
+     only on screen, which paper can't guarantee, so give them a text label here
+     instead of leaning on colour. */
+  mark.hl-long, mark.hl-quote { background: transparent !important; text-decoration-line: none; }
+  mark.hl-long[data-first-frag]::before { content: "[Long sentence] "; font-weight: 700; }
+  mark.hl-quote[data-first-frag]::before { content: "[Empty quote] "; font-weight: 700; }
+}

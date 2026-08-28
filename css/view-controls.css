@@ -37,6 +37,8 @@ body[data-view="glance"] #sub-scores,
 body[data-view="glance"] #worst-offenders,
 body[data-view="glance"] #rewrite-suggestions,
 body[data-view="glance"] #copy-report-btn,
+body[data-view="glance"] .export-actions,
+body[data-view="glance"] .share-actions,
 body[data-view="glance"] #annotated-text-section,
 body[data-view="working"] #annotated-text-section {
   display: none;

@@ -15,6 +15,7 @@
 <link rel="stylesheet" href="css/rewrites.css">
 <link rel="stylesheet" href="css/highlights.css">
 <link rel="stylesheet" href="css/responsive.css">
+<link rel="stylesheet" href="css/print.css" media="print">
 </head>
 <body>
 
@@ -71,7 +72,7 @@
         <span><span class="swatch hl-long" aria-hidden="true">Aa</span> Long sentence — background tint</span>
         <span><span class="swatch hl-quote" aria-hidden="true">Aa</span> Empty quote — background tint</span>
       </div>
-      <p style="margin-top:-0.5rem;color:var(--color-muted);font-size:0.85rem;">Tap a highlight for the explanation. Faded text is boilerplate (an "About", "Notes to editors"/references, or contact block) — excluded from your score and graded separately below.</p>
+      <p class="tap-hint" style="margin-top:-0.5rem;color:var(--color-muted);font-size:0.85rem;">Tap a highlight for the explanation. Faded text is boilerplate (an "About", "Notes to editors"/references, or contact block) — excluded from your score and graded separately below.</p>
       <div id="annotated-output" class="card"></div>
     </section>
   </div>
@@ -205,6 +206,19 @@
       </section>
 
       <button id="copy-report-btn" type="button" class="secondary">Copy report</button>
+
+      <div class="export-actions">
+        <button id="export-email-btn" type="button" class="secondary">Copy for email</button>
+        <button id="export-slack-btn" type="button" class="secondary">Copy for Slack</button>
+      </div>
+
+      <div class="share-actions">
+        <button id="share-score-btn" type="button" class="secondary" aria-expanded="false" aria-controls="share-score-options">Share score</button>
+        <div id="share-score-options" class="share-score-options" hidden>
+          <a id="share-whatsapp-link" class="secondary-link" href="https://wa.me/" target="_blank" rel="noopener noreferrer" aria-label="Share to WhatsApp (opens in a new tab)">Share to WhatsApp</a>
+          <button id="share-slack-btn" type="button" class="secondary">Share to Slack</button>
+        </div>
+      </div>
     </section>
   </div>
 </main>
@@ -222,6 +236,7 @@
 <script src="js/consistency.js"></script>
 <script src="js/analyze.js"></script>
 <script src="js/render.js"></script>
+<script src="js/export.js"></script>
 <script src="js/events.js"></script>
 </body>
 </html>

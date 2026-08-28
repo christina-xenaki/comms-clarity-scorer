@@ -21,10 +21,17 @@ var elWorstList = $("worst-offenders-list");
 var elRewriteList = $("rewrite-suggestions-list");
 var elAnnotated = $("annotated-output");
 var elCopyBtn = $("copy-report-btn");
+var elExportEmailBtn = $("export-email-btn");
+var elExportSlackBtn = $("export-slack-btn");
+var elShareScoreBtn = $("share-score-btn");
+var elShareOptions = $("share-score-options");
+var elShareWhatsappLink = $("share-whatsapp-link");
+var elShareSlackBtn = $("share-slack-btn");
 var elAnnouncer = $("results-announcer");
 var elViewLevelRadios = document.querySelectorAll('input[name="view-level"]');
 
 var lastReportText = "";
+var lastResult = null;
 
 function setViewLevel(level) {
   document.body.setAttribute("data-view", level);
