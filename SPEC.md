@@ -30,28 +30,29 @@ Green highlights alongside red ones. Detect and credit:
 1. **Numbers with a baseline** — "up from 12% last year" scores higher than a bare "34%"
 2. **Named actor + active verb + object** — the structural opposite of passive
 3. **Precise verbs** — cut, doubled, delayed, acquired, halved, closed (configurable list)
-4. **Specific timeframes** — "from 3 March" rather than "in the coming months"
-5. **Informative quotes** — contain a reason, a number, or a decision
-6. **Plain word choices** where a jargon alternative existed
+4. **Informative quotes** — contain a reason, a number, or a decision
+5. **Plain word choices** where a jargon alternative existed
 
 Sub-score: "Strengths". Contributes positively to the overall grade.
+
+A specific timeframe ("from 3 March" rather than "in the coming months") is already credited by the concreteness check, so it isn't scored a second time here. A vague timeframe is flagged as a caution in this card but doesn't move the score.
 
 ---
 
 ## C. Concrete rewrites
 
-Three tiers. The tier must be visible to the user so the tool never pretends to more certainty than it has.
+Three levels of confidence. Each fix is labelled with which one applies, so the tool never pretends to more certainty than it has.
 
-### Tier 1 — automatic rewrite, show the fixed text
+### "Suggested rewrite" — automatic rewrite, show the fixed text
 - **Passive with named agent:** "was impacted by the delay" → "the delay impacted"
 - **Nominalisations:** "the implementation of the policy" → "implementing the policy". Needs a noun→verb map in config (implementation→implement, provision→provide, utilisation→use, application→apply, consideration→consider)
 - **Word swaps:** substitution dictionary in config. leverage→use, facilitate→help, commence→start, in order to→to, at this point in time→now, is designed to→does, utilise→use, prior to→before
 
-### Tier 2 — guided question, no automatic fix
+### "Worth asking yourself" — guided question, no automatic fix
 - **Passive with no agent:** "Mistakes were made." → "Who made them? If you'd rather not say, make that a deliberate choice rather than an accident of grammar."
 - **Empty quote:** "A useful quote gives a reason, a number, or a next step. This gives none. Ask your spokesperson why you actually did this."
 
-### Tier 3 — flag only, no rewrite offered
+### "Flag only" — no rewrite offered
 - Superlatives, absolute claims, regulated claims. The fix is factual or legal, not linguistic.
 
 ---
@@ -59,7 +60,7 @@ Three tiers. The tier must be visible to the user so the tool never pretends to 
 ## D. Inverted pyramid checks
 
 1. **Fact depth** — word position of the first concrete fact. Report it: "Your first specific detail appears at word 187."
-2. **Lede completeness** — does sentence one carry who, what, and when?
+2. **Lede completeness** — does sentence one carry a who and a when? ("What" isn't checked separately — reliably verifying a sentence states something meaningful needs real language understanding, which is out of scope for a regex-based tool.)
 3. **Quote position** — flag a quote appearing before the news is stated
 4. **Density decline** — information should thin toward the end; flag if the final paragraph is denser than the first
 
@@ -147,7 +148,6 @@ Every threshold shows where it came from, via the hover/tap explainer.
 - UK Government Digital Service style guide
 - Reuters Handbook of Journalism (free online)
 - Helen Sword on nominalisations ("zombie nouns")
-- Steven Pinker, *The Sense of Style* — the curse of knowledge
 - Orwell, *Politics and the English Language* (1946)
 - Inverted pyramid — standard news writing convention
 
