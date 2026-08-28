@@ -35,7 +35,7 @@ Every check's card body is split into up to three labelled parts, styled differe
 
 - **Finding** — the factual observation: what the tool actually counted or detected. Normal size, normal contrast.
 - **Action** — what to do about it, in plain imperative language ("Swap them for concrete facts," "No action needed"). Its label is in the accent colour so it's easy to scan for across cards.
-- **Rationale** — the generic background: why the check exists, where a threshold came from, or a link to further reading. This is reference material you only need once, not every time, so it's deliberately **smaller, indented, lower-contrast, and collapsed by default** inside its own `<details>` toggle — click "Rationale" on any card to expand it.
+- **Rationale** — the generic background: why the check exists, where a threshold came from, or a link to further reading. This is reference material you only need once, not every time, so it's deliberately **smaller, indented, lower-contrast, and collapsed by default**, behind a pill-shaped **"Why this check exists"** button under the Finding/Action text. The button is a real `<button>`, reachable by Tab and activated by Enter/Space, with `aria-expanded` reflecting its state and `aria-controls` pointing at the panel it reveals, so a screen reader announces it correctly. Its chevron rotates on open and respects `prefers-reduced-motion`. For nine checks — concreteness, passive voice, sentence length, readability, hedging, nominalisation, superlatives, inverted pyramid, and regulated claims — this text is quoted verbatim from `COPY.md`, the repo's canonical interface-copy source; the rest keep this document's own wording.
 
 Where a claim is genuinely sourced (Flesch-Kincaid, the inverted-pyramid convention, Helen Sword's "zombie nouns," Oxford spelling, a sector's regulator), the Rationale links to it — opening in a new tab, with an accessible label describing the destination rather than a bare "click here." Where a number is a convention rather than a citable finding (the 20% passive-voice threshold, this tool's own scoring targets), the Rationale says so explicitly and deliberately carries **no** link, so a link's presence or absence is itself an honest signal of how sourced a number is.
 
@@ -154,7 +154,7 @@ score = 100 − max(0, avgLength − 15) × 2.5 − percentOverLimit × 1
 grade = 0.39 × (words ÷ sentences) + 11.8 × (syllables ÷ words) − 15.59
 ```
 
-**Source:** Flesch (1948); Kincaid et al. (1975), developed for the US Navy — one of the few numbers in this tool with a real citation, shown in the card itself. Syllables are estimated with a standard vowel-group heuristic (not a dictionary lookup), so it can be off by one syllable on unusual words — normal for this kind of estimator.
+**Source:** Flesch (1948); Kincaid et al. (1975), developed for the US Navy — one of the few numbers in this tool with a real citation, documented here even though the in-app card's own rationale (from `COPY.md`) states it more plainly rather than naming the paper. Syllables are estimated with a standard vowel-group heuristic (not a dictionary lookup), so it can be off by one syllable on unusual words — normal for this kind of estimator.
 
 **Scoring:** the grade is compared against a target (`targetReadabilityGrade`, default **8** — roughly newspaper level) and penalised above that:
 
@@ -263,7 +263,7 @@ A single composite check made of four independent sub-signals, each worth `25` p
 3. **Quote position** — flagged if the first quote in the text appears before the first concrete fact, i.e. before any news has actually been stated.
 4. **Density decline** — concrete-signal density (per 100 words) is compared between the first and last non-boilerplate paragraphs. Flagged if the last paragraph is *denser* than the first — proper inverted-pyramid structure should thin out toward the end, not thicken.
 
-**Source note shown in the card:** the inverted pyramid itself is a standard, long-established news-writing convention; the four specific checks above are this tool's own operationalisation of that convention, not a cited formula — said plainly rather than dressed up as more rigorous than it is.
+The inverted pyramid itself is a standard, long-established news-writing convention; the four specific checks above are this tool's own operationalisation of that convention, not a cited formula. The in-app card's rationale (from `COPY.md`) puts this more plainly: *"News writing puts the most important information first, so an editor can cut from the bottom without losing the story. If your first concrete fact arrives late, the structure is working against you."*
 
 ---
 
@@ -287,7 +287,7 @@ score = 100 − matchCount × regulatedClaimPenaltyPerMatch (default 15)
 ```
 This score is always shown in its own card when a sector is active, but **it is never part of the overall weighted average, under any sector** — `regulatedClaims` isn't a key in `weights` at all. Switching from General to Healthcare on the same text changes the Regulated Claims card's own number but leaves the Overall grade exactly where it was. This is a deliberate design choice: a regulated-claim match is a compliance flag, not a clarity defect, and folding it into the clarity score would conflate two different questions ("is this well written" vs. "should legal see this first").
 
-Each sector config also carries a `sectorName`, a `disclaimer` (extending the base disclaimer with sector-specific regulatory context) shown as the card's **Action**, and a `sourceUrl` pointing at the relevant regulator or code, shown as a clickable link in the card's **Rationale**. **None of this is legal advice** — every sector card repeats that a flagged term is a prompt to consult your own legal/compliance/medical-affairs team, not a verdict.
+Each sector config also carries a `sectorName`, a `disclaimer` (extending the base disclaimer with sector-specific regulatory context) shown as the card's **Action**, and a `sourceUrl` pointing at the relevant regulator or code — currently kept in the config for reference but not yet rendered as a link in the card (its Rationale is `COPY.md`'s fixed regulated-claims text instead: *"These words draw scrutiny in this sector. The flag is a prompt to check with the people who own that risk in your organisation. It is not a compliance decision."*). **None of this is legal advice** — every sector card repeats that a flagged term is a prompt to consult your own legal/compliance/medical-affairs team, not a verdict.
 
 ---
 

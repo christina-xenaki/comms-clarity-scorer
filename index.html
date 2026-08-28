@@ -208,18 +208,55 @@
   .seg-action .seg-label { color: var(--color-accent); }
   .seg-finding ul, .seg-action ul { margin: 0.4rem 0 0 0; padding-left: 1.25rem; }
 
-  .seg-rationale {
-    margin-top: 0.5rem;
-  }
-  .seg-rationale summary {
-    cursor: pointer;
-    font-size: 0.75rem;
-    font-weight: 600;
+  .why-wrap { margin-top: 0.6rem; }
+
+  .why-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    width: auto;
+    min-height: 44px;
+    margin: 0;
+    padding: 0.55rem 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background: var(--color-surface);
     color: var(--color-muted);
-    list-style: revert;
+    font-family: inherit;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
   }
-  .seg-rationale[open] summary { margin-bottom: 0.35rem; }
-  .seg-rationale > div {
+
+  .why-toggle:hover {
+    background: var(--color-bg);
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  .why-toggle:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .why-chevron {
+    display: inline-block;
+    flex: none;
+    transition: transform 0.15s ease;
+  }
+
+  .why-toggle[aria-expanded="true"] .why-chevron {
+    transform: rotate(90deg);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .why-toggle, .why-chevron { transition: none; }
+  }
+
+  .why-panel {
+    margin-top: 0.55rem;
     font-size: 0.78rem;
     line-height: 1.5;
     color: var(--color-muted);
@@ -227,10 +264,11 @@
     padding-left: 0.75rem;
     border-left: 2px solid var(--color-border);
   }
-  .seg-rationale > div p { margin: 0 0 0.4rem 0; }
-  .seg-rationale > div ul { margin: 0.3rem 0 0 0; padding-left: 1.1rem; }
+  .why-panel[hidden] { display: none; }
+  .why-panel p { margin: 0 0 0.4rem 0; }
+  .why-panel ul { margin: 0.3rem 0 0 0; padding-left: 1.1rem; }
 
-  .card-body a, .seg-rationale a {
+  .card-body a, .why-panel a {
     color: var(--color-accent);
     text-decoration: underline;
   }
@@ -612,7 +650,16 @@
     var html = "";
     if (parts.finding) html += "<div class=\"seg-finding\"><span class=\"seg-label\">Finding</span> " + parts.finding + "</div>";
     if (parts.action) html += "<div class=\"seg-action\"><span class=\"seg-label\">Action</span> " + parts.action + "</div>";
-    if (parts.rationale) html += "<details class=\"seg-rationale\"><summary>Rationale</summary><div>" + parts.rationale + "</div></details>";
+    if (parts.rationale) {
+      var panelId = "why-panel-" + parts.key;
+      html += "<div class=\"why-wrap\">" +
+        "<button type=\"button\" class=\"why-toggle\" aria-expanded=\"false\" aria-controls=\"" + panelId + "\">" +
+        "<span>Why this check exists</span>" +
+        "<svg class=\"why-chevron\" width=\"10\" height=\"10\" viewBox=\"0 0 16 16\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M6 4l4 4-4 4\" stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>" +
+        "</button>" +
+        "<div id=\"" + panelId + "\" class=\"why-panel\" hidden>" + parts.rationale + "</div>" +
+        "</div>";
+    }
     return html;
   }
 
@@ -1384,9 +1431,10 @@
 
     setScore("score-concreteness", r.concretenessScore);
     $("body-concreteness").innerHTML = segBody({
+      key: "concreteness",
       finding: r.concreteMatches.length + " concrete detail" + (r.concreteMatches.length === 1 ? "" : "s") + " found (numbers, dates, percentages, amounts) &mdash; " + r.signalsPer100.toFixed(1) + " per 100 words.",
       action: r.concreteMatches.length === 0 ? "Add specific numbers, dates, or amounts before this goes out." : (r.concretenessScore < 70 ? "Add a few more specific numbers or dates to strengthen this." : "No action needed."),
-      rationale: "Concrete details give readers, and journalists, something to trust and quote. Zero concrete details anywhere in the text is treated as the single biggest red flag a release can have, regardless of everything else."
+      rationale: "A release with no numbers, dates or named specifics gives a journalist nothing to quote and nothing to check."
     });
 
     setScore("score-strengths", r.strengthsScore);
@@ -1400,12 +1448,14 @@
         "<li>" + r.plainWordMatches.length + " plain word choice" + (r.plainWordMatches.length === 1 ? "" : "s") + " used instead of a jargon alternative</li>" +
         "</ul>",
       action: r.strengthsScore < 80 ? "Look for more places to add a baseline comparison, a precise verb, or a plain word instead of jargon." : "No action needed — this is doing real work for you.",
-      rationale: "Green highlights, not just red — this check exists to credit good writing, not only flag bad writing, so it's weighted as heavily as concreteness. A specific timeframe (e.g. \"from 3 March\" vs. \"in the coming months\") isn't scored separately here, since that's the same underlying signal the concreteness check already rewards."
+      rationale: "Green highlights, not just red — this check exists to credit good writing, not only flag bad writing, so it's weighted as heavily as concreteness. A specific timeframe (e.g. \"from 3 March\" vs. \"in the coming months\") isn't scored separately here, since that's the same underlying signal the concreteness check already rewards.",
+      key: "strengths"
     });
 
     setScore("score-empty-quote", r.emptyQuoteScore);
     if (r.quoteData.length === 0) {
       $("body-empty-quote").innerHTML = segBody({
+        key: "empty-quote",
         finding: "No quotations found to evaluate.",
         rationale: "This check only applies once the text includes an attributed quote."
       });
@@ -1421,6 +1471,7 @@
         eqAction = "No action needed.";
       }
       $("body-empty-quote").innerHTML = segBody({
+        key: "empty-quote",
         finding: eqFinding,
         action: eqAction,
         rationale: "A quote is flagged empty when it contains zero concrete signals (numbers/dates) and is at least 6 words long."
@@ -1432,14 +1483,16 @@
       finding: r.buzzMatches.length + " buzzword match" + (r.buzzMatches.length === 1 ? "" : "es") + " out of " + r.contentWords + " content words &mdash; a density of " + r.buzz.density.toFixed(1) + "%. " +
         sentenceCoveragePhrase(r.buzzMatches, r.sentences, "a buzzword") + describeClustering(r.buzzMatches, r.paragraphs, { clusteringMinMatches: 3, clusteringShareThreshold: 0.4 }, "buzzwords"),
       action: r.buzzMatches.length > 0 ? "Swap them for concrete facts." : "No action needed.",
-      rationale: "Buzzwords are vague, overused corporate phrases (e.g. \"synergy\", \"best-in-class\", \"cutting-edge\") that sound impressive but say nothing specific. Density is measured against content words only (stopwords like \"the\"/\"of\"/\"and\" excluded), since they'd otherwise water down the percentage."
+      rationale: "Buzzwords are vague, overused corporate phrases (e.g. \"synergy\", \"best-in-class\", \"cutting-edge\") that sound impressive but say nothing specific. Density is measured against content words only (stopwords like \"the\"/\"of\"/\"and\" excluded), since they'd otherwise water down the percentage.",
+      key: "buzzword"
     });
 
     setScore("score-sentence-length", r.lengthScore);
     $("body-sentence-length").innerHTML = segBody({
       finding: "Average sentence length: " + r.avgLength.toFixed(1) + " words. " + r.overLimit.length + " of " + r.sentenceData.length + " sentence" + (r.sentenceData.length === 1 ? "" : "s") + " " + (r.overLimit.length === 1 ? "is" : "are") + " over the " + r.limit + "-word guideline.",
       action: r.overLimit.length > 0 ? "Split the longest ones first — see Worst Offenders." : "No action needed.",
-      rationale: "Long sentences are harder to skim. Readers of press releases scan &mdash; aim for sentences under " + r.limit + " words."
+      rationale: "People scan press releases rather than reading them. Long sentences survive that badly. The 30-word flag follows plain-language guidance rather than a specific study.",
+      key: "sentence-length"
     });
 
     setScore("score-readability", r.readScore);
@@ -1447,35 +1500,40 @@
     $("body-readability").innerHTML = segBody({
       finding: "Flesch-Kincaid grade level: " + (isFinite(r.grade) ? r.grade.toFixed(1) : "n/a") + ". " + gradeInfo.label,
       action: gradeInfo.action,
-      rationale: "Source: " + srcLink("https://en.wikipedia.org/wiki/Flesch%E2%80%93Kincaid_readability_tests", "Flesch-Kincaid readability tests on Wikipedia", "Flesch (1948); Kincaid et al. (1975)") + ", developed for the US Navy."
+      rationale: "Flesch-Kincaid estimates the US school grade needed to read a text, based on syllable and sentence length. It rewards short words and short sentences. It cannot tell whether the writing is any good.",
+      key: "readability"
     });
 
     setScore("score-passive", r.passiveScore);
     $("body-passive").innerHTML = segBody({
       finding: r.passiveSentenceCount + " of " + r.sentenceData.length + " sentence" + (r.sentenceData.length === 1 ? "" : "s") + " (" + r.passivePercent.toFixed(1) + "%) use passive voice.",
       action: r.passivePercent <= 20 ? "No action needed — some passive voice is fine and occasionally correct." : "Consider rewriting the most prominent ones as active voice — see Rewrite suggestions.",
-      rationale: "The 20% threshold is a widely repeated writing convention, not a research finding &mdash; labelled as such rather than as science, deliberately not linked to a source, since claiming one would be exactly the false precision this tool exists to criticise."
+      rationale: "Passive constructions hide who did the thing. Sometimes that's correct, and sometimes it's convenient. The 20% threshold is a widely repeated writing convention rather than a research finding, so treat it as a prompt rather than a rule.",
+      key: "passive"
     });
 
     setScore("score-hedging", r.hedge.score);
     $("body-hedging").innerHTML = segBody({
       finding: r.hedgeMatches.length + " hedge/weasel word" + (r.hedgeMatches.length === 1 ? "" : "s") + " out of " + r.contentWords + " content words &mdash; a density of " + r.hedge.density.toFixed(1) + "%.",
       action: r.hedge.score < 80 ? "Cut the ones that aren't doing real work." : "No action needed.",
-      rationale: "Words like \"may\", \"could\", \"aims to\" or \"up to\" soften a claim so much it stops meaning anything concrete. A little is normal; a lot signals you're avoiding commitment."
+      rationale: "Words like \"may\", \"could\", \"aims to\" and \"up to\" soften a claim until it stops committing to anything. A little hedging is normal and often necessary. A lot of it usually means the claim can't be supported.",
+      key: "hedging"
     });
 
     setScore("score-superlatives", r.superlative.score);
     $("body-superlatives").innerHTML = segBody({
       finding: r.superlativeMatches.length + " superlative or absolute claim" + (r.superlativeMatches.length === 1 ? "" : "s") + " out of " + r.contentWords + " content words &mdash; a density of " + r.superlative.density.toFixed(1) + "%.",
       action: r.superlativeMatches.length > 0 ? "Only keep the ones you can actually prove — cut or soften the rest." : "No action needed.",
-      rationale: "Words like \"best\", \"only\", \"always\" or \"guaranteed\" are hard to prove and easy to challenge. This is a \"Flag only\" issue in Rewrite suggestions &mdash; the fix is factual or legal, not linguistic, so no automatic rewrite is offered."
+      rationale: "\"First\", \"only\", \"best\" and \"leading\" are claims of fact. Most need substantiation and some attract regulatory attention. This is a flag only. Whether you can back it up is a factual question, not a wording one.",
+      key: "superlatives"
     });
 
     setScore("score-nominalisation", r.nominal.score);
     $("body-nominalisation").innerHTML = segBody({
       finding: r.nominalMatches.length + " nominalisation" + (r.nominalMatches.length === 1 ? "" : "s") + " (e.g. \"the implementation of\" instead of \"implementing\") out of " + r.contentWords + " content words.",
       action: r.nominalRewrites.length > 0 ? "Swap for the verb form — see Rewrite suggestions for specific examples." : (r.nominalMatches.length > 0 ? "Swap for the verb form where you can." : "No action needed."),
-      rationale: "Turning verbs into nouns makes writing feel formal and distant &mdash; " + srcLink("https://www.nytimes.com/2012/07/23/opinion/sunday/zombie-nouns.html", "Helen Sword's \"Zombie Nouns\" essay in the New York Times", "Helen Sword calls these \"zombie nouns\"") + ". Using the verb directly is usually punchier."
+      rationale: "Turning a verb into a noun drains the action out of a sentence. \"The implementation of the policy\" is slower than \"implementing the policy\". Helen Sword calls these zombie nouns.",
+      key: "nominalisation"
     });
 
     setScore("score-self-reference", r.selfRefScore);
@@ -1485,14 +1543,16 @@
     $("body-self-reference").innerHTML = segBody({
       finding: srFinding,
       action: r.selfRefCompanySharePercent > CONFIG.thresholds.selfReferenceCompanyShareTarget ? "Balance this with more sentences framed around the reader or a third party." : "No action needed.",
-      rationale: "Each sentence's subject is classified by which of three word lists appears earliest in its first few words: company-facing (\"we\", \"our\", \"the company\"), audience-facing (\"you\", \"your\", \"customers\"), or third-party (\"analysts\", \"the market\", and similar). Quoted sentences and boilerplate are excluded, since a quote reflects the speaker's framing, not the release's own voice. Reported as sentence counts rather than a percentage of words, since \"subject of the sentence\" is a per-sentence property."
+      rationale: "Each sentence's subject is classified by which of three word lists appears earliest in its first few words: company-facing (\"we\", \"our\", \"the company\"), audience-facing (\"you\", \"your\", \"customers\"), or third-party (\"analysts\", \"the market\", and similar). Quoted sentences and boilerplate are excluded, since a quote reflects the speaker's framing, not the release's own voice. Reported as sentence counts rather than a percentage of words, since \"subject of the sentence\" is a per-sentence property.",
+      key: "self-reference"
     });
 
     setScore("score-acronym", r.acronymScore);
     $("body-acronym").innerHTML = segBody({
       finding: r.acronymInfo.uniqueCount + " acronym" + (r.acronymInfo.uniqueCount === 1 ? "" : "s") + ", " + r.acronymInfo.neverExpanded.length + " never expanded" + (r.acronymInfo.neverExpanded.length ? " (" + r.acronymInfo.neverExpanded.join(", ") + ")" : "") + ".",
       action: r.acronymInfo.neverExpanded.length > 0 ? "Spell out the never-expanded ones on first use." : "No action needed.",
-      rationale: "Only the first use of each acronym is highlighted in the text, to avoid cluttering repeats. An acronym counts as \"expanded\" if its full term appears in parentheses next to it anywhere in the text. Common acronyms in the allowlist (CEO, US, AI, and similar) never need expanding and aren't flagged at all. Acronyms inside boilerplate, contact details, or a \"Notes to editors\"/references block are excluded from this check entirely, since that content is already excluded from your score."
+      rationale: "Only the first use of each acronym is highlighted in the text, to avoid cluttering repeats. An acronym counts as \"expanded\" if its full term appears in parentheses next to it anywhere in the text. Common acronyms in the allowlist (CEO, US, AI, and similar) never need expanding and aren't flagged at all. Acronyms inside boilerplate, contact details, or a \"Notes to editors\"/references block are excluded from this check entirely, since that content is already excluded from your score.",
+      key: "acronym"
     });
 
     setScore("score-inverted-pyramid", r.pyramidScore);
@@ -1512,7 +1572,8 @@
     $("body-inverted-pyramid").innerHTML = segBody({
       finding: ipFinding,
       action: ipActions.length ? ipActions.join(" ") : "No action needed.",
-      rationale: "The " + srcLink("https://en.wikipedia.org/wiki/Inverted_pyramid_(journalism)", "Inverted pyramid (journalism) on Wikipedia", "inverted pyramid") + " is a standard news-writing convention; the four checks above are this tool's own operationalisation of it, not a cited formula."
+      rationale: "News writing puts the most important information first, so an editor can cut from the bottom without losing the story. If your first concrete fact arrives late, the structure is working against you.",
+      key: "inverted-pyramid"
     });
 
     setScore("score-consistency", r.consistencyScore);
@@ -1532,7 +1593,8 @@
     $("body-consistency").innerHTML = segBody({
       finding: csFinding,
       action: (r.consistencyIssues.length > 0 || confusedGroups.length > 0) ? "Proofread these before sending" + (confusedGroups.length ? " — including a second look at: " + escapeHtml(confusedGroups.join(", ")) : "") + "." : "No action needed.",
-      rationale: "Not a spellchecker &mdash; your browser already checks spelling in the text box, and a bundled dictionary would misfire constantly on brand names and surnames. This only looks for mechanical slips and commonly-confused word pairs worth a second look, and only flags a confusion pair when two or more of its members actually appear, as a reminder to double-check, not a claim that either use is wrong."
+      rationale: "Not a spellchecker &mdash; your browser already checks spelling in the text box, and a bundled dictionary would misfire constantly on brand names and surnames. This only looks for mechanical slips and commonly-confused word pairs worth a second look, and only flags a confusion pair when two or more of its members actually appear, as a reminder to double-check, not a claim that either use is wrong.",
+      key: "consistency"
     });
 
     setScore("score-english-variant", r.variantScore);
@@ -1549,24 +1611,26 @@
     $("body-english-variant").innerHTML = segBody({
       finding: evFinding,
       action: r.variantMismatches.length > 0 ? "Fix these to match your selected variant." : "No action needed.",
-      rationale: srcLink("https://en.wikipedia.org/wiki/Oxford_spelling", "Oxford spelling on Wikipedia", "British Oxford spelling") + " (–ize) is the convention used by OUP and the OED; it still keeps British –our/–re/–ll– spellings, so this is deliberately a three-way choice, not a two-way one — a simple toggle would wrongly flag “organize.”"
+      rationale: srcLink("https://en.wikipedia.org/wiki/Oxford_spelling", "Oxford spelling on Wikipedia", "British Oxford spelling") + " (–ize) is the convention used by OUP and the OED; it still keeps British –our/–re/–ll– spellings, so this is deliberately a three-way choice, not a two-way one — a simple toggle would wrongly flag “organize.”",
+      key: "english-variant"
     });
 
     setScore("score-regulated-claims", r.regulatedScore);
+    var rcRationale = "These words draw scrutiny in this sector. The flag is a prompt to check with the people who own that risk in your organisation. It is not a compliance decision.";
     if (!r.regulatedEnabled) {
       $("body-regulated-claims").innerHTML = segBody({
-        finding: "Off by default.",
+        finding: "Off by default. This check is never counted toward the overall clarity grade above, even when a sector is selected.",
         action: "Use the Sector selector at the top of the page (Healthcare, Environmental claims, AI, or Forward-looking statements) to check sector-specific regulated terms.",
-        rationale: "This check is never counted toward the overall clarity grade above, even when a sector is selected — it's a compliance flag, not a writing-quality signal."
+        rationale: rcRationale,
+        key: "regulated-claims"
       });
     } else {
-      var rcFinding = "Sector: <strong>" + escapeHtml(CONFIG.sectorName) + "</strong>. " + r.regulatedMatches.length + " regulated term" + (r.regulatedMatches.length === 1 ? "" : "s") + " found" + (r.regulatedMatches.length ? ": " + r.regulatedMatches.map(function (m) { return escapeHtml(m.label); }).join(", ") : "") + ".";
-      var rcRationale = "This score is tracked separately and does not count toward your overall clarity grade above.";
-      if (CONFIG.sourceUrl) rcRationale += " Reference: " + srcLink(CONFIG.sourceUrl, CONFIG.sectorName + " regulatory reference", CONFIG.sourceUrl);
+      var rcFinding = "Sector: <strong>" + escapeHtml(CONFIG.sectorName) + "</strong>. " + r.regulatedMatches.length + " regulated term" + (r.regulatedMatches.length === 1 ? "" : "s") + " found" + (r.regulatedMatches.length ? ": " + r.regulatedMatches.map(function (m) { return escapeHtml(m.label); }).join(", ") : "") + ". This score is tracked separately and does not count toward your overall clarity grade above.";
       $("body-regulated-claims").innerHTML = segBody({
         finding: rcFinding,
         action: escapeHtml(CONFIG.disclaimer),
-        rationale: rcRationale
+        rationale: rcRationale,
+        key: "regulated-claims"
       });
     }
 
@@ -1769,6 +1833,14 @@
     var hl = e.target.closest(".hl");
     document.querySelectorAll(".hl.open").forEach(function (el) { if (el !== hl) el.classList.remove("open"); });
     if (hl) { hl.classList.toggle("open"); e.stopPropagation(); }
+
+    var whyBtn = e.target.closest(".why-toggle");
+    if (whyBtn) {
+      var expanded = whyBtn.getAttribute("aria-expanded") === "true";
+      whyBtn.setAttribute("aria-expanded", String(!expanded));
+      var panel = document.getElementById(whyBtn.getAttribute("aria-controls"));
+      if (panel) panel.hidden = expanded;
+    }
   });
 
   elCopyBtn.addEventListener("click", function () {
