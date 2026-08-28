@@ -13,13 +13,21 @@
     --color-muted: #6b6862;
     --color-accent: #1d5b4f;
     --color-accent-contrast: #ffffff;
-    --color-buzz: #ffe08a;
-    --color-buzz-border: #b8860b;
-    --color-long: #ffd0c2;
-    --color-long-border: #c9542f;
+
     --color-good: #1d5b4f;
     --color-warn: #b8860b;
     --color-bad: #b3392c;
+
+    --c-buzz-bg: #ffe08a;      --c-buzz-border: #b8860b;
+    --c-long-bg: #ffd0c2;      --c-long-border: #c9542f;
+    --c-hedge-bg: #cfe3ff;     --c-hedge-border: #3b6fb3;
+    --c-superlative-bg: #e6d6ff; --c-superlative-border: #7b4fb8;
+    --c-passive-bg: #ffd3e2;   --c-passive-border: #b8365f;
+    --c-nominal-bg: #f0e0c8;   --c-nominal-border: #a67c2e;
+    --c-acronym-bg: #e2e2e2;   --c-acronym-border: #616161;
+    --c-concrete-bg: #dcf3d3;  --c-concrete-border: #3f8f2a;
+    --c-quote-bg: #ffbdbd;     --c-quote-border: #c0392b;
+
     --radius: 10px;
   }
 
@@ -34,9 +42,7 @@
     line-height: 1.5;
   }
 
-  body {
-    padding: 0 0 3rem 0;
-  }
+  body { padding: 0 0 3rem 0; }
 
   header {
     padding: 1.25rem 1rem 1rem 1rem;
@@ -44,32 +50,20 @@
     border-bottom: 1px solid var(--color-border);
   }
 
-  header h1 {
-    margin: 0 0 0.25rem 0;
-    font-size: 1.4rem;
-  }
+  header h1 { margin: 0 0 0.25rem 0; font-size: 1.4rem; }
+  header p { margin: 0; color: var(--color-muted); font-size: 0.95rem; }
 
-  header p {
-    margin: 0;
-    color: var(--color-muted);
-    font-size: 0.95rem;
-  }
-
-  main {
-    max-width: 640px;
+  .layout {
+    max-width: 1200px;
     margin: 0 auto;
     padding: 1rem;
   }
 
-  section {
-    margin-bottom: 1.5rem;
-  }
+  .col-text, .col-scores { width: 100%; }
 
-  label {
-    display: block;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-  }
+  section { margin-bottom: 1.5rem; }
+
+  label { display: block; font-weight: 600; margin-bottom: 0.5rem; }
 
   textarea {
     width: 100%;
@@ -98,9 +92,7 @@
     margin-top: 0.75rem;
   }
 
-  button:active {
-    opacity: 0.85;
-  }
+  button:active { opacity: 0.85; }
 
   button.secondary {
     background: var(--color-surface);
@@ -108,25 +100,12 @@
     border: 1px solid var(--color-accent);
   }
 
-  .privacy-note {
-    font-size: 0.85rem;
-    color: var(--color-muted);
-    margin-top: 0.75rem;
-  }
+  .privacy-note { font-size: 0.85rem; color: var(--color-muted); margin-top: 0.75rem; }
 
-  .config-status {
-    font-size: 0.8rem;
-    color: var(--color-muted);
-    margin-top: 0.5rem;
-  }
+  .config-status { font-size: 0.8rem; color: var(--color-muted); margin-top: 0.5rem; }
+  .config-status.warn { color: var(--color-warn); }
 
-  .config-status.warn {
-    color: var(--color-warn);
-  }
-
-  #results[hidden] {
-    display: none;
-  }
+  [hidden] { display: none !important; }
 
   .card {
     background: var(--color-surface);
@@ -135,36 +114,18 @@
     padding: 1rem;
   }
 
-  #overall-card {
-    text-align: center;
-  }
+  #overall-card { text-align: center; }
 
-  #overall-grade {
-    font-size: 3rem;
-    font-weight: 700;
-    line-height: 1;
-    margin: 0.25rem 0;
-  }
-
-  #overall-verdict {
-    font-size: 1.05rem;
-    margin: 0.25rem 0 0 0;
-  }
+  #overall-grade { font-size: 3rem; font-weight: 700; line-height: 1; margin: 0.25rem 0; }
+  #overall-verdict { font-size: 1.05rem; margin: 0.25rem 0 0 0; }
 
   .grade-good { color: var(--color-good); }
   .grade-warn { color: var(--color-warn); }
   .grade-bad { color: var(--color-bad); }
 
-  h2 {
-    font-size: 1.1rem;
-    margin: 0 0 0.75rem 0;
-  }
+  h2 { font-size: 1.1rem; margin: 0 0 0.75rem 0; }
 
-  details.card {
-    padding: 0;
-    overflow: hidden;
-    margin-bottom: 0.75rem;
-  }
+  details.card { padding: 0; overflow: hidden; margin-bottom: 0.75rem; }
 
   details.card summary {
     list-style: none;
@@ -177,18 +138,10 @@
     min-height: 44px;
   }
 
-  details.card summary::-webkit-details-marker {
-    display: none;
-  }
+  details.card summary::-webkit-details-marker { display: none; }
 
-  .summary-title {
-    font-weight: 600;
-  }
-
-  .summary-score {
-    font-weight: 700;
-    white-space: nowrap;
-  }
+  .summary-title { font-weight: 600; }
+  .summary-score { font-weight: 700; white-space: nowrap; }
 
   .card-body {
     padding: 0 1rem 1rem 1rem;
@@ -198,80 +151,47 @@
     color: var(--color-muted);
   }
 
-  .card-body p {
-    margin: 0 0 0.5rem 0;
+  .card-body p { margin: 0 0 0.5rem 0; }
+  .card-body ul { margin: 0.5rem 0 0 0; padding-left: 1.25rem; }
+  .card-body .shareable {
+    font-style: italic;
+    color: var(--color-text);
+    border-left: 3px solid var(--c-quote-border);
+    padding-left: 0.6rem;
+    margin: 0.5rem 0;
   }
 
-  .card-body ul {
-    margin: 0.5rem 0 0 0;
-    padding-left: 1.25rem;
-  }
+  #worst-offenders ol { margin: 0; padding-left: 1.25rem; }
+  #worst-offenders li { margin-bottom: 0.75rem; }
+  #worst-offenders .reason { display: block; font-size: 0.85rem; color: var(--color-muted); }
 
-  #worst-offenders ol {
-    margin: 0;
-    padding-left: 1.25rem;
-  }
+  #annotated-output { white-space: pre-wrap; font-size: 1rem; line-height: 1.7; }
 
-  #worst-offenders li {
-    margin-bottom: 0.75rem;
-  }
+  .legend { display: flex; flex-wrap: wrap; gap: 0.6rem; font-size: 0.8rem; color: var(--color-muted); margin-bottom: 0.75rem; }
+  .legend span { display: inline-flex; align-items: center; gap: 0.3rem; }
+  .swatch { display: inline-block; width: 0.8rem; height: 0.8rem; border-radius: 3px; }
 
-  #worst-offenders .reason {
-    display: block;
-    font-size: 0.85rem;
-    color: var(--color-muted);
-  }
+  .swatch.buzz { background: var(--c-buzz-bg); border: 1px solid var(--c-buzz-border); }
+  .swatch.long { background: var(--c-long-bg); border: 1px solid var(--c-long-border); }
+  .swatch.hedge { background: var(--c-hedge-bg); border: 1px solid var(--c-hedge-border); }
+  .swatch.superlative { background: var(--c-superlative-bg); border: 1px solid var(--c-superlative-border); }
+  .swatch.passive { background: var(--c-passive-bg); border: 1px solid var(--c-passive-border); }
+  .swatch.nominal { background: var(--c-nominal-bg); border: 1px solid var(--c-nominal-border); }
+  .swatch.acronym { background: var(--c-acronym-bg); border: 1px solid var(--c-acronym-border); }
+  .swatch.concrete { background: var(--c-concrete-bg); border: 1px solid var(--c-concrete-border); }
+  .swatch.quote { background: var(--c-quote-bg); border: 1px solid var(--c-quote-border); }
 
-  #annotated-output {
-    white-space: pre-wrap;
-    font-size: 1rem;
-    line-height: 1.7;
-  }
+  mark.hl { position: relative; background: transparent; color: inherit; cursor: pointer; border-radius: 3px; }
 
-  .legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    font-size: 0.85rem;
-    color: var(--color-muted);
-    margin-bottom: 0.75rem;
-  }
-
-  .legend span {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-  }
-
-  .swatch {
-    display: inline-block;
-    width: 0.85rem;
-    height: 0.85rem;
-    border-radius: 3px;
-  }
-
-  .swatch.buzz { background: var(--color-buzz); border: 1px solid var(--color-buzz-border); }
-  .swatch.long { background: var(--color-long); border: 1px solid var(--color-long-border); }
-
-  mark.hl {
-    position: relative;
-    background: transparent;
-    color: inherit;
-    cursor: pointer;
-    border-radius: 3px;
-  }
-
-  mark.hl-buzz {
-    background: var(--color-buzz);
-    border-bottom: 2px solid var(--color-buzz-border);
-    padding: 0 1px;
-  }
-
-  mark.hl-long {
-    background: var(--color-long);
-    box-decoration-break: clone;
-    -webkit-box-decoration-break: clone;
-  }
+  mark.hl-buzz { background: var(--c-buzz-bg); border-bottom: 2px solid var(--c-buzz-border); padding: 0 1px; }
+  mark.hl-long { background: var(--c-long-bg); box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+  mark.hl-hedge { background: var(--c-hedge-bg); border-bottom: 2px solid var(--c-hedge-border); padding: 0 1px; }
+  mark.hl-superlative { background: var(--c-superlative-bg); border-bottom: 2px solid var(--c-superlative-border); padding: 0 1px; }
+  mark.hl-passive { background: var(--c-passive-bg); border-bottom: 2px solid var(--c-passive-border); padding: 0 1px; }
+  mark.hl-nominal { background: var(--c-nominal-bg); border-bottom: 2px solid var(--c-nominal-border); padding: 0 1px; }
+  mark.hl-acronym { background: var(--c-acronym-bg); border-bottom: 2px solid var(--c-acronym-border); padding: 0 1px; }
+  mark.hl-concrete { background: var(--c-concrete-bg); border-bottom: 2px solid var(--c-concrete-border); padding: 0 1px; }
+  mark.hl-quote { background: var(--c-quote-bg); box-decoration-break: clone; -webkit-box-decoration-break: clone; }
 
   mark.hl .tip {
     display: none;
@@ -292,20 +212,32 @@
     box-shadow: 0 4px 10px rgba(0,0,0,0.2);
   }
 
-  mark.hl.open .tip {
-    display: block;
-  }
+  mark.hl.open .tip { display: block; }
 
   footer {
-    max-width: 640px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 1rem;
     color: var(--color-muted);
     font-size: 0.85rem;
   }
 
-  @media (min-width: 700px) {
+  @media (min-width: 900px) {
     header h1 { font-size: 1.6rem; }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 400px;
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    .col-scores {
+      position: sticky;
+      top: 1rem;
+    }
+
+    textarea { min-height: 340px; }
   }
 </style>
 </head>
@@ -316,73 +248,115 @@
   <p>Paste a press release or pitch. Get a clarity score and exactly what's wrong with it.</p>
 </header>
 
-<main>
-  <section id="input-section">
-    <label for="input-text">Your text</label>
-    <textarea id="input-text" placeholder="Paste your press release or pitch here…"></textarea>
-    <button id="analyze-btn" type="button">Analyze</button>
-    <p class="privacy-note">Nothing you paste here leaves your browser. There's no server, no account and no upload &mdash; the analysis runs entirely on your device.</p>
-    <p id="config-status" class="config-status">Loading word lists…</p>
-  </section>
-
-  <section id="results" hidden>
-
-    <section id="overall-card" class="card">
-      <div class="summary-title">Overall grade</div>
-      <div id="overall-grade">&mdash;</div>
-      <p id="overall-verdict"></p>
+<main class="layout">
+  <div class="col-text">
+    <section id="input-section">
+      <label for="input-text">Your text</label>
+      <textarea id="input-text" placeholder="Paste your press release or pitch here…"></textarea>
+      <button id="analyze-btn" type="button">Analyze</button>
+      <p class="privacy-note">Nothing you paste here leaves your browser. There's no server, no account and no upload &mdash; the analysis runs entirely on your device.</p>
+      <p id="config-status" class="config-status">Loading word lists…</p>
     </section>
 
-    <section id="sub-scores">
-      <h2>Checks</h2>
-
-      <details class="card" id="card-buzzword">
-        <summary>
-          <span class="summary-title">Buzzword density</span>
-          <span class="summary-score" id="score-buzzword">&mdash;</span>
-        </summary>
-        <div class="card-body" id="body-buzzword"></div>
-      </details>
-
-      <details class="card" id="card-sentence-length">
-        <summary>
-          <span class="summary-title">Sentence length</span>
-          <span class="summary-score" id="score-sentence-length">&mdash;</span>
-        </summary>
-        <div class="card-body" id="body-sentence-length"></div>
-      </details>
-
-      <details class="card" id="card-readability">
-        <summary>
-          <span class="summary-title">Readability</span>
-          <span class="summary-score" id="score-readability">&mdash;</span>
-        </summary>
-        <div class="card-body" id="body-readability"></div>
-      </details>
-    </section>
-
-    <section id="worst-offenders" class="card">
-      <h2>Worst offenders</h2>
-      <p style="margin-top:0;color:var(--color-muted);font-size:0.9rem;">The sentences to fix first, ranked worst to least-bad.</p>
-      <ol id="worst-offenders-list"></ol>
-    </section>
-
-    <section id="annotated-text-section">
+    <section id="annotated-text-section" hidden>
       <h2>Your text, annotated</h2>
       <div class="legend">
         <span><span class="swatch buzz"></span> Buzzword</span>
+        <span><span class="swatch hedge"></span> Hedge word</span>
+        <span><span class="swatch superlative"></span> Superlative / absolute claim</span>
+        <span><span class="swatch passive"></span> Passive voice</span>
+        <span><span class="swatch nominal"></span> Nominalisation</span>
+        <span><span class="swatch acronym"></span> Acronym</span>
+        <span><span class="swatch concrete"></span> Concrete detail (good)</span>
         <span><span class="swatch long"></span> Long sentence</span>
+        <span><span class="swatch quote"></span> Empty quote</span>
       </div>
       <p style="margin-top:-0.5rem;color:var(--color-muted);font-size:0.85rem;">Tap a highlight for the explanation.</p>
       <div id="annotated-output" class="card"></div>
     </section>
+  </div>
 
-    <button id="copy-report-btn" type="button" class="secondary">Copy report</button>
-  </section>
+  <div class="col-scores">
+    <section id="results-panel" hidden>
+
+      <section id="overall-card" class="card">
+        <div class="summary-title">Overall grade</div>
+        <div id="overall-grade">&mdash;</div>
+        <p id="overall-verdict"></p>
+      </section>
+
+      <section id="sub-scores">
+        <h2>Checks</h2>
+
+        <details class="card" id="card-concreteness">
+          <summary><span class="summary-title">Concreteness</span><span class="summary-score" id="score-concreteness">&mdash;</span></summary>
+          <div class="card-body" id="body-concreteness"></div>
+        </details>
+
+        <details class="card" id="card-empty-quote">
+          <summary><span class="summary-title">Empty quote detector</span><span class="summary-score" id="score-empty-quote">&mdash;</span></summary>
+          <div class="card-body" id="body-empty-quote"></div>
+        </details>
+
+        <details class="card" id="card-buzzword">
+          <summary><span class="summary-title">Buzzword density</span><span class="summary-score" id="score-buzzword">&mdash;</span></summary>
+          <div class="card-body" id="body-buzzword"></div>
+        </details>
+
+        <details class="card" id="card-sentence-length">
+          <summary><span class="summary-title">Sentence length</span><span class="summary-score" id="score-sentence-length">&mdash;</span></summary>
+          <div class="card-body" id="body-sentence-length"></div>
+        </details>
+
+        <details class="card" id="card-readability">
+          <summary><span class="summary-title">Readability</span><span class="summary-score" id="score-readability">&mdash;</span></summary>
+          <div class="card-body" id="body-readability"></div>
+        </details>
+
+        <details class="card" id="card-passive">
+          <summary><span class="summary-title">Passive voice</span><span class="summary-score" id="score-passive">&mdash;</span></summary>
+          <div class="card-body" id="body-passive"></div>
+        </details>
+
+        <details class="card" id="card-hedging">
+          <summary><span class="summary-title">Hedging &amp; weasel words</span><span class="summary-score" id="score-hedging">&mdash;</span></summary>
+          <div class="card-body" id="body-hedging"></div>
+        </details>
+
+        <details class="card" id="card-superlatives">
+          <summary><span class="summary-title">Superlatives &amp; absolute claims</span><span class="summary-score" id="score-superlatives">&mdash;</span></summary>
+          <div class="card-body" id="body-superlatives"></div>
+        </details>
+
+        <details class="card" id="card-nominalisation">
+          <summary><span class="summary-title">Nominalisation</span><span class="summary-score" id="score-nominalisation">&mdash;</span></summary>
+          <div class="card-body" id="body-nominalisation"></div>
+        </details>
+
+        <details class="card" id="card-self-reference">
+          <summary><span class="summary-title">Self-reference ratio</span><span class="summary-score" id="score-self-reference">&mdash;</span></summary>
+          <div class="card-body" id="body-self-reference"></div>
+        </details>
+
+        <details class="card" id="card-acronym">
+          <summary><span class="summary-title">Acronym load</span><span class="summary-score" id="score-acronym">&mdash;</span></summary>
+          <div class="card-body" id="body-acronym"></div>
+        </details>
+      </section>
+
+      <section id="worst-offenders" class="card">
+        <h2>Worst offenders</h2>
+        <p style="margin-top:0;color:var(--color-muted);font-size:0.9rem;">The sentences to fix first, ranked worst to least-bad.</p>
+        <ol id="worst-offenders-list"></ol>
+      </section>
+
+      <button id="copy-report-btn" type="button" class="secondary">Copy report</button>
+    </section>
+  </div>
 </main>
 
 <footer>
-  <p>First pass of the Comms Clarity Scorer. Currently checks: buzzword density, sentence length and readability. More checks (passive voice, empty-quote detection, hedging, concreteness, nominalisation, regulated-claim flags) are planned but not built yet.</p>
+  <p>Checks: buzzword density, sentence length, readability, passive voice, empty-quote detection, hedging, concreteness, nominalisation, self-reference ratio, superlatives &amp; absolute claims, and acronym load. See <a href="SCORING.md">SCORING.md</a> for exactly how each is calculated. Regulated-claim flags (sector-specific, config-driven) aren't built yet.</p>
 </footer>
 
 <script>
@@ -400,27 +374,86 @@
       "next-generation", "transformative", "revolutionise", "revolutionize",
       "pioneering", "landmark", "unparalleled", "industry-leading"
     ],
-    thresholds: { sentenceLengthLimit: 30, targetReadabilityGrade: 8 },
-    weights: { buzzwordDensity: 1, sentenceLength: 1, readability: 1 }
+    hedges: [
+      "may", "might", "could", "potentially", "aims to", "seeks to", "helps to",
+      "is designed to", "up to", "as much as", "some of the", "a number of"
+    ],
+    superlativesAndAbsolutes: [
+      "best", "greatest", "biggest", "smallest", "first-ever", "first ever",
+      "only", "unique", "unmatched", "unrivalled", "unrivaled", "world's first",
+      "number one", "never before", "like no other", "most advanced", "fastest",
+      "largest", "best-ever", "undisputed", "always", "never", "guarantee",
+      "guaranteed", "every single", "completely", "totally", "entirely",
+      "without exception", "most trusted", "most reliable"
+    ],
+    selfReferenceTerms: ["we", "us", "our", "ours", "ourselves", "the company", "the team"],
+    irregularPastParticiples: [
+      "done", "made", "said", "gone", "known", "given", "taken", "seen", "shown",
+      "held", "sent", "built", "brought", "bought", "caught", "chosen", "driven",
+      "eaten", "fallen", "felt", "found", "flown", "forgotten", "gotten", "hidden",
+      "kept", "left", "lost", "meant", "paid", "put", "read", "run", "sold",
+      "spoken", "spent", "stood", "stolen", "swum", "taught", "thrown",
+      "understood", "worn", "won", "written", "begun", "broken", "drawn", "drunk",
+      "frozen", "grown", "ridden", "risen", "sworn", "torn", "woken", "born",
+      "bound", "bred", "dealt", "dug", "fed", "fought", "fled", "hung", "hurt",
+      "laid", "led", "lent", "lit", "met", "rung", "sat", "set", "shaken", "shot",
+      "shut", "slept", "slid", "spread", "struck", "swept", "swung", "thought",
+      "upset", "woven"
+    ],
+    nominalisationSuffixes: ["tion", "ment", "ance", "ence"],
+    monthNames: [
+      "January", "February", "March", "April", "May", "June", "July", "August",
+      "September", "October", "November", "December",
+      "Jan", "Feb", "Mar", "Apr", "Jun", "Jul", "Aug", "Sep", "Sept", "Oct", "Nov", "Dec"
+    ],
+    acronymAllowlist: [
+      "CEO", "CFO", "COO", "CTO", "CMO", "US", "UK", "EU", "UN", "USA",
+      "AI", "IT", "PR", "HR", "API", "FAQ", "OK", "TV", "PC", "ID", "VP", "SVP", "EVP"
+    ],
+    thresholds: {
+      sentenceLengthLimit: 30,
+      sentenceLengthComfortableAverage: 15,
+      sentenceLengthPenaltyPerWordOverAverage: 2.5,
+      sentenceLengthPenaltyPerPercentOverLimit: 1,
+      targetReadabilityGrade: 8,
+      readabilityPenaltyPerGrade: 8,
+      buzzwordPenaltyPerPercent: 12,
+      passiveVoiceAcceptablePercent: 20,
+      passiveVoicePenaltyPerPercent: 2,
+      hedgeDensityTarget: 0.5,
+      hedgePenaltyPerPercent: 15,
+      superlativeDensityTarget: 0.5,
+      superlativePenaltyPerPercent: 15,
+      nominalisationDensityTarget: 1,
+      nominalisationPenaltyPerPercent: 10,
+      selfReferenceDensityTarget: 3,
+      selfReferencePenaltyPerPercent: 6,
+      acronymDensityTarget: 1.5,
+      acronymPenaltyPerPercent: 10,
+      concretenessTargetPer100Words: 3,
+      emptyQuoteMinWords: 6
+    },
+    weights: {
+      buzzwordDensity: 1, sentenceLength: 1, readability: 1, passiveVoice: 1,
+      emptyQuote: 1, hedging: 1, concreteness: 2, nominalisation: 1,
+      selfReference: 1, superlatives: 1, acronymLoad: 1
+    }
   };
 
   var CONFIG = null;
 
-  var elInputText = document.getElementById("input-text");
-  var elAnalyzeBtn = document.getElementById("analyze-btn");
-  var elConfigStatus = document.getElementById("config-status");
-  var elResults = document.getElementById("results");
-  var elOverallGrade = document.getElementById("overall-grade");
-  var elOverallVerdict = document.getElementById("overall-verdict");
-  var elScoreBuzz = document.getElementById("score-buzzword");
-  var elBodyBuzz = document.getElementById("body-buzzword");
-  var elScoreLen = document.getElementById("score-sentence-length");
-  var elBodyLen = document.getElementById("body-sentence-length");
-  var elScoreRead = document.getElementById("score-readability");
-  var elBodyRead = document.getElementById("body-readability");
-  var elWorstList = document.getElementById("worst-offenders-list");
-  var elAnnotated = document.getElementById("annotated-output");
-  var elCopyBtn = document.getElementById("copy-report-btn");
+  function $(id) { return document.getElementById(id); }
+
+  var elInputText = $("input-text");
+  var elAnalyzeBtn = $("analyze-btn");
+  var elConfigStatus = $("config-status");
+  var elResultsPanel = $("results-panel");
+  var elAnnotatedSection = $("annotated-text-section");
+  var elOverallGrade = $("overall-grade");
+  var elOverallVerdict = $("overall-verdict");
+  var elWorstList = $("worst-offenders-list");
+  var elAnnotated = $("annotated-output");
+  var elCopyBtn = $("copy-report-btn");
 
   var lastReportText = "";
 
@@ -431,23 +464,33 @@
     })
     .then(function (json) {
       CONFIG = mergeWithDefaults(json);
-      elConfigStatus.textContent = "Word list loaded: " + (CONFIG.sectorName || "config.json") + " (" + CONFIG.buzzwords.length + " buzzwords).";
+      elConfigStatus.textContent = "Word lists loaded: " + (CONFIG.sectorName || "config.json") + " (" + CONFIG.buzzwords.length + " buzzwords, " + CONFIG.hedges.length + " hedges, " + CONFIG.superlativesAndAbsolutes.length + " superlatives).";
       elConfigStatus.classList.remove("warn");
     })
     .catch(function (err) {
       CONFIG = DEFAULT_CONFIG;
-      elConfigStatus.textContent = "Couldn't load config.json (" + err.message + ") — using the built-in default word list instead.";
+      elConfigStatus.textContent = "Couldn't load config.json (" + err.message + ") — using the built-in default word lists instead.";
       elConfigStatus.classList.add("warn");
     });
 
   function mergeWithDefaults(json) {
     var cfg = {};
     cfg.sectorName = json.sectorName || "config.json";
-    cfg.buzzwords = Array.isArray(json.buzzwords) && json.buzzwords.length ? json.buzzwords : DEFAULT_CONFIG.buzzwords;
-    cfg.thresholds = json.thresholds || {};
-    if (typeof cfg.thresholds.sentenceLengthLimit !== "number") cfg.thresholds.sentenceLengthLimit = DEFAULT_CONFIG.thresholds.sentenceLengthLimit;
-    if (typeof cfg.thresholds.targetReadabilityGrade !== "number") cfg.thresholds.targetReadabilityGrade = DEFAULT_CONFIG.thresholds.targetReadabilityGrade;
-    cfg.weights = json.weights || DEFAULT_CONFIG.weights;
+    ["buzzwords", "hedges", "superlativesAndAbsolutes", "selfReferenceTerms",
+     "irregularPastParticiples", "nominalisationSuffixes", "monthNames", "acronymAllowlist"
+    ].forEach(function (key) {
+      cfg[key] = Array.isArray(json[key]) && json[key].length ? json[key] : DEFAULT_CONFIG[key];
+    });
+    cfg.thresholds = {};
+    Object.keys(DEFAULT_CONFIG.thresholds).forEach(function (key) {
+      var v = json.thresholds && json.thresholds[key];
+      cfg.thresholds[key] = typeof v === "number" ? v : DEFAULT_CONFIG.thresholds[key];
+    });
+    cfg.weights = {};
+    Object.keys(DEFAULT_CONFIG.weights).forEach(function (key) {
+      var v = json.weights && json.weights[key];
+      cfg.weights[key] = typeof v === "number" ? v : DEFAULT_CONFIG.weights[key];
+    });
     return cfg;
   }
 
@@ -481,6 +524,13 @@
     return sentences;
   }
 
+  function findSentenceIndex(sentences, pos) {
+    for (var i = 0; i < sentences.length; i++) {
+      if (pos >= sentences[i].start && pos < sentences[i].end) return i;
+    }
+    return -1;
+  }
+
   function countSyllables(word) {
     word = word.toLowerCase().replace(/[^a-z]/g, "");
     if (word.length === 0) return 0;
@@ -491,9 +541,7 @@
     return matches ? Math.max(1, matches.length) : 1;
   }
 
-  function clamp(n, min, max) {
-    return Math.max(min, Math.min(max, n));
-  }
+  function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
 
   function letterGrade(score) {
     if (score >= 90) return "A";
@@ -509,37 +557,102 @@
     return "grade-bad";
   }
 
-  // --- Check 1: buzzword density ---
-  function analyzeBuzzwords(sentence) {
+  // Dedupe overlapping matches within ONE category: keep earliest/longest.
+  function dedupeOverlaps(matches) {
+    matches.sort(function (a, b) { return a.start - b.start || (b.end - b.start) - (a.end - a.start); });
+    var out = [];
+    var lastEnd = -1;
+    matches.forEach(function (m) {
+      if (m.start >= lastEnd) { out.push(m); lastEnd = m.end; }
+    });
+    return out;
+  }
+
+  // Find every occurrence of any phrase in `list` inside `text`, whole-word matched, case-insensitive.
+  function genericPhraseMatches(text, list) {
     var matches = [];
-    CONFIG.buzzwords.forEach(function (phrase) {
+    list.forEach(function (phrase) {
       var re = new RegExp("\\b" + escapeRegExp(phrase) + "\\b", "gi");
       var m;
-      while ((m = re.exec(sentence.text)) !== null) {
-        matches.push({ start: m.index, end: m.index + m[0].length, phrase: phrase });
+      while ((m = re.exec(text)) !== null) {
+        matches.push({ start: m.index, end: m.index + m[0].length, label: phrase });
         if (m[0].length === 0) re.lastIndex++;
       }
     });
-    matches.sort(function (a, b) { return a.start - b.start || (b.end - b.start) - (a.end - a.start); });
-    var filtered = [];
-    var lastEnd = -1;
-    matches.forEach(function (mObj) {
-      if (mObj.start >= lastEnd) {
-        filtered.push(mObj);
-        lastEnd = mObj.end;
-      }
-    });
-    return filtered;
+    return dedupeOverlaps(matches);
   }
 
-  // --- Check 3: readability (Flesch-Kincaid grade level) ---
-  function computeReadability(text, wordTokens, sentenceCount) {
-    var syllables = 0;
-    wordTokens.forEach(function (w) { syllables += countSyllables(w); });
-    var wordCount = wordTokens.length;
-    if (wordCount === 0 || sentenceCount === 0) return { grade: 0, syllables: syllables };
-    var grade = 0.39 * (wordCount / sentenceCount) + 11.8 * (syllables / wordCount) - 15.59;
-    return { grade: grade, syllables: syllables };
+  // "to be" verb + participle (regular -ed or from the irregular list).
+  function findPassiveMatches(text, irregularList) {
+    var irregularSet = {};
+    irregularList.forEach(function (w) { irregularSet[w.toLowerCase()] = true; });
+    var re = /\b(is|are|was|were|be|been|being|am)\b(\s+\w+ly)?\s+(\w+)/gi;
+    var matches = [];
+    var m;
+    while ((m = re.exec(text)) !== null) {
+      var candidate = m[3].toLowerCase();
+      if (/ed$/.test(candidate) || irregularSet[candidate]) {
+        matches.push({ start: m.index, end: m.index + m[0].length, label: m[0].trim() });
+      }
+    }
+    return dedupeOverlaps(matches);
+  }
+
+  // "<word ending in -tion/-ment/-ance/-ence> of"
+  function findNominalisationMatches(text, suffixes) {
+    var re = new RegExp("\\b(\\w+(?:" + suffixes.join("|") + "))\\s+of\\b", "gi");
+    var matches = [];
+    var m;
+    while ((m = re.exec(text)) !== null) {
+      matches.push({ start: m.index, end: m.index + m[0].length, label: m[1] });
+    }
+    return dedupeOverlaps(matches);
+  }
+
+  // Runs of 2-6 capital letters, minus the allowlist.
+  function findAcronymMatches(text, allowlist) {
+    var allowSet = {};
+    allowlist.forEach(function (a) { allowSet[a] = true; });
+    var re = /\b[A-Z]{2,6}\b/g;
+    var matches = [];
+    var m;
+    while ((m = re.exec(text)) !== null) {
+      if (!allowSet[m[0]]) matches.push({ start: m.index, end: m.index + m[0].length, label: m[0] });
+    }
+    return dedupeOverlaps(matches);
+  }
+
+  // Numbers, percentages, currency amounts, and dates — the raw material of "concreteness".
+  function findConcreteSignals(text, monthNames) {
+    var patterns = [
+      /[$£€]\s?\d[\d,]*(\.\d+)?\s?(million|billion|thousand|k|m|bn)?/gi,
+      /\b\d+(\.\d+)?\s?%/g,
+      /\b\d{1,2}(st|nd|rd|th)\b/gi,
+      new RegExp("\\b(" + monthNames.join("|") + ")\\.?\\s+\\d{1,2}(st|nd|rd|th)?(,?\\s+\\d{4})?\\b", "gi"),
+      /\b(19|20)\d{2}\b/g,
+      /\b\d[\d,]*(\.\d+)?\b/g
+    ];
+    var matches = [];
+    patterns.forEach(function (re) {
+      var m;
+      while ((m = re.exec(text)) !== null) {
+        matches.push({ start: m.index, end: m.index + m[0].length, label: m[0] });
+        if (m[0].length === 0) re.lastIndex++;
+      }
+    });
+    return dedupeOverlaps(matches);
+  }
+
+  // Straight " " and curly " " quoted spans, at least a few words long.
+  function findQuotes(text) {
+    var re = /"([^"\n]{3,600})"|“([^”\n]{3,600})”/g;
+    var quotes = [];
+    var m;
+    while ((m = re.exec(text)) !== null) {
+      var inner = m[1] !== undefined ? m[1] : m[2];
+      quotes.push({ start: m.index, end: m.index + m[0].length, text: inner });
+    }
+    return quotes;
   }
 
   function interpretGrade(grade) {
@@ -550,68 +663,10 @@
     return "Very dense — reads like an academic paper, not a press release. Simplify substantially.";
   }
 
-  function analyze() {
-    var text = elInputText.value;
-    if (!text || !text.trim()) {
-      alert("Paste some text first.");
-      return;
-    }
-    if (!CONFIG) CONFIG = DEFAULT_CONFIG;
-
-    var sentences = splitSentences(text);
-    var totalWords = tokenizeWords(text).length;
-
-    // Per-sentence data
-    var sentenceData = sentences.map(function (s) {
-      var wordCount = tokenizeWords(s.text).length;
-      var buzz = analyzeBuzzwords(s);
-      return { sentence: s, wordCount: wordCount, buzz: buzz };
-    });
-
-    var limit = CONFIG.thresholds.sentenceLengthLimit;
-    var overLimit = sentenceData.filter(function (d) { return d.wordCount > limit; });
-    var avgLength = sentenceData.length
-      ? sentenceData.reduce(function (sum, d) { return sum + d.wordCount; }, 0) / sentenceData.length
-      : 0;
-    var percentOver = sentenceData.length ? (overLimit.length / sentenceData.length) * 100 : 0;
-    var lengthScore = clamp(100 - Math.max(0, avgLength - 15) * 2.5 - percentOver, 0, 100);
-
-    var totalBuzzMatches = sentenceData.reduce(function (sum, d) { return sum + d.buzz.length; }, 0);
-    var buzzDensity = totalWords ? (totalBuzzMatches / totalWords) * 100 : 0;
-    var buzzScore = clamp(100 - buzzDensity * 12, 0, 100);
-
-    var readability = computeReadability(text, tokenizeWords(text), sentences.length);
-    var targetGrade = CONFIG.thresholds.targetReadabilityGrade;
-    var readScore = clamp(100 - Math.max(0, readability.grade - targetGrade) * 8, 0, 100);
-
-    var weights = CONFIG.weights || DEFAULT_CONFIG.weights;
-    var wBuzz = typeof weights.buzzwordDensity === "number" ? weights.buzzwordDensity : 1;
-    var wLen = typeof weights.sentenceLength === "number" ? weights.sentenceLength : 1;
-    var wRead = typeof weights.readability === "number" ? weights.readability : 1;
-    var totalWeight = wBuzz + wLen + wRead;
-    var overall = totalWeight > 0
-      ? (buzzScore * wBuzz + lengthScore * wLen + readScore * wRead) / totalWeight
-      : (buzzScore + lengthScore + readScore) / 3;
-    overall = Math.round(overall);
-
-    renderResults({
-      text: text,
-      sentenceData: sentenceData,
-      totalWords: totalWords,
-      limit: limit,
-      overLimit: overLimit,
-      avgLength: avgLength,
-      buzzDensity: buzzDensity,
-      totalBuzzMatches: totalBuzzMatches,
-      buzzScore: buzzScore,
-      lengthScore: lengthScore,
-      readability: readability,
-      readScore: readScore,
-      overall: overall
-    });
-
-    elResults.hidden = false;
-    elResults.scrollIntoView({ behavior: "smooth", block: "start" });
+  function densityScore(matchCount, totalWords, target, penaltyPerPercent) {
+    var density = totalWords ? (matchCount / totalWords) * 100 : 0;
+    var score = clamp(100 - Math.max(0, density - target) * penaltyPerPercent, 0, 100);
+    return { density: density, score: score };
   }
 
   function verdictForScore(score) {
@@ -622,41 +677,200 @@
     return "Heavy rewrite recommended before this goes out.";
   }
 
+  function analyze() {
+    var text = elInputText.value;
+    if (!text || !text.trim()) {
+      alert("Paste some text first.");
+      return;
+    }
+    if (!CONFIG) CONFIG = DEFAULT_CONFIG;
+    var T = CONFIG.thresholds;
+
+    var sentences = splitSentences(text);
+    var totalWords = tokenizeWords(text).length;
+
+    var buzzMatches = genericPhraseMatches(text, CONFIG.buzzwords);
+    var hedgeMatches = genericPhraseMatches(text, CONFIG.hedges);
+    var superlativeMatches = genericPhraseMatches(text, CONFIG.superlativesAndAbsolutes);
+    var selfRefMatches = genericPhraseMatches(text, CONFIG.selfReferenceTerms);
+    var passiveMatches = findPassiveMatches(text, CONFIG.irregularPastParticiples);
+    var nominalMatches = findNominalisationMatches(text, CONFIG.nominalisationSuffixes);
+    var acronymMatches = findAcronymMatches(text, CONFIG.acronymAllowlist);
+    var concreteMatches = findConcreteSignals(text, CONFIG.monthNames);
+    var quotes = findQuotes(text);
+
+    // Per-sentence data, for the sentence-length check and worst-offenders ranking.
+    var sentenceData = sentences.map(function (s) {
+      return { sentence: s, wordCount: tokenizeWords(s.text).length, buzz: 0, hedge: 0, superlative: 0, nominal: 0, acronym: 0, passive: false };
+    });
+    function tally(matches, key, flagOnly) {
+      matches.forEach(function (m) {
+        var idx = findSentenceIndex(sentences, m.start);
+        if (idx >= 0) { if (flagOnly) sentenceData[idx][key] = true; else sentenceData[idx][key]++; }
+      });
+    }
+    tally(buzzMatches, "buzz");
+    tally(hedgeMatches, "hedge");
+    tally(superlativeMatches, "superlative");
+    tally(nominalMatches, "nominal");
+    tally(acronymMatches, "acronym");
+    tally(passiveMatches, "passive", true);
+
+    // --- Sentence length ---
+    var limit = T.sentenceLengthLimit;
+    var overLimit = sentenceData.filter(function (d) { return d.wordCount > limit; });
+    var avgLength = sentenceData.length ? sentenceData.reduce(function (s, d) { return s + d.wordCount; }, 0) / sentenceData.length : 0;
+    var percentOver = sentenceData.length ? (overLimit.length / sentenceData.length) * 100 : 0;
+    var lengthScore = clamp(100 - Math.max(0, avgLength - T.sentenceLengthComfortableAverage) * T.sentenceLengthPenaltyPerWordOverAverage - percentOver * T.sentenceLengthPenaltyPerPercentOverLimit, 0, 100);
+
+    // --- Buzzwords ---
+    var buzz = densityScore(buzzMatches.length, totalWords, 0, T.buzzwordPenaltyPerPercent);
+
+    // --- Readability ---
+    var syllables = 0;
+    tokenizeWords(text).forEach(function (w) { syllables += countSyllables(w); });
+    var grade = (totalWords === 0 || sentences.length === 0) ? 0 : 0.39 * (totalWords / sentences.length) + 11.8 * (syllables / totalWords) - 15.59;
+    var readScore = clamp(100 - Math.max(0, grade - T.targetReadabilityGrade) * T.readabilityPenaltyPerGrade, 0, 100);
+
+    // --- Passive voice ---
+    var passiveSentenceCount = sentenceData.filter(function (d) { return d.passive; }).length;
+    var passivePercent = sentences.length ? (passiveSentenceCount / sentences.length) * 100 : 0;
+    var passiveScore = clamp(100 - Math.max(0, passivePercent - T.passiveVoiceAcceptablePercent) * T.passiveVoicePenaltyPerPercent, 0, 100);
+
+    // --- Hedging, superlatives, nominalisation, self-reference, acronyms (all density-based) ---
+    var hedge = densityScore(hedgeMatches.length, totalWords, T.hedgeDensityTarget, T.hedgePenaltyPerPercent);
+    var superlative = densityScore(superlativeMatches.length, totalWords, T.superlativeDensityTarget, T.superlativePenaltyPerPercent);
+    var nominal = densityScore(nominalMatches.length, totalWords, T.nominalisationDensityTarget, T.nominalisationPenaltyPerPercent);
+    var selfRef = densityScore(selfRefMatches.length, totalWords, T.selfReferenceDensityTarget, T.selfReferencePenaltyPerPercent);
+    var acronym = densityScore(acronymMatches.length, totalWords, T.acronymDensityTarget, T.acronymPenaltyPerPercent);
+
+    // --- Concreteness ---
+    var signalsPer100 = totalWords ? (concreteMatches.length / totalWords) * 100 : 0;
+    var concretenessScore = concreteMatches.length === 0 ? 0 : clamp((signalsPer100 / T.concretenessTargetPer100Words) * 100, 0, 100);
+
+    // --- Empty quote detector ---
+    var quoteData = quotes.map(function (q) {
+      var words = tokenizeWords(q.text).length;
+      var qBuzz = genericPhraseMatches(q.text, CONFIG.buzzwords).length;
+      var qConcrete = findConcreteSignals(q.text, CONFIG.monthNames).length;
+      var isEmpty = qConcrete === 0 && words >= T.emptyQuoteMinWords;
+      return { start: q.start, end: q.end, text: q.text, words: words, buzz: qBuzz, concrete: qConcrete, isEmpty: isEmpty };
+    });
+    var emptyQuotes = quoteData.filter(function (q) { return q.isEmpty; });
+    var emptyQuoteScore = quoteData.length === 0 ? 100 : clamp(100 * (1 - emptyQuotes.length / quoteData.length), 0, 100);
+
+    var scores = {
+      buzzwordDensity: buzz.score, sentenceLength: lengthScore, readability: readScore,
+      passiveVoice: passiveScore, emptyQuote: emptyQuoteScore, hedging: hedge.score,
+      concreteness: concretenessScore, nominalisation: nominal.score,
+      selfReference: selfRef.score, superlatives: superlative.score, acronymLoad: acronym.score
+    };
+    var weights = CONFIG.weights;
+    var weightedSum = 0, totalWeight = 0;
+    Object.keys(scores).forEach(function (key) {
+      var w = typeof weights[key] === "number" ? weights[key] : 1;
+      weightedSum += scores[key] * w;
+      totalWeight += w;
+    });
+    var overall = Math.round(totalWeight > 0 ? weightedSum / totalWeight : 0);
+
+    var result = {
+      text: text, sentences: sentences, sentenceData: sentenceData, totalWords: totalWords, limit: limit,
+      overLimit: overLimit, avgLength: avgLength,
+      buzzMatches: buzzMatches, buzz: buzz,
+      grade: grade, readScore: readScore,
+      passiveMatches: passiveMatches, passivePercent: passivePercent, passiveSentenceCount: passiveSentenceCount, passiveScore: passiveScore,
+      hedgeMatches: hedgeMatches, hedge: hedge,
+      superlativeMatches: superlativeMatches, superlative: superlative,
+      nominalMatches: nominalMatches, nominal: nominal,
+      selfRefMatches: selfRefMatches, selfRef: selfRef,
+      acronymMatches: acronymMatches, acronym: acronym,
+      concreteMatches: concreteMatches, signalsPer100: signalsPer100, concretenessScore: concretenessScore,
+      quoteData: quoteData, emptyQuotes: emptyQuotes, emptyQuoteScore: emptyQuoteScore,
+      lengthScore: lengthScore, overall: overall
+    };
+
+    renderResults(result);
+    elResultsPanel.hidden = false;
+    elAnnotatedSection.hidden = false;
+  }
+
+  function setScore(id, score) { $(id).textContent = Math.round(score) + "/100"; }
+
   function renderResults(r) {
     elOverallGrade.textContent = letterGrade(r.overall) + " (" + r.overall + "/100)";
     elOverallGrade.className = gradeClass(r.overall);
     elOverallVerdict.textContent = verdictForScore(r.overall);
 
-    // Buzzword card
-    elScoreBuzz.textContent = Math.round(r.buzzScore) + "/100";
-    elBodyBuzz.innerHTML =
-      "<p>" + r.totalBuzzMatches + " buzzword match" + (r.totalBuzzMatches === 1 ? "" : "es") +
-      " out of " + r.totalWords + " words &mdash; a density of " + r.buzzDensity.toFixed(1) + "%.</p>" +
+    setScore("score-buzzword", r.buzz.score);
+    $("body-buzzword").innerHTML =
+      "<p>" + r.buzzMatches.length + " buzzword match" + (r.buzzMatches.length === 1 ? "" : "es") + " out of " + r.totalWords + " words &mdash; a density of " + r.buzz.density.toFixed(1) + "%.</p>" +
       "<p>Buzzwords are vague, overused corporate phrases (e.g. \"synergy\", \"best-in-class\", \"cutting-edge\") that sound impressive but say nothing specific. Swap them for concrete facts.</p>";
 
-    // Sentence length card
-    elScoreLen.textContent = Math.round(r.lengthScore) + "/100";
-    elBodyLen.innerHTML =
-      "<p>Average sentence length: " + r.avgLength.toFixed(1) + " words. " +
-      r.overLimit.length + " of " + r.sentenceData.length + " sentence" + (r.sentenceData.length === 1 ? "" : "s") +
-      " " + (r.overLimit.length === 1 ? "is" : "are") + " over the " + r.limit + "-word guideline.</p>" +
+    setScore("score-sentence-length", r.lengthScore);
+    $("body-sentence-length").innerHTML =
+      "<p>Average sentence length: " + r.avgLength.toFixed(1) + " words. " + r.overLimit.length + " of " + r.sentenceData.length + " sentence" + (r.sentenceData.length === 1 ? "" : "s") + " " + (r.overLimit.length === 1 ? "is" : "are") + " over the " + r.limit + "-word guideline.</p>" +
       "<p>Long sentences are harder to skim. Readers of press releases scan &mdash; aim for sentences under " + r.limit + " words.</p>";
 
-    // Readability card
-    elScoreRead.textContent = Math.round(r.readScore) + "/100";
-    var gradeDisplay = isFinite(r.readability.grade) ? r.readability.grade.toFixed(1) : "n/a";
-    elBodyRead.innerHTML =
-      "<p>Flesch-Kincaid grade level: " + gradeDisplay + "</p>" +
-      "<p>" + interpretGrade(r.readability.grade) + "</p>";
+    setScore("score-readability", r.readScore);
+    $("body-readability").innerHTML =
+      "<p>Flesch-Kincaid grade level: " + (isFinite(r.grade) ? r.grade.toFixed(1) : "n/a") + "</p><p>" + interpretGrade(r.grade) + "</p>";
 
-    // Worst offenders: rank sentences by (words over limit) + (buzzwords in sentence * 3)
-    var ranked = r.sentenceData
-      .map(function (d) {
-        var overBy = Math.max(0, d.wordCount - r.limit);
-        var badness = overBy + d.buzz.length * 3;
-        return { d: d, badness: badness, overBy: overBy };
-      })
-      .filter(function (x) { return x.badness > 0; })
+    setScore("score-passive", r.passiveScore);
+    $("body-passive").innerHTML =
+      "<p>" + r.passiveSentenceCount + " of " + r.sentenceData.length + " sentence" + (r.sentenceData.length === 1 ? "" : "s") + " (" + r.passivePercent.toFixed(1) + "%) use passive voice.</p>" +
+      "<p>" + (r.passivePercent <= 20 ? "That's within the normal range — some passive voice is fine and occasionally correct. No action needed." : "That's above the 20% guideline. Passive voice hides who's doing the acting (\"mistakes were made\" vs. \"we made mistakes\") — consider rewriting the most prominent ones as active voice.") + "</p>";
+
+    setScore("score-hedging", r.hedge.score);
+    $("body-hedging").innerHTML =
+      "<p>" + r.hedgeMatches.length + " hedge/weasel word" + (r.hedgeMatches.length === 1 ? "" : "s") + " out of " + r.totalWords + " words &mdash; a density of " + r.hedge.density.toFixed(1) + "%.</p>" +
+      "<p>Words like \"may\", \"could\", \"aims to\" or \"up to\" soften a claim so much it stops meaning anything concrete. A little is normal; a lot signals you're avoiding commitment.</p>";
+
+    setScore("score-superlatives", r.superlative.score);
+    $("body-superlatives").innerHTML =
+      "<p>" + r.superlativeMatches.length + " superlative or absolute claim" + (r.superlativeMatches.length === 1 ? "" : "s") + " out of " + r.totalWords + " words &mdash; a density of " + r.superlative.density.toFixed(1) + "%.</p>" +
+      "<p>Words like \"best\", \"only\", \"always\" or \"guaranteed\" are hard to prove and easy to challenge. Each one raises the bar for what you have to back up.</p>";
+
+    setScore("score-nominalisation", r.nominal.score);
+    $("body-nominalisation").innerHTML =
+      "<p>" + r.nominalMatches.length + " nominalisation" + (r.nominalMatches.length === 1 ? "" : "s") + " (e.g. \"the implementation of\" instead of \"implementing\") out of " + r.totalWords + " words.</p>" +
+      "<p>Turning verbs into nouns makes writing feel formal and distant. Using the verb directly is usually punchier.</p>";
+
+    setScore("score-self-reference", r.selfRef.score);
+    $("body-self-reference").innerHTML =
+      "<p>\"We\"/\"our\"/\"the company\" and similar terms appear " + r.selfRefMatches.length + " times &mdash; " + r.selfRef.density.toFixed(1) + "% of all words.</p>" +
+      "<p>Some self-reference is natural in a press release. A very high ratio can mean the release talks about the company more than it talks about what matters to the reader.</p>";
+
+    setScore("score-acronym", r.acronym.score);
+    $("body-acronym").innerHTML =
+      "<p>" + r.acronymMatches.length + " acronym" + (r.acronymMatches.length === 1 ? "" : "s") + " flagged (common ones like CEO or UK are excluded) &mdash; " + r.acronym.density.toFixed(1) + "% of all words.</p>" +
+      "<p>Every acronym a general reader doesn't already know is a small tax on their attention. Spell it out on first use.</p>";
+
+    setScore("score-concreteness", r.concretenessScore);
+    $("body-concreteness").innerHTML =
+      "<p>" + r.concreteMatches.length + " concrete detail" + (r.concreteMatches.length === 1 ? "" : "s") + " found (numbers, dates, percentages, amounts) &mdash; " + r.signalsPer100.toFixed(1) + " per 100 words.</p>" +
+      "<p>" + (r.concreteMatches.length === 0 ? "Zero concrete details. This is the single biggest red flag — a release with no numbers, dates or specifics reads as pure spin." : "Concrete details give readers, and journalists, something to trust and quote.") + "</p>";
+
+    setScore("score-empty-quote", r.emptyQuoteScore);
+    var eqBody = "";
+    if (r.quoteData.length === 0) {
+      eqBody = "<p>No quotations found to evaluate. This check only applies once the text includes an attributed quote.</p>";
+    } else {
+      eqBody = "<p>" + r.emptyQuotes.length + " of " + r.quoteData.length + " quote" + (r.quoteData.length === 1 ? "" : "s") + " " + (r.emptyQuotes.length === 1 ? "is" : "are") + " empty &mdash; no numbers or concrete nouns, and high on buzzwords.</p>";
+      if (r.emptyQuotes.length > 0) {
+        eqBody += "<p class=\"shareable\">\"This quote would work equally well in a press release about a completely different product.\"</p><ul>";
+        r.emptyQuotes.forEach(function (q) { eqBody += "<li>“" + escapeHtml(q.text.trim()) + "”</li>"; });
+        eqBody += "</ul>";
+      }
+    }
+    $("body-empty-quote").innerHTML = eqBody;
+
+    // Worst offenders
+    var ranked = r.sentenceData.map(function (d) {
+      var overBy = Math.max(0, d.wordCount - r.limit);
+      var badness = overBy + d.buzz * 3 + d.hedge * 2 + d.superlative * 2 + d.nominal * 2 + d.acronym;
+      return { d: d, badness: badness, overBy: overBy };
+    }).filter(function (x) { return x.badness > 0; })
       .sort(function (a, b) { return b.badness - a.badness; })
       .slice(0, 5);
 
@@ -670,42 +884,81 @@
         var li = document.createElement("li");
         var reasons = [];
         if (item.overBy > 0) reasons.push(item.d.wordCount + " words (" + item.overBy + " over the " + r.limit + "-word limit)");
-        if (item.d.buzz.length > 0) reasons.push(item.d.buzz.length + " buzzword" + (item.d.buzz.length === 1 ? "" : "s"));
-        li.innerHTML = escapeHtml(item.d.sentence.text.trim()) +
-          "<span class=\"reason\">" + escapeHtml(reasons.join(" · ")) + "</span>";
+        if (item.d.buzz > 0) reasons.push(item.d.buzz + " buzzword" + (item.d.buzz === 1 ? "" : "s"));
+        if (item.d.hedge > 0) reasons.push(item.d.hedge + " hedge word" + (item.d.hedge === 1 ? "" : "s"));
+        if (item.d.superlative > 0) reasons.push(item.d.superlative + " superlative" + (item.d.superlative === 1 ? "" : "s"));
+        if (item.d.nominal > 0) reasons.push(item.d.nominal + " nominalisation" + (item.d.nominal === 1 ? "" : "s"));
+        if (item.d.acronym > 0) reasons.push(item.d.acronym + " acronym" + (item.d.acronym === 1 ? "" : "s"));
+        li.innerHTML = escapeHtml(item.d.sentence.text.trim()) + "<span class=\"reason\">" + escapeHtml(reasons.join(" · ")) + "</span>";
         elWorstList.appendChild(li);
       });
     }
 
-    // Annotated text
-    var html = r.sentenceData.map(function (d) {
-      var sentenceHtml = buildSentenceHtml(d);
-      if (d.wordCount > r.limit) {
-        return "<mark class=\"hl hl-long\" tabindex=\"0\">" + sentenceHtml +
-          "<span class=\"tip\">" + d.wordCount + " words &mdash; over the " + r.limit + "-word guideline. Consider splitting this sentence.</span></mark>";
-      }
-      return sentenceHtml;
-    }).join("");
-    elAnnotated.innerHTML = html || escapeHtml(r.text);
-
-    // Build plain-text report for copying
+    elAnnotated.innerHTML = buildAnnotatedHtml(r);
     lastReportText = buildReportText(r);
   }
 
-  function buildSentenceHtml(d) {
-    var text = d.sentence.text;
-    var pieces = [];
-    var cursor = 0;
-    d.buzz.forEach(function (mObj) {
-      if (mObj.start > cursor) pieces.push(escapeHtml(text.slice(cursor, mObj.start)));
-      pieces.push(
-        "<mark class=\"hl hl-buzz\" tabindex=\"0\">" + escapeHtml(text.slice(mObj.start, mObj.end)) +
-        "<span class=\"tip\">Buzzword: \"" + escapeHtml(mObj.phrase) + "\" &mdash; vague corporate language. Try a concrete alternative.</span></mark>"
-      );
-      cursor = mObj.end;
+  // Build a single flat list of highlight ranges (containers + phrase-level), then
+  // render them as properly nested <mark> tags so overlapping ranges never produce
+  // invalid/crossing HTML.
+  function buildAnnotatedHtml(r) {
+    var text = r.text;
+    var ranges = [];
+
+    r.sentenceData.forEach(function (d) {
+      if (d.wordCount > r.limit) {
+        ranges.push({ start: d.sentence.start, end: d.sentence.end, priority: 0, cls: "hl-long", tooltip: d.wordCount + " words &mdash; over the " + r.limit + "-word guideline. Consider splitting this sentence." });
+      }
     });
-    if (cursor < text.length) pieces.push(escapeHtml(text.slice(cursor)));
-    return pieces.join("");
+    r.emptyQuotes.forEach(function (q) {
+      ranges.push({ start: q.start, end: q.end, priority: 1, cls: "hl-quote", tooltip: "This quote would work equally well in a press release about a completely different product." });
+    });
+    r.buzzMatches.forEach(function (m) {
+      ranges.push({ start: m.start, end: m.end, priority: 2, cls: "hl-buzz", tooltip: "Buzzword: \"" + escapeHtml(m.label) + "\" &mdash; vague corporate language. Try a concrete alternative." });
+    });
+    r.hedgeMatches.forEach(function (m) {
+      ranges.push({ start: m.start, end: m.end, priority: 2, cls: "hl-hedge", tooltip: "Hedge word: \"" + escapeHtml(m.label) + "\" &mdash; softens the claim until it says very little." });
+    });
+    r.superlativeMatches.forEach(function (m) {
+      ranges.push({ start: m.start, end: m.end, priority: 2, cls: "hl-superlative", tooltip: "Superlative/absolute claim: \"" + escapeHtml(m.label) + "\" &mdash; hard to prove, easy to challenge." });
+    });
+    r.passiveMatches.forEach(function (m) {
+      ranges.push({ start: m.start, end: m.end, priority: 2, cls: "hl-passive", tooltip: "Passive voice: \"" + escapeHtml(m.label) + "\" &mdash; consider naming who's doing the action." });
+    });
+    r.nominalMatches.forEach(function (m) {
+      ranges.push({ start: m.start, end: m.end, priority: 2, cls: "hl-nominal", tooltip: "Nominalisation: \"" + escapeHtml(m.label) + "\" &mdash; a verb turned into a noun. The verb form is usually punchier." });
+    });
+    r.acronymMatches.forEach(function (m) {
+      ranges.push({ start: m.start, end: m.end, priority: 2, cls: "hl-acronym", tooltip: "Acronym: \"" + escapeHtml(m.label) + "\" &mdash; spell it out on first use for readers who don't already know it." });
+    });
+    r.concreteMatches.forEach(function (m) {
+      ranges.push({ start: m.start, end: m.end, priority: 2, cls: "hl-concrete", tooltip: "Concrete detail &mdash; numbers, dates and specifics give readers something to trust." });
+    });
+
+    if (ranges.length === 0) return escapeHtml(text);
+
+    var points = {};
+    points[0] = true;
+    points[text.length] = true;
+    ranges.forEach(function (rr) { points[rr.start] = true; points[rr.end] = true; });
+    var cuts = Object.keys(points).map(Number).sort(function (a, b) { return a - b; });
+
+    var html = "";
+    for (var i = 0; i < cuts.length - 1; i++) {
+      var segStart = cuts[i], segEnd = cuts[i + 1];
+      if (segStart >= segEnd) continue;
+      var active = ranges.filter(function (rr) { return rr.start <= segStart && rr.end >= segEnd; });
+      active.sort(function (a, b) { return a.priority - b.priority || a.start - b.start || b.end - a.end; });
+      var segText = escapeHtml(text.slice(segStart, segEnd));
+      var open = "", close = "";
+      active.forEach(function (rr) {
+        open += "<mark class=\"hl " + rr.cls + "\" tabindex=\"0\">";
+        close = "</mark>" + close;
+      });
+      var tip = active.length ? "<span class=\"tip\">" + active[active.length - 1].tooltip + "</span>" : "";
+      html += open + segText + tip + close;
+    }
+    return html;
   }
 
   function buildReportText(r) {
@@ -713,26 +966,25 @@
     lines.push("Comms Clarity Scorer report");
     lines.push("Overall: " + letterGrade(r.overall) + " (" + r.overall + "/100) — " + verdictForScore(r.overall));
     lines.push("");
-    lines.push("Buzzword density: " + Math.round(r.buzzScore) + "/100 — " + r.totalBuzzMatches + " matches, " + r.buzzDensity.toFixed(1) + "% density");
-    lines.push("Sentence length: " + Math.round(r.lengthScore) + "/100 — average " + r.avgLength.toFixed(1) + " words, " + r.overLimit.length + "/" + r.sentenceData.length + " sentences over " + r.limit + " words");
-    lines.push("Readability: " + Math.round(r.readScore) + "/100 — Flesch-Kincaid grade " + (isFinite(r.readability.grade) ? r.readability.grade.toFixed(1) : "n/a"));
+    lines.push("Concreteness: " + Math.round(r.concretenessScore) + "/100 — " + r.concreteMatches.length + " concrete details");
+    lines.push("Empty quote detector: " + Math.round(r.emptyQuoteScore) + "/100 — " + r.emptyQuotes.length + "/" + r.quoteData.length + " quotes empty");
+    lines.push("Buzzword density: " + Math.round(r.buzz.score) + "/100 — " + r.buzzMatches.length + " matches, " + r.buzz.density.toFixed(1) + "% density");
+    lines.push("Sentence length: " + Math.round(r.lengthScore) + "/100 — average " + r.avgLength.toFixed(1) + " words, " + r.overLimit.length + "/" + r.sentenceData.length + " over " + r.limit + " words");
+    lines.push("Readability: " + Math.round(r.readScore) + "/100 — Flesch-Kincaid grade " + (isFinite(r.grade) ? r.grade.toFixed(1) : "n/a"));
+    lines.push("Passive voice: " + Math.round(r.passiveScore) + "/100 — " + r.passivePercent.toFixed(1) + "% of sentences");
+    lines.push("Hedging: " + Math.round(r.hedge.score) + "/100 — " + r.hedge.density.toFixed(1) + "% density");
+    lines.push("Superlatives/absolutes: " + Math.round(r.superlative.score) + "/100 — " + r.superlative.density.toFixed(1) + "% density");
+    lines.push("Nominalisation: " + Math.round(r.nominal.score) + "/100 — " + r.nominalMatches.length + " instances");
+    lines.push("Self-reference ratio: " + Math.round(r.selfRef.score) + "/100 — " + r.selfRef.density.toFixed(1) + "% density");
+    lines.push("Acronym load: " + Math.round(r.acronym.score) + "/100 — " + r.acronymMatches.length + " flagged");
     lines.push("");
     lines.push("Worst offenders:");
-    var ranked = r.sentenceData
-      .map(function (d) {
-        var overBy = Math.max(0, d.wordCount - r.limit);
-        return { d: d, badness: overBy + d.buzz.length * 3 };
-      })
-      .filter(function (x) { return x.badness > 0; })
-      .sort(function (a, b) { return b.badness - a.badness; })
-      .slice(0, 5);
-    if (ranked.length === 0) {
-      lines.push("- None — nice and tight.");
-    } else {
-      ranked.forEach(function (item, i) {
-        lines.push((i + 1) + ". " + item.d.sentence.text.trim());
-      });
-    }
+    var ranked = r.sentenceData.map(function (d) {
+      var overBy = Math.max(0, d.wordCount - r.limit);
+      return { d: d, badness: overBy + d.buzz * 3 + d.hedge * 2 + d.superlative * 2 + d.nominal * 2 + d.acronym };
+    }).filter(function (x) { return x.badness > 0; }).sort(function (a, b) { return b.badness - a.badness; }).slice(0, 5);
+    if (ranked.length === 0) lines.push("- None — nice and tight.");
+    else ranked.forEach(function (item, i) { lines.push((i + 1) + ". " + item.d.sentence.text.trim()); });
     return lines.join("\n");
   }
 
@@ -740,13 +992,8 @@
 
   document.addEventListener("click", function (e) {
     var hl = e.target.closest(".hl");
-    document.querySelectorAll(".hl.open").forEach(function (el) {
-      if (el !== hl) el.classList.remove("open");
-    });
-    if (hl) {
-      hl.classList.toggle("open");
-      e.stopPropagation();
-    }
+    document.querySelectorAll(".hl.open").forEach(function (el) { if (el !== hl) el.classList.remove("open"); });
+    if (hl) { hl.classList.toggle("open"); e.stopPropagation(); }
   });
 
   elCopyBtn.addEventListener("click", function () {
@@ -755,9 +1002,7 @@
       navigator.clipboard.writeText(lastReportText).then(function () {
         elCopyBtn.textContent = "Copied!";
         setTimeout(function () { elCopyBtn.textContent = "Copy report"; }, 1500);
-      }, function () {
-        fallbackCopy(lastReportText);
-      });
+      }, function () { fallbackCopy(lastReportText); });
     } else {
       fallbackCopy(lastReportText);
     }
