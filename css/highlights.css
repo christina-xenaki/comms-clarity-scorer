@@ -1,0 +1,97 @@
+#annotated-output { white-space: pre-wrap; font-size: 1rem; line-height: 1.7; }
+.boilerplate-text { opacity: 0.55; }
+
+.legend { display: flex; flex-wrap: wrap; gap: 0.75rem; font-size: 0.8rem; color: var(--color-muted); margin-bottom: 0.75rem; }
+.legend span { display: inline-flex; align-items: center; gap: 0.35rem; }
+.swatch {
+  display: inline-block;
+  padding: 0 0.3rem;
+  border-radius: 3px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-text);
+  line-height: 1.4;
+}
+
+.hl, .swatch {
+  position: relative;
+  background: transparent;
+  color: inherit;
+  border-radius: 3px;
+  text-decoration-line: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+mark.hl { cursor: pointer; }
+
+mark.hl:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Container-level marks (whole sentence / whole quote): background tint only —
+   already distinguished from word-level marks by their much larger extent, so no
+   underline pattern is layered on top of running, wrapped text. */
+.hl-long { background: var(--c-long-bg); text-decoration-line: none; }
+mark.hl-long { box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.hl-quote { background: var(--c-quote-bg); text-decoration-line: none; }
+mark.hl-quote { box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+
+/* Word/phrase-level marks: background tint + a non-solid underline style, grouped by
+   family so the pattern alone (independent of colour) tells the categories apart —
+   solid underline stays reserved for real links (see .card-body a). Shared with the
+   legend's ".swatch" samples so the key always matches what's on the page. */
+.hl-buzz, .hl-hedge, .hl-nominal { text-decoration-style: dotted; }
+.hl-superlative, .hl-regulated { text-decoration-style: wavy; }
+.hl-passive, .hl-acronym { text-decoration-style: dashed; }
+.hl-concrete, .hl-strength { text-decoration-style: double; text-decoration-thickness: 3px; }
+
+.hl-buzz { background: var(--c-buzz-bg); text-decoration-color: var(--c-buzz-border); }
+.hl-hedge { background: var(--c-hedge-bg); text-decoration-color: var(--c-hedge-border); }
+.hl-superlative { background: var(--c-superlative-bg); text-decoration-color: var(--c-superlative-border); }
+.hl-passive { background: var(--c-passive-bg); text-decoration-color: var(--c-passive-border); }
+.hl-nominal { background: var(--c-nominal-bg); text-decoration-color: var(--c-nominal-border); }
+.hl-acronym { background: var(--c-acronym-bg); text-decoration-color: var(--c-acronym-border); }
+.hl-concrete { background: var(--c-concrete-bg); text-decoration-color: var(--c-concrete-border); }
+.hl-strength { background: var(--c-strength-bg); text-decoration-color: var(--c-strength-border); }
+.hl-regulated { background: var(--c-regulated-bg); text-decoration-color: var(--c-regulated-border); }
+mark.hl-buzz, mark.hl-hedge, mark.hl-superlative, mark.hl-passive, mark.hl-nominal,
+mark.hl-acronym, mark.hl-concrete, mark.hl-strength, mark.hl-regulated { padding: 0 1px; }
+
+/* The explanation stays in the accessibility tree at all times (so aria-describedby
+   always works for screen readers) but is only visually shown once .open is toggled —
+   tap-to-toggle for sighted keyboard/touch users, always-on for assistive tech. */
+mark.hl .tip {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+mark.hl.open .tip {
+  position: absolute;
+  width: max-content;
+  height: auto;
+  margin: 0;
+  padding: 0.5rem 0.65rem;
+  clip: auto;
+  overflow: visible;
+  white-space: normal;
+  left: 0;
+  top: 100%;
+  margin-top: 4px;
+  z-index: 10;
+  background: var(--color-text);
+  color: #fff;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  border-radius: 6px;
+  max-width: 80vw;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}

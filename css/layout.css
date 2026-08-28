@@ -1,0 +1,37 @@
+header {
+  padding: 1.25rem 1rem 1rem 1rem;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+header h1 { margin: 0 0 0.25rem 0; font-size: 1.4rem; }
+header p { margin: 0; color: var(--color-muted); font-size: 0.95rem; }
+
+.sector-bar {
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  padding: 0.6rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.sector-bar label { font-weight: 600; margin: 0; white-space: nowrap; }
+
+.layout {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.col-text, .col-scores { width: 100%; }
+
+section { margin-bottom: 1.5rem; }
+
+footer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+  color: var(--color-muted);
+  font-size: 0.85rem;
+}

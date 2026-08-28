@@ -1,0 +1,60 @@
+:root {
+  --color-bg: #f7f7f5;
+  --color-surface: #ffffff;
+  --color-border: #e0ddd6;
+  --color-text: #1f1e1c;
+  --color-muted: #6b6862;
+  --color-accent: #1d5b4f;
+  --color-accent-contrast: #ffffff;
+
+  --color-good: #1d5b4f;
+  --color-warn: #b8860b;
+  --color-bad: #b3392c;
+
+  /* Category colours: chosen so each is distinguishable by hue AND paired with a
+     distinct non-solid underline style (see mark.hl-* below) — colour is never the
+     only signal. Border colours are tuned to stay above 3:1 contrast against their
+     own tint, and all backgrounds stay above 12:1 text contrast (WCAG AA needs 4.5:1). */
+  --c-buzz-bg: #ffe08a;      --c-buzz-border: #926a09;
+  --c-long-bg: #ffd0c2;      --c-long-border: #b84d2b;
+  --c-hedge-bg: #cfe3ff;     --c-hedge-border: #3b6fb3;
+  --c-superlative-bg: #e6d6ff; --c-superlative-border: #7b4fb8;
+  --c-passive-bg: #ffd3e2;   --c-passive-border: #b8365f;
+  --c-nominal-bg: #f0dbf0;   --c-nominal-border: #853285;
+  --c-acronym-bg: #e2e2e2;   --c-acronym-border: #616161;
+  --c-concrete-bg: #dcf3d3;  --c-concrete-border: #3f8f2a;
+  --c-quote-bg: #ffbdbd;     --c-quote-border: #c0392b;
+  --c-strength-bg: #c8f0e6;  --c-strength-border: #1f8a6b;
+  --c-regulated-bg: #f3c9c9; --c-regulated-border: #7a1f1f;
+
+  --radius: 10px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+
+body { padding: 0 0 3rem 0; }

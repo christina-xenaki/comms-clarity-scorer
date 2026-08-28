@@ -84,14 +84,14 @@ Mobile-first layout. Full width, single column, big tap targets. Test on a phone
 
 ## Configuration
 
-A single file, `config.json`, containing:
+A single file, `config/config.json`, containing:
 - `buzzwords` — array of strings
 - `hedges` — array of strings
 - `regulatedClaims` — array of strings, plus an `enabled` flag and a `sectorName` label
 - `thresholds` — sentence length limit, target readability grade, acceptable passive percentage
 - `weights` — how much each check contributes to the overall score
 
-Ship at least three: `config.default.json`, `config.pharma-oncology.json`, `config.responsible-ai.json`.
+Ship at least three: `config/config.default.json`, `config/config.pharma-oncology.json`, `config/config.responsible-ai.json`.
 
 The settings panel in the UI should let a user paste in or edit lists without touching files, and download their edited config.
 

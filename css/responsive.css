@@ -1,0 +1,17 @@
+@media (min-width: 900px) {
+  header h1 { font-size: 1.6rem; }
+
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 400px;
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  .col-scores {
+    position: sticky;
+    top: 1rem;
+  }
+
+  textarea { min-height: 340px; }
+}

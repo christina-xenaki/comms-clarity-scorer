@@ -2,7 +2,7 @@
 
 This document explains, in plain English, exactly how every check in the Comms Clarity Scorer is calculated: what it looks for, how the 0–100 sub-score is worked out, what each threshold means, and where the numbers came from.
 
-**Read this if you want to trust the score, tune it, or challenge it.** Nothing here is hidden inside the code — every number below is a `thresholds` or `weights` value in `config.json`, so you can see and change all of them without touching any code.
+**Read this if you want to trust the score, tune it, or challenge it.** Nothing here is hidden inside the code — every number below is a `thresholds` or `weights` value in `config/config.json`, so you can see and change all of them without touching any code.
 
 ## The honest bit, up front
 
@@ -10,7 +10,7 @@ This is a rule-based heuristic tool, not a language model and not a grammar chec
 
 - **The thresholds and penalty multipliers below are reasonable starting defaults**, chosen by the developer for a first version of this tool. A handful are genuinely sourceable (Flesch-Kincaid, the inverted pyramid convention) and are cited where they are; most of the rest are **not** derived from a statistical study of thousands of real press releases, and say so rather than claiming false precision. Treat scores as a useful, consistent starting point for a conversation — "why is this scoring an E?" — not as an infallible verdict.
 - **Every check has known blind spots**, documented in its own section below. Where a check is likely to produce false positives or false negatives, that's called out explicitly rather than glossed over.
-- All thresholds live in `config.json` under `thresholds`, and every check's contribution to the overall score lives under `weights`. Edit either and the tool immediately scores differently — no rebuild needed.
+- All thresholds live in `config/config.json` under `thresholds`, and every check's contribution to the overall score lives under `weights`. Edit either and the tool immediately scores differently — no rebuild needed.
 - **Disclaimer:** this tool is directional, not authoritative. It does not replace an editor. Regulated-claim flags are a prompt to consult your own legal, compliance, or medical affairs team, not a sign-off. It's tuned for English. A good score does not mean the release is accurate, newsworthy, or that it will earn coverage.
 
 ## The headline metric
@@ -19,13 +19,13 @@ Above the grade, the tool shows one line in the shape **"11 buzzwords. 2 concret
 
 ## How the overall score is built
 
-Every check produces a sub-score from 0 (worst) to 100 (best). The overall score is a **weighted average** of every active sub-score, using the multipliers in `config.json`'s `weights` object:
+Every check produces a sub-score from 0 (worst) to 100 (best). The overall score is a **weighted average** of every active sub-score, using the multipliers in `config/config.json`'s `weights` object:
 
 ```
 overall = (score₁×weight₁ + score₂×weight₂ + … ) / (weight₁ + weight₂ + …)
 ```
 
-Most checks default to a weight of `1`. **Concreteness** and **strengths** default to `2` — a deliberate choice: concreteness because a total absence of concrete detail is "the single biggest red flag" a release can have, and strengths for the same reason in reverse, so the tool visibly rewards good writing and not just penalises bad writing. **Regulated claims never enters this average, under any sector** — it isn't a `weights` key at all any more. It's a compliance flag, not a clarity signal, so switching sectors (see section E below) never moves your overall grade, even when it finds matches. Change any other weight in `config.json` to rebalance what the tool cares about most, or set a weight to `0` to switch a check off entirely.
+Most checks default to a weight of `1`. **Concreteness** and **strengths** default to `2` — a deliberate choice: concreteness because a total absence of concrete detail is "the single biggest red flag" a release can have, and strengths for the same reason in reverse, so the tool visibly rewards good writing and not just penalises bad writing. **Regulated claims never enters this average, under any sector** — it isn't a `weights` key at all any more. It's a compliance flag, not a clarity signal, so switching sectors (see section E below) never moves your overall grade, even when it finds matches. Change any other weight in `config/config.json` to rebalance what the tool cares about most, or set a weight to `0` to switch a check off entirely.
 
 The overall score maps to a letter grade the same way school grades usually do: A ≥ 90, B ≥ 80, C ≥ 70, D ≥ 60, E below 60. The interface shows each grade as a weather icon rather than a bare letter (A = ☀️ Clear, down to E = 🌧 Murky) — see the README for why, and note that this is a display choice only: the 90/80/70/60 cut-offs themselves are unchanged.
 
@@ -43,7 +43,7 @@ Where a claim is genuinely sourced (Flesch-Kincaid, the inverted-pyramid convent
 
 Rating things as a percentage of *every* word is misleading, because function words ("the," "of," "and," "to") make up 40–50% of any text and water down the percentage without meaning anything. So different checks below deliberately use different denominators:
 
-- **Content words**, not total words, for buzzwords, hedging, superlatives, and nominalisation. Content words = every word minus a `stopwords` list of ~130 common function words in `config.json`. A release that's 10% buzzwords-by-content-word is a much stronger signal than 10%-by-total-word would suggest, since content words are the words actually carrying meaning.
+- **Content words**, not total words, for buzzwords, hedging, superlatives, and nominalisation. Content words = every word minus a `stopwords` list of ~130 common function words in `config/config.json`. A release that's 10% buzzwords-by-content-word is a much stronger signal than 10%-by-total-word would suggest, since content words are the words actually carrying meaning.
 - **Per 100 words** (of whichever denominator applies) so a 200-word pitch and a 900-word release are directly comparable — this is just what "density" means throughout this document.
 - **Per sentence**, reported alongside density where it's more intuitive to read: buzzword, hedge, and other check cards say things like *"7 of your 14 sentences contain a buzzword"* in addition to the density number.
 - **Absolute counts**, not a density, for acronym load specifically — see section 12 below; a percentage doesn't capture "how many distinct acronyms did you never explain," a count does.
@@ -62,7 +62,7 @@ The tool detects a handful of structural zones in the pasted text:
 - **Boilerplate** (including "Notes to editors"/references and contact blocks) — see below.
 - **Body** — everything else.
 
-**Boilerplate detection:** the tool looks at your paragraphs (blank-line-separated blocks) from the end, backwards, and treats any consecutive trailing paragraph as boilerplate if it starts with one of `boilerplateHeadingPatterns` in `config.json` (by default: "about ", "notes to editors", "note to editors", "notes for editors", "references") or contains a contact indicator (`media contact`, `press contact`, `contact:`, `for more information`, or an email address) — configured via `contactIndicators`. It stops at the first paragraph (from the end) that matches neither, so a trailing "About the company" paragraph immediately followed by "Notes to editors" and a contact line are all correctly caught as one boilerplate block, in any order.
+**Boilerplate detection:** the tool looks at your paragraphs (blank-line-separated blocks) from the end, backwards, and treats any consecutive trailing paragraph as boilerplate if it starts with one of `boilerplateHeadingPatterns` in `config/config.json` (by default: "about ", "notes to editors", "note to editors", "notes for editors", "references") or contains a contact indicator (`media contact`, `press contact`, `contact:`, `for more information`, or an email address) — configured via `contactIndicators`. It stops at the first paragraph (from the end) that matches neither, so a trailing "About the company" paragraph immediately followed by "Notes to editors" and a contact line are all correctly caught as one boilerplate block, in any order.
 
 Everything inside that detected range is **excluded from every check and from the overall score** — including the acronym check specifically, so a "Notes to editors" block that re-lists trademark acronyms, or a references list full of citations, doesn't inflate your acronym count. It's still shown in the annotated text, faded, so you can see what was excluded and why, and it gets its own small info card reporting its word count and buzzword count on their own — graded separately, never folded into your main grade.
 
@@ -124,7 +124,7 @@ No quotes in the text at all → score is 100 with a note that the check didn't 
 
 ### 4. Buzzword density — weight `1`
 
-**What it looks for:** exact matches (whole-word, case-insensitive) against the `buzzwords` list in `config.json` — words like "synergy," "best-in-class," "cutting-edge." Multi-word phrases like "excited to announce" match as a phrase.
+**What it looks for:** exact matches (whole-word, case-insensitive) against the `buzzwords` list in `config/config.json` — words like "synergy," "best-in-class," "cutting-edge." Multi-word phrases like "excited to announce" match as a phrase.
 
 **Scoring:** density-based against **content words** (see the denominator section above) with `target = 0` and `buzzwordPenaltyPerPercent = 12`. Zero tolerance by design — every buzzword counts against the score.
 
@@ -132,7 +132,7 @@ No quotes in the text at all → score is 100 with a note that the check didn't 
 score = 100 − max(0, density − 0) × 12
 ```
 
-**Where the list came from:** the starter list in the original tool spec — 32 terms drawn from common comms/PR jargon complaints. It's the first thing worth editing in `config.json` for your own organisation's pet peeves.
+**Where the list came from:** the starter list in the original tool spec — 32 terms drawn from common comms/PR jargon complaints. It's the first thing worth editing in `config/config.json` for your own organisation's pet peeves.
 
 ### 5. Sentence length — weight `1`
 
@@ -198,7 +198,7 @@ score = 100 − max(0, passivePercent − 20) × passiveVoicePenaltyPerPercent (
 
 ### 11. Self-reference — weight `1`
 
-**What it looks for:** not a word density any more, but a per-sentence classification of who each (non-quoted, non-boilerplate) sentence is actually about. For each eligible sentence, the tool looks at its first eight words for the earliest match against three word lists in `config.json`:
+**What it looks for:** not a word density any more, but a per-sentence classification of who each (non-quoted, non-boilerplate) sentence is actually about. For each eligible sentence, the tool looks at its first eight words for the earliest match against three word lists in `config/config.json`:
 
 - **`companyFacingTerms`** — we, us, our, ours, ourselves, the company, the team, the firm, the organisation
 - **`audienceFacingTerms`** — you, your, yours, customers, users, readers, subscribers, clients, members, patients
@@ -242,7 +242,7 @@ The **Rewrite suggestions** panel lists concrete fixes, but is explicit about ho
 **"Suggested rewrite" — automatic rewrite, shown directly:**
 - **Passive with a named agent** ("X was impacted by the delay") → the fragment is swapped to active order ("the delay impacted"). Requires a "by …" phrase to follow the passive verb within the same clause; the participle's base form comes from the `irregularVerbs` map for irregular verbs, or a small rule-based stemmer for regular "-ed" verbs (strip "-ed"; de-double a doubled final consonant, e.g. "stopped"→"stop"; restore a dropped silent "e" for common endings like "-at/-it/-et/-ct", e.g. "completed"→"complete"). **This is an approximation, not a dictionary lookup** — it can get tense agreement wrong (showing "team complete" rather than "team completes") and is flagged in the UI as something to double-check before using.
 - **Nominalisations with a known verb** — `nominalisationVerbMap` maps ~35 common nominalised nouns to their verb (implementation→implement, provision→provide, consideration→consider, …; the spec's five examples plus common extensions). "The implementation of the policy" → "implementing the policy."
-- **Word swaps** — a direct substitution dictionary, `wordSwaps` in `config.json`: leverage→use, facilitate→help, commence→start, "in order to"→to, "at this point in time"→now, "is designed to"→does, utilise/utilize→use, prior to→before (the spec's exact list).
+- **Word swaps** — a direct substitution dictionary, `wordSwaps` in `config/config.json`: leverage→use, facilitate→help, commence→start, "in order to"→to, "at this point in time"→now, "is designed to"→does, utilise/utilize→use, prior to→before (the spec's exact list).
 
 **"Worth asking yourself" — a guided question, no automatic fix:**
 - **Passive with no agent** ("Mistakes were made.") → *"Who did it? If you'd rather not say, make that a deliberate choice rather than an accident of grammar."* (verbatim from the spec)
@@ -273,13 +273,13 @@ A **Sector** selector at the top of the page — General, Healthcare, Environmen
 
 | Sector selector | File | Regulated claims |
 |---|---|---|
-| General | `config.json` / `config.default.json` | Off |
-| Environmental claims | `config.greenwashing.json` | carbon neutral, net zero, sustainable, eco-friendly, biodegradable, 100% recyclable, plastic-free, climate positive, offset |
-| Healthcare | `config.healthcare.json` | cure, breakthrough, safe, proven, well-tolerated, life-saving, miracle, first-in-class, revolutionary |
-| AI | `config.ai.json` | unbiased, fair, explainable, fully autonomous, human-level, hallucination-free, guaranteed accuracy, solved |
-| Forward-looking statements | `config.forward-looking.json` | will, expects to, is on track to, anticipates, projects, guidance, confident that |
+| General | `config/config.json` / `config/config.default.json` | Off |
+| Environmental claims | `config/config.greenwashing.json` | carbon neutral, net zero, sustainable, eco-friendly, biodegradable, 100% recyclable, plastic-free, climate positive, offset |
+| Healthcare | `config/config.healthcare.json` | cure, breakthrough, safe, proven, well-tolerated, life-saving, miracle, first-in-class, revolutionary |
+| AI | `config/config.ai.json` | unbiased, fair, explainable, fully autonomous, human-level, hallucination-free, guaranteed accuracy, solved |
+| Forward-looking statements | `config/config.forward-looking.json` | will, expects to, is on track to, anticipates, projects, guidance, confident that |
 
-Advanced/custom use: appending `?config=<name>` to the page URL still works for any `config.<name>.json` file you add yourself, even one not in the fixed dropdown list above — useful for building and testing your own sector config (see "Editing the numbers," below) before it earns a permanent spot in the selector.
+Advanced/custom use: appending `?config=<name>` to the page URL still works for any `config/config.<name>.json` file you add yourself, even one not in the fixed dropdown list above — useful for building and testing your own sector config (see "Editing the numbers," below) before it earns a permanent spot in the selector.
 
 **Scoring, only when `regulatedClaims.enabled` is true:**
 ```
@@ -301,7 +301,7 @@ score = 100 − issueTypesFound × consistencyPenaltyPerIssueType (default 10)
 
 (Capped per **type** found, not per instance — ten doubled words count the same as one, since the fix is the same "proofread this" nudge either way.)
 
-What it checks, all against `config.json` lists/patterns:
+What it checks, all against `config/config.json` lists/patterns:
 - **Doubled words** ("the the")
 - **Double spaces**
 - **Missing space after a full stop** (a letter or digit, then a period, then an immediate capital letter — "…2026.The rollout…")
@@ -311,13 +311,13 @@ What it checks, all against `config.json` lists/patterns:
 - **Mixed date formats** — two or more of month-name, `DD/MM/YYYY`-style, and ISO `YYYY-MM-DD` style in the same text
 - **Mixed straight and curly quotes/apostrophes** — both `"`/`'` and `"`/`'`/`'` in the same text, usually a sign of copy-pasting from two different sources
 
-**Commonly-confused words:** `confusionGroups` in `config.json` (its/it's, their/there/they're, affect/effect, principle/principal, complement/compliment, discreet/discrete, practice/practise). The tool only flags a group when **two or more** of its members appear in the text — a reminder to double-check, not a claim that either use is wrong, since determining which spelling is grammatically correct in context needs real parsing, not a word list.
+**Commonly-confused words:** `confusionGroups` in `config/config.json` (its/it's, their/there/they're, affect/effect, principle/principal, complement/compliment, discreet/discrete, practice/practise). The tool only flags a group when **two or more** of its members appear in the text — a reminder to double-check, not a claim that either use is wrong, since determining which spelling is grammatically correct in context needs real parsing, not a word list.
 
 ---
 
 ## G. English variant — weight `1`
 
-A three-way choice, not two, selectable per-analysis from the dropdown next to the text box: **British (-ise)**, **British Oxford (-ize)**, or **American**. `config.json`'s `defaultEnglishVariant` sets the pre-selected option.
+A three-way choice, not two, selectable per-analysis from the dropdown next to the text box: **British (-ise)**, **British Oxford (-ize)**, or **American**. `config/config.json`'s `defaultEnglishVariant` sets the pre-selected option.
 
 **Why three, not two:** British Oxford spelling — the convention used by Oxford University Press and the OED — uses "-ize" endings (organize, recognize) but *keeps* British "-our"/"-re"/"-ll-" spelling (colour, centre, travelled). A simple British/American toggle would either wrongly flag "organize" as an American spelling, or wrongly accept "color." The three-way choice is the only way to get this right. A configurable `alwaysIseWords` list (advertise, surprise, compromise, exercise, …) excludes words where "-ise" isn't a suffix alternation at all — even Oxford spelling keeps these as "-ise" always.
 
@@ -351,16 +351,16 @@ Buzzwords count for the most per instance (×3) because they're the check with z
 
 ## Not yet built
 
-An in-page settings panel for editing word lists without touching `config.json` directly. The sector switcher itself is now built (the Sector selector at the top of the page); what's still missing is a way to edit a sector's own terms from inside the browser rather than by hand-editing its JSON file.
+An in-page settings panel for editing word lists without touching `config/config.json` directly. The sector switcher itself is now built (the Sector selector at the top of the page); what's still missing is a way to edit a sector's own terms from inside the browser rather than by hand-editing its JSON file.
 
 ## Editing the numbers
 
-Everything above lives in `config.json`. To recalibrate:
+Everything above lives in `config/config.json`. To recalibrate:
 
 - Change a `target` value to make a check stricter (lower target) or more forgiving (higher target).
 - Change a `penaltyPerPercent`/`penaltyPerGrade`/`penaltyPerWordOverAverage`/`penaltyEach`/`penaltyPerMismatch`/`penaltyPerIssueType`/`penaltyPerMatch`/`penaltyPerSharePoint` value to make the score fall faster or slower once past the target.
 - Change a value in `weights` to make a check matter more or less to the overall grade, or set it to `0` to turn it off entirely. (`regulatedClaims` is deliberately not a `weights` key — see section E.)
 - Add or remove words from any list (`buzzwords`, `hedges`, `superlativesAndAbsolutes`, `companyFacingTerms`, `audienceFacingTerms`, `thirdPartyTerms`, `irregularVerbs`, `nominalisationSuffixes`, `nominalisationVerbMap`, `acronymAllowlist`, `wordSwaps`, `baselineIndicators`, `preciseVerbs`, `vagueTimeframes`, `reasonIndicators`, `decisionIndicators`, `confusionGroups`, `variantWordPairs`, `alwaysIseWords`, `titleAbbreviations`, `stopwords`, `boilerplateHeadingPatterns`, `contactIndicators`) to match your own house style or sector.
-- Build a new sector config for regulated claims by copying `config.json`, changing `sectorName`/`disclaimer`/`sourceUrl`, and setting `regulatedClaims.enabled: true` with your own `terms` list — then load it with `?config=<yourname>` (matching a file named `config.<yourname>.json`) until it earns a permanent spot in the Sector selector's dropdown.
+- Build a new sector config for regulated claims by copying `config/config.json`, changing `sectorName`/`disclaimer`/`sourceUrl`, and setting `regulatedClaims.enabled: true` with your own `terms` list — then load it with `?config=<yourname>` (matching a file named `config/config.<yourname>.json`) until it earns a permanent spot in the Sector selector's dropdown.
 
-No code changes required for any of that — reload the page after editing `config.json` and the new numbers take effect immediately.
+No code changes required for any of that — reload the page after editing `config/config.json` and the new numbers take effect immediately.

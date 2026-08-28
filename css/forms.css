@@ -1,0 +1,53 @@
+label { display: block; font-weight: 600; margin-bottom: 0.5rem; }
+
+textarea {
+  width: 100%;
+  min-height: 220px;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  color: var(--color-text);
+  resize: vertical;
+  font-family: inherit;
+}
+
+.variant-row { margin-top: 0.75rem; }
+.variant-row label { display: inline; font-weight: 600; margin-right: 0.5rem; }
+select {
+  font-size: 0.95rem;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-family: inherit;
+}
+
+button {
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius);
+  background: var(--color-accent);
+  color: var(--color-accent-contrast);
+  cursor: pointer;
+  margin-top: 0.75rem;
+}
+
+button:active { opacity: 0.85; }
+
+button.secondary {
+  background: var(--color-surface);
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent);
+}
+
+.privacy-note { font-size: 0.85rem; color: var(--color-muted); margin-top: 0.75rem; }
+
+.config-status { font-size: 0.8rem; color: var(--color-muted); margin-top: 0.5rem; }
+.config-status.warn { color: var(--color-warn); }

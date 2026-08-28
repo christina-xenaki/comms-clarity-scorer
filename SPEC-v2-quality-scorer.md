@@ -2,7 +2,7 @@
 
 Supersedes SPEC-tool-1-quality-scorer.md. Read this one.
 
-**Principle throughout:** every list, threshold, and message lives in `config.json`. The code contains no sector-specific content and no hardcoded word lists.
+**Principle throughout:** every list, threshold, and message lives in `config/config.json`. The code contains no sector-specific content and no hardcoded word lists.
 
 ---
 
@@ -71,12 +71,12 @@ Three tiers. The tier must be visible to the user so the tool never pretends to 
 
 Ship four configs. Off by default, enabled per config.
 
-- `config.greenwashing.json` — carbon neutral, net zero, sustainable, eco-friendly, biodegradable, 100% recyclable, plastic-free, climate positive, offset
-- `config.healthcare.json` — cure, breakthrough, safe, proven, well-tolerated, life-saving, miracle, first-in-class, revolutionary
-- `config.ai.json` — unbiased, fair, explainable, fully autonomous, human-level, hallucination-free, guaranteed accuracy, solved
-- `config.forward-looking.json` — will, expects to, is on track to, anticipates, projects, guidance, confident that
+- `config/config.greenwashing.json` — carbon neutral, net zero, sustainable, eco-friendly, biodegradable, 100% recyclable, plastic-free, climate positive, offset
+- `config/config.healthcare.json` — cure, breakthrough, safe, proven, well-tolerated, life-saving, miracle, first-in-class, revolutionary
+- `config/config.ai.json` — unbiased, fair, explainable, fully autonomous, human-level, hallucination-free, guaranteed accuracy, solved
+- `config/config.forward-looking.json` — will, expects to, is on track to, anticipates, projects, guidance, confident that
 
-Plus `config.default.json` with regulated claims disabled.
+Plus `config/config.default.json` with regulated claims disabled.
 
 Each config carries a `sectorName`, a `disclaimer` string, and optionally a `sourceUrl` for the relevant code or regulator.
 
