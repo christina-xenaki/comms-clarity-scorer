@@ -2,7 +2,7 @@
 
 Paste a press release or pitch, get a clarity score and a list of exactly what's wrong with it.
 
-**No data leaves your browser.** This tool has no server, no account, and no upload — everything runs as JavaScript on your own device. You can paste unreleased or confidential material and it never travels anywhere. (You can check this yourself: open your browser's network tab while using the tool — the only network request it makes is loading `config.json` from this same site.)
+**No data leaves your browser.** The analysis runs in your browser, on your device. Your text is never uploaded anywhere, so you can safely paste a draft that hasn't been published yet. This tool has no server and no account. (You can check this yourself: open your browser's network tab while using the tool — the only network requests it makes are loading `config.json` from this same site and the Google Font used for the interface.)
 
 ## Status
 
@@ -26,7 +26,20 @@ Every check's explanation is split into three visually distinct parts: a **Findi
 
 Exactly how each check is calculated — the formula, the threshold, and where the numbers came from (including which ones are genuinely sourced, like Flesch-Kincaid, versus which are the developer's own starting heuristics) — is documented in **[SCORING.md](SCORING.md)**. That file also spells out each check's known blind spots, honestly.
 
-Not yet built: an in-page settings panel for editing word lists without touching `config.json` directly. (The sector switcher itself is built now — see the Sector selector at the top of the page.) The visual design itself — layout, typeface, colour palette — was deliberately left alone in this round and the one before it; only the analysis logic changed.
+Not yet built: an in-page settings panel for editing word lists without touching `config.json` directly. (The sector switcher itself is built now — see the Sector selector at the top of the page.)
+
+### Interface and accessibility
+
+This round was interface-only — no scoring logic, threshold, word list or calculation changed, only how the same results are presented:
+
+- **Three detail levels** — Glance, Working, and Full — control how much of the same analysis is shown, without re-running it. Glance shows the grade and headline only; Working (the default) adds every check's score plus the top five fixes; Full adds the annotated text and each check's "Why this check exists" sources. The page picks Glance automatically on a narrow (phone-width) screen; a "Detail level" control near the top of the results lets you override it at any time.
+- **Weather-scale grades** — A–E map to a sky icon (☀️ Clear, 🌤 Mostly clear, ⛅ Hazy, 🌫 Foggy, 🌧 Murky) instead of a bare letter. A screen reader announces the grade and label together ("Grade B, Mostly clear"), never just the emoji, and the result is also announced automatically when analysis finishes.
+- **Colour-blind-safe highlights** — every flagged category in the annotated text uses its own underline *pattern* (dotted, wavy, dashed, or a double line), not colour alone, so the categories stay distinguishable without relying on hue. A solid underline is reserved for real links.
+- **Two-column desktop layout, single column on a phone** — your text on the left, scores on the right on a wide screen; it collapses to one column with nothing overlapping on a narrow one.
+- Semantic headings in document order, a real `<label>` on the text box, visible keyboard-focus outlines throughout, and every highlighted word and "Why this check exists" control reachable and operable from the keyboard (not just by mouse or touch).
+- A Google Font (Inter) and a restrained palette, applied on top of the existing card layout — the layout and colour system itself were built in an earlier round.
+
+**Source links.** A few of the "Why this check exists" panels now link the named source in the text itself, opening in a new tab with an accessible label: the sentence-length rationale links "plain-language guidance" to plainlanguage.gov, the readability rationale links "Flesch-Kincaid" to the freely-available 1975 Kincaid et al. US Navy report on ERIC, and the nominalisation rationale links "Helen Sword" to her *New York Times* piece (via the Times' own archive, since the original Opinionator URL has since moved). Regulated-claims results now also link to the actual regulator for the selected sector (e.g. the ABPI/PMCPA code for healthcare), using the `sourceUrl` already in each sector's config file. The English-variant check's link to Wikipedia's Oxford spelling article was already in place from an earlier round and was left untouched. Two sources named in COPY.md were deliberately **not** added: the Reuters Handbook of Journalism has no live, official, directly-linkable URL that could be verified, and Orwell's "Politics and the English Language" isn't currently named in any on-page rationale text, so there was nowhere to attach it without inventing new copy. This environment blocks general outbound web requests, so every candidate URL above was checked indirectly (via search, not a direct fetch) before being added.
 
 ## What each file does (plain English)
 

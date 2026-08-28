@@ -8,7 +8,7 @@ This document explains, in plain English, exactly how every check in the Comms C
 
 This is a rule-based heuristic tool, not a language model and not a grammar checker. It uses word lists and regular-expression pattern matching, not true parsing or understanding. That means:
 
-- **The thresholds and penalty multipliers below are reasonable starting defaults**, chosen by the developer for a first version of this tool. A handful are genuinely sourceable (Flesch-Kincaid, the inverted pyramid convention) and are cited where they are; most of the rest are **not** derived from a statistical study of thousands of real press releases, and say so rather than claiming false precision. Treat scores as a useful, consistent starting point for a conversation — "why is this scoring an F?" — not as an infallible verdict.
+- **The thresholds and penalty multipliers below are reasonable starting defaults**, chosen by the developer for a first version of this tool. A handful are genuinely sourceable (Flesch-Kincaid, the inverted pyramid convention) and are cited where they are; most of the rest are **not** derived from a statistical study of thousands of real press releases, and say so rather than claiming false precision. Treat scores as a useful, consistent starting point for a conversation — "why is this scoring an E?" — not as an infallible verdict.
 - **Every check has known blind spots**, documented in its own section below. Where a check is likely to produce false positives or false negatives, that's called out explicitly rather than glossed over.
 - All thresholds live in `config.json` under `thresholds`, and every check's contribution to the overall score lives under `weights`. Edit either and the tool immediately scores differently — no rebuild needed.
 - **Disclaimer:** this tool is directional, not authoritative. It does not replace an editor. Regulated-claim flags are a prompt to consult your own legal, compliance, or medical affairs team, not a sign-off. It's tuned for English. A good score does not mean the release is accurate, newsworthy, or that it will earn coverage.
@@ -27,7 +27,7 @@ overall = (score₁×weight₁ + score₂×weight₂ + … ) / (weight₁ + weig
 
 Most checks default to a weight of `1`. **Concreteness** and **strengths** default to `2` — a deliberate choice: concreteness because a total absence of concrete detail is "the single biggest red flag" a release can have, and strengths for the same reason in reverse, so the tool visibly rewards good writing and not just penalises bad writing. **Regulated claims never enters this average, under any sector** — it isn't a `weights` key at all any more. It's a compliance flag, not a clarity signal, so switching sectors (see section E below) never moves your overall grade, even when it finds matches. Change any other weight in `config.json` to rebalance what the tool cares about most, or set a weight to `0` to switch a check off entirely.
 
-The overall score maps to a letter grade the same way school grades usually do: A ≥ 90, B ≥ 80, C ≥ 70, D ≥ 60, F below 60.
+The overall score maps to a letter grade the same way school grades usually do: A ≥ 90, B ≥ 80, C ≥ 70, D ≥ 60, E below 60. The interface shows each grade as a weather icon rather than a bare letter (A = ☀️ Clear, down to E = 🌧 Murky) — see the README for why, and note that this is a display choice only: the 90/80/70/60 cut-offs themselves are unchanged.
 
 ## How each check is presented: Finding, Action, Rationale
 

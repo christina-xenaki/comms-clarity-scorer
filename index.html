@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Comms Clarity Scorer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --color-bg: #f7f7f5;
@@ -18,12 +21,16 @@
     --color-warn: #b8860b;
     --color-bad: #b3392c;
 
-    --c-buzz-bg: #ffe08a;      --c-buzz-border: #b8860b;
-    --c-long-bg: #ffd0c2;      --c-long-border: #c9542f;
+    /* Category colours: chosen so each is distinguishable by hue AND paired with a
+       distinct non-solid underline style (see mark.hl-* below) — colour is never the
+       only signal. Border colours are tuned to stay above 3:1 contrast against their
+       own tint, and all backgrounds stay above 12:1 text contrast (WCAG AA needs 4.5:1). */
+    --c-buzz-bg: #ffe08a;      --c-buzz-border: #926a09;
+    --c-long-bg: #ffd0c2;      --c-long-border: #b84d2b;
     --c-hedge-bg: #cfe3ff;     --c-hedge-border: #3b6fb3;
     --c-superlative-bg: #e6d6ff; --c-superlative-border: #7b4fb8;
     --c-passive-bg: #ffd3e2;   --c-passive-border: #b8365f;
-    --c-nominal-bg: #f0e0c8;   --c-nominal-border: #a67c2e;
+    --c-nominal-bg: #f0dbf0;   --c-nominal-border: #853285;
     --c-acronym-bg: #e2e2e2;   --c-acronym-border: #616161;
     --c-concrete-bg: #dcf3d3;  --c-concrete-border: #3f8f2a;
     --c-quote-bg: #ffbdbd;     --c-quote-border: #c0392b;
@@ -40,8 +47,24 @@
     padding: 0;
     background: var(--color-bg);
     color: var(--color-text);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     line-height: 1.5;
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
   }
 
   body { padding: 0 0 3rem 0; }
@@ -173,7 +196,7 @@
 
   details.card summary::-webkit-details-marker { display: none; }
 
-  .summary-title { font-weight: 600; }
+  .summary-title { font-weight: 600; font-size: 1rem; margin: 0; display: inline; }
   .summary-score { font-weight: 700; white-space: nowrap; }
 
   .card-body {
@@ -275,6 +298,51 @@
 
   #boilerplate-note { font-size: 0.85rem; color: var(--color-muted); border-style: dashed; }
 
+  .view-level-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    padding: 0.6rem 0.75rem;
+    margin: 0 0 1rem;
+  }
+  .view-level-group legend {
+    padding: 0 0.3rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .view-level-option {
+    display: flex;
+    align-items: baseline;
+    gap: 0.35rem;
+    flex: 1 1 auto;
+    padding: 0.35rem 0.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .view-level-option:hover { background: var(--color-bg); }
+  .view-level-option:has(input:checked) { background: var(--color-accent); }
+  .view-level-option:has(input:checked) .view-level-name,
+  .view-level-option:has(input:checked) .view-level-desc { color: var(--color-accent-contrast); }
+  .view-level-option input:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+  .view-level-name { font-weight: 600; }
+  .view-level-desc { font-size: 0.78rem; color: var(--color-muted); }
+
+  body[data-view="glance"] #boilerplate-note,
+  body[data-view="glance"] #sub-scores,
+  body[data-view="glance"] #worst-offenders,
+  body[data-view="glance"] #rewrite-suggestions,
+  body[data-view="glance"] #copy-report-btn,
+  body[data-view="glance"] #annotated-text-section,
+  body[data-view="working"] #annotated-text-section {
+    display: none;
+  }
+  body:not([data-view="full"]) .why-wrap { display: none; }
+
   #worst-offenders ol, #rewrite-suggestions ol { margin: 0; padding-left: 1.25rem; }
   #worst-offenders li, #rewrite-suggestions li { margin-bottom: 0.9rem; }
   #worst-offenders .reason { display: block; font-size: 0.85rem; color: var(--color-muted); }
@@ -300,39 +368,88 @@
   #annotated-output { white-space: pre-wrap; font-size: 1rem; line-height: 1.7; }
   .boilerplate-text { opacity: 0.55; }
 
-  .legend { display: flex; flex-wrap: wrap; gap: 0.6rem; font-size: 0.8rem; color: var(--color-muted); margin-bottom: 0.75rem; }
-  .legend span { display: inline-flex; align-items: center; gap: 0.3rem; }
-  .swatch { display: inline-block; width: 0.8rem; height: 0.8rem; border-radius: 3px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 0.75rem; font-size: 0.8rem; color: var(--color-muted); margin-bottom: 0.75rem; }
+  .legend span { display: inline-flex; align-items: center; gap: 0.35rem; }
+  .swatch {
+    display: inline-block;
+    padding: 0 0.3rem;
+    border-radius: 3px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-text);
+    line-height: 1.4;
+  }
 
-  .swatch.buzz { background: var(--c-buzz-bg); border: 1px solid var(--c-buzz-border); }
-  .swatch.long { background: var(--c-long-bg); border: 1px solid var(--c-long-border); }
-  .swatch.hedge { background: var(--c-hedge-bg); border: 1px solid var(--c-hedge-border); }
-  .swatch.superlative { background: var(--c-superlative-bg); border: 1px solid var(--c-superlative-border); }
-  .swatch.passive { background: var(--c-passive-bg); border: 1px solid var(--c-passive-border); }
-  .swatch.nominal { background: var(--c-nominal-bg); border: 1px solid var(--c-nominal-border); }
-  .swatch.acronym { background: var(--c-acronym-bg); border: 1px solid var(--c-acronym-border); }
-  .swatch.concrete { background: var(--c-concrete-bg); border: 1px solid var(--c-concrete-border); }
-  .swatch.quote { background: var(--c-quote-bg); border: 1px solid var(--c-quote-border); }
-  .swatch.strength { background: var(--c-strength-bg); border: 1px solid var(--c-strength-border); }
-  .swatch.regulated { background: var(--c-regulated-bg); border: 1px solid var(--c-regulated-border); }
+  .hl, .swatch {
+    position: relative;
+    background: transparent;
+    color: inherit;
+    border-radius: 3px;
+    text-decoration-line: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+  }
 
-  mark.hl { position: relative; background: transparent; color: inherit; cursor: pointer; border-radius: 3px; }
+  mark.hl { cursor: pointer; }
 
-  mark.hl-buzz { background: var(--c-buzz-bg); border-bottom: 2px solid var(--c-buzz-border); padding: 0 1px; }
-  mark.hl-long { background: var(--c-long-bg); box-decoration-break: clone; -webkit-box-decoration-break: clone; }
-  mark.hl-hedge { background: var(--c-hedge-bg); border-bottom: 2px solid var(--c-hedge-border); padding: 0 1px; }
-  mark.hl-superlative { background: var(--c-superlative-bg); border-bottom: 2px solid var(--c-superlative-border); padding: 0 1px; }
-  mark.hl-passive { background: var(--c-passive-bg); border-bottom: 2px solid var(--c-passive-border); padding: 0 1px; }
-  mark.hl-nominal { background: var(--c-nominal-bg); border-bottom: 2px solid var(--c-nominal-border); padding: 0 1px; }
-  mark.hl-acronym { background: var(--c-acronym-bg); border-bottom: 2px solid var(--c-acronym-border); padding: 0 1px; }
-  mark.hl-concrete { background: var(--c-concrete-bg); border-bottom: 2px solid var(--c-concrete-border); padding: 0 1px; }
-  mark.hl-quote { background: var(--c-quote-bg); box-decoration-break: clone; -webkit-box-decoration-break: clone; }
-  mark.hl-strength { background: var(--c-strength-bg); border-bottom: 2px solid var(--c-strength-border); padding: 0 1px; }
-  mark.hl-regulated { background: var(--c-regulated-bg); border-bottom: 2px solid var(--c-regulated-border); padding: 0 1px; }
+  mark.hl:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
 
+  /* Container-level marks (whole sentence / whole quote): background tint only —
+     already distinguished from word-level marks by their much larger extent, so no
+     underline pattern is layered on top of running, wrapped text. */
+  .hl-long { background: var(--c-long-bg); text-decoration-line: none; }
+  mark.hl-long { box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+  .hl-quote { background: var(--c-quote-bg); text-decoration-line: none; }
+  mark.hl-quote { box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+
+  /* Word/phrase-level marks: background tint + a non-solid underline style, grouped by
+     family so the pattern alone (independent of colour) tells the categories apart —
+     solid underline stays reserved for real links (see .card-body a). Shared with the
+     legend's ".swatch" samples so the key always matches what's on the page. */
+  .hl-buzz, .hl-hedge, .hl-nominal { text-decoration-style: dotted; }
+  .hl-superlative, .hl-regulated { text-decoration-style: wavy; }
+  .hl-passive, .hl-acronym { text-decoration-style: dashed; }
+  .hl-concrete, .hl-strength { text-decoration-style: double; text-decoration-thickness: 3px; }
+
+  .hl-buzz { background: var(--c-buzz-bg); text-decoration-color: var(--c-buzz-border); }
+  .hl-hedge { background: var(--c-hedge-bg); text-decoration-color: var(--c-hedge-border); }
+  .hl-superlative { background: var(--c-superlative-bg); text-decoration-color: var(--c-superlative-border); }
+  .hl-passive { background: var(--c-passive-bg); text-decoration-color: var(--c-passive-border); }
+  .hl-nominal { background: var(--c-nominal-bg); text-decoration-color: var(--c-nominal-border); }
+  .hl-acronym { background: var(--c-acronym-bg); text-decoration-color: var(--c-acronym-border); }
+  .hl-concrete { background: var(--c-concrete-bg); text-decoration-color: var(--c-concrete-border); }
+  .hl-strength { background: var(--c-strength-bg); text-decoration-color: var(--c-strength-border); }
+  .hl-regulated { background: var(--c-regulated-bg); text-decoration-color: var(--c-regulated-border); }
+  mark.hl-buzz, mark.hl-hedge, mark.hl-superlative, mark.hl-passive, mark.hl-nominal,
+  mark.hl-acronym, mark.hl-concrete, mark.hl-strength, mark.hl-regulated { padding: 0 1px; }
+
+  /* The explanation stays in the accessibility tree at all times (so aria-describedby
+     always works for screen readers) but is only visually shown once .open is toggled —
+     tap-to-toggle for sighted keyboard/touch users, always-on for assistive tech. */
   mark.hl .tip {
-    display: none;
     position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  mark.hl.open .tip {
+    position: absolute;
+    width: max-content;
+    height: auto;
+    margin: 0;
+    padding: 0.5rem 0.65rem;
+    clip: auto;
+    overflow: visible;
+    white-space: normal;
     left: 0;
     top: 100%;
     margin-top: 4px;
@@ -341,15 +458,10 @@
     color: #fff;
     font-size: 0.8rem;
     line-height: 1.4;
-    padding: 0.5rem 0.65rem;
     border-radius: 6px;
-    width: max-content;
     max-width: 80vw;
-    white-space: normal;
     box-shadow: 0 4px 10px rgba(0,0,0,0.2);
   }
-
-  mark.hl.open .tip { display: block; }
 
   footer {
     max-width: 1200px;
@@ -396,6 +508,8 @@
   </select>
 </div>
 
+<div id="results-announcer" role="status" aria-live="polite" class="visually-hidden"></div>
+
 <main class="layout">
   <div class="col-text">
     <section id="input-section">
@@ -412,24 +526,24 @@
       </div>
 
       <button id="analyze-btn" type="button">Analyze</button>
-      <p class="privacy-note">Nothing you paste here leaves your browser. There's no server, no account and no upload &mdash; the analysis runs entirely on your device.</p>
+      <p class="privacy-note">The analysis runs in your browser, on your device. Your text is never uploaded anywhere, so you can safely paste a draft that hasn't been published yet.</p>
       <p id="config-status" class="config-status">Loading word lists…</p>
     </section>
 
     <section id="annotated-text-section" hidden>
       <h2>Your text, annotated</h2>
       <div class="legend">
-        <span><span class="swatch strength"></span> Strength (good)</span>
-        <span><span class="swatch concrete"></span> Concrete detail (good)</span>
-        <span><span class="swatch buzz"></span> Buzzword</span>
-        <span><span class="swatch hedge"></span> Hedge word</span>
-        <span><span class="swatch superlative"></span> Superlative / absolute claim</span>
-        <span><span class="swatch passive"></span> Passive voice</span>
-        <span><span class="swatch nominal"></span> Nominalisation</span>
-        <span><span class="swatch acronym"></span> Acronym (first use)</span>
-        <span><span class="swatch long"></span> Long sentence</span>
-        <span><span class="swatch quote"></span> Empty quote</span>
-        <span><span class="swatch regulated"></span> Regulated claim</span>
+        <span><span class="swatch hl-strength" aria-hidden="true">Aa</span> Strength (good) — double underline</span>
+        <span><span class="swatch hl-concrete" aria-hidden="true">Aa</span> Concrete detail (good) — double underline</span>
+        <span><span class="swatch hl-buzz" aria-hidden="true">Aa</span> Buzzword — dotted underline</span>
+        <span><span class="swatch hl-hedge" aria-hidden="true">Aa</span> Hedge word — dotted underline</span>
+        <span><span class="swatch hl-nominal" aria-hidden="true">Aa</span> Nominalisation — dotted underline</span>
+        <span><span class="swatch hl-superlative" aria-hidden="true">Aa</span> Superlative / absolute claim — wavy underline</span>
+        <span><span class="swatch hl-regulated" aria-hidden="true">Aa</span> Regulated claim — wavy underline</span>
+        <span><span class="swatch hl-passive" aria-hidden="true">Aa</span> Passive voice — dashed underline</span>
+        <span><span class="swatch hl-acronym" aria-hidden="true">Aa</span> Acronym (first use) — dashed underline</span>
+        <span><span class="swatch hl-long" aria-hidden="true">Aa</span> Long sentence — background tint</span>
+        <span><span class="swatch hl-quote" aria-hidden="true">Aa</span> Empty quote — background tint</span>
       </div>
       <p style="margin-top:-0.5rem;color:var(--color-muted);font-size:0.85rem;">Tap a highlight for the explanation. Faded text is boilerplate (an "About", "Notes to editors"/references, or contact block) — excluded from your score and graded separately below.</p>
       <div id="annotated-output" class="card"></div>
@@ -439,11 +553,30 @@
   <div class="col-scores">
     <section id="results-panel" hidden>
 
+      <fieldset id="view-level-group" class="view-level-group">
+        <legend>Detail level</legend>
+        <label class="view-level-option">
+          <input type="radio" name="view-level" value="glance">
+          <span class="view-level-name">Glance</span>
+          <span class="view-level-desc">Grade and headline only</span>
+        </label>
+        <label class="view-level-option">
+          <input type="radio" name="view-level" value="working">
+          <span class="view-level-name">Working</span>
+          <span class="view-level-desc">Scores and the top five fixes</span>
+        </label>
+        <label class="view-level-option">
+          <input type="radio" name="view-level" value="full">
+          <span class="view-level-name">Full</span>
+          <span class="view-level-desc">Everything, including sources</span>
+        </label>
+      </fieldset>
+
       <div id="headline-metric" class="card"></div>
 
-      <section id="overall-card" class="card">
-        <div class="summary-title">Overall grade</div>
-        <div id="overall-grade">&mdash;</div>
+      <section id="overall-card" class="card" aria-labelledby="overall-grade-heading">
+        <h2 id="overall-grade-heading" class="summary-title">Overall grade</h2>
+        <div id="overall-grade"><span id="overall-grade-icon" aria-hidden="true"></span> <span id="overall-grade-text">&mdash;</span></div>
         <p id="overall-verdict"></p>
       </section>
 
@@ -453,82 +586,82 @@
         <h2>Checks</h2>
 
         <details class="card" id="card-concreteness">
-          <summary><span class="summary-title">Concreteness</span><span class="summary-score" id="score-concreteness">&mdash;</span></summary>
+          <summary><h3 class="summary-title">Concreteness</h3><span class="summary-score" id="score-concreteness">&mdash;</span></summary>
           <div class="card-body" id="body-concreteness"></div>
         </details>
 
         <details class="card" id="card-strengths">
-          <summary><span class="summary-title">Strengths</span><span class="summary-score" id="score-strengths">&mdash;</span></summary>
+          <summary><h3 class="summary-title">Strengths</h3><span class="summary-score" id="score-strengths">&mdash;</span></summary>
           <div class="card-body" id="body-strengths"></div>
         </details>
 
         <details class="card" id="card-empty-quote">
-          <summary><span class="summary-title">Empty quote detector</span><span class="summary-score" id="score-empty-quote">&mdash;</span></summary>
+          <summary><h3 class="summary-title">Empty quote detector</h3><span class="summary-score" id="score-empty-quote">&mdash;</span></summary>
           <div class="card-body" id="body-empty-quote"></div>
         </details>
 
         <details class="card" id="card-buzzword">
-          <summary><span class="summary-title">Buzzword density</span><span class="summary-score" id="score-buzzword">&mdash;</span></summary>
+          <summary><h3 class="summary-title">Buzzword density</h3><span class="summary-score" id="score-buzzword">&mdash;</span></summary>
           <div class="card-body" id="body-buzzword"></div>
         </details>
 
         <details class="card" id="card-sentence-length">
-          <summary><span class="summary-title">Sentence length</span><span class="summary-score" id="score-sentence-length">&mdash;</span></summary>
+          <summary><h3 class="summary-title">Sentence length</h3><span class="summary-score" id="score-sentence-length">&mdash;</span></summary>
           <div class="card-body" id="body-sentence-length"></div>
         </details>
 
         <details class="card" id="card-readability">
-          <summary><span class="summary-title">Readability</span><span class="summary-score" id="score-readability">&mdash;</span></summary>
+          <summary><h3 class="summary-title">Readability</h3><span class="summary-score" id="score-readability">&mdash;</span></summary>
           <div class="card-body" id="body-readability"></div>
         </details>
 
         <details class="card" id="card-passive">
-          <summary><span class="summary-title">Passive voice</span><span class="summary-score" id="score-passive">&mdash;</span></summary>
+          <summary><h3 class="summary-title">Passive voice</h3><span class="summary-score" id="score-passive">&mdash;</span></summary>
           <div class="card-body" id="body-passive"></div>
         </details>
 
         <details class="card" id="card-hedging">
-          <summary><span class="summary-title">Hedging &amp; weasel words</span><span class="summary-score" id="score-hedging">&mdash;</span></summary>
+          <summary><h3 class="summary-title">Hedging &amp; weasel words</h3><span class="summary-score" id="score-hedging">&mdash;</span></summary>
           <div class="card-body" id="body-hedging"></div>
         </details>
 
         <details class="card" id="card-superlatives">
-          <summary><span class="summary-title">Superlatives &amp; absolute claims</span><span class="summary-score" id="score-superlatives">&mdash;</span></summary>
+          <summary><h3 class="summary-title">Superlatives &amp; absolute claims</h3><span class="summary-score" id="score-superlatives">&mdash;</span></summary>
           <div class="card-body" id="body-superlatives"></div>
         </details>
 
         <details class="card" id="card-nominalisation">
-          <summary><span class="summary-title">Nominalisation</span><span class="summary-score" id="score-nominalisation">&mdash;</span></summary>
+          <summary><h3 class="summary-title">Nominalisation</h3><span class="summary-score" id="score-nominalisation">&mdash;</span></summary>
           <div class="card-body" id="body-nominalisation"></div>
         </details>
 
         <details class="card" id="card-self-reference">
-          <summary><span class="summary-title">Self-reference</span><span class="summary-score" id="score-self-reference">&mdash;</span></summary>
+          <summary><h3 class="summary-title">Self-reference</h3><span class="summary-score" id="score-self-reference">&mdash;</span></summary>
           <div class="card-body" id="body-self-reference"></div>
         </details>
 
         <details class="card" id="card-acronym">
-          <summary><span class="summary-title">Acronym load</span><span class="summary-score" id="score-acronym">&mdash;</span></summary>
+          <summary><h3 class="summary-title">Acronym load</h3><span class="summary-score" id="score-acronym">&mdash;</span></summary>
           <div class="card-body" id="body-acronym"></div>
         </details>
 
         <details class="card" id="card-inverted-pyramid">
-          <summary><span class="summary-title">Inverted pyramid</span><span class="summary-score" id="score-inverted-pyramid">&mdash;</span></summary>
+          <summary><h3 class="summary-title">Inverted pyramid</h3><span class="summary-score" id="score-inverted-pyramid">&mdash;</span></summary>
           <div class="card-body" id="body-inverted-pyramid"></div>
         </details>
 
         <details class="card" id="card-consistency">
-          <summary><span class="summary-title">Consistency &amp; typos</span><span class="summary-score" id="score-consistency">&mdash;</span></summary>
+          <summary><h3 class="summary-title">Consistency &amp; typos</h3><span class="summary-score" id="score-consistency">&mdash;</span></summary>
           <div class="card-body" id="body-consistency"></div>
         </details>
 
         <details class="card" id="card-english-variant">
-          <summary><span class="summary-title">English variant</span><span class="summary-score" id="score-english-variant">&mdash;</span></summary>
+          <summary><h3 class="summary-title">English variant</h3><span class="summary-score" id="score-english-variant">&mdash;</span></summary>
           <div class="card-body" id="body-english-variant"></div>
         </details>
 
         <details class="card" id="card-regulated-claims">
-          <summary><span class="summary-title">Regulated claims</span><span class="summary-score" id="score-regulated-claims">&mdash;</span></summary>
+          <summary><h3 class="summary-title">Regulated claims</h3><span class="summary-score" id="score-regulated-claims">&mdash;</span></summary>
           <div class="card-body" id="body-regulated-claims"></div>
         </details>
       </section>
@@ -571,14 +704,27 @@
   var elAnnotatedSection = $("annotated-text-section");
   var elHeadline = $("headline-metric");
   var elOverallGrade = $("overall-grade");
+  var elOverallGradeIcon = $("overall-grade-icon");
+  var elOverallGradeText = $("overall-grade-text");
   var elOverallVerdict = $("overall-verdict");
   var elBoilerplateNote = $("boilerplate-note");
   var elWorstList = $("worst-offenders-list");
   var elRewriteList = $("rewrite-suggestions-list");
   var elAnnotated = $("annotated-output");
   var elCopyBtn = $("copy-report-btn");
+  var elAnnouncer = $("results-announcer");
+  var elViewLevelRadios = document.querySelectorAll('input[name="view-level"]');
 
   var lastReportText = "";
+
+  function setViewLevel(level) {
+    document.body.setAttribute("data-view", level);
+    elViewLevelRadios.forEach(function (radio) { radio.checked = (radio.value === level); });
+  }
+  elViewLevelRadios.forEach(function (radio) {
+    radio.addEventListener("change", function () { if (radio.checked) setViewLevel(radio.value); });
+  });
+  setViewLevel(window.matchMedia("(max-width: 599px)").matches ? "glance" : "working");
 
   var SECTOR_FILES = {
     general: "config.json",
@@ -727,8 +873,18 @@
     if (score >= 80) return "B";
     if (score >= 70) return "C";
     if (score >= 60) return "D";
-    return "F";
+    return "E";
   }
+
+  // Weather scale, verbatim from COPY.md — deliberately not faces, since this often
+  // runs over a colleague's or CEO's copy in an open-plan office.
+  var GRADE_INFO = {
+    A: { icon: "☀️", label: "Clear", ariaLabel: "Grade A, Clear" },
+    B: { icon: "🌤", label: "Mostly clear", ariaLabel: "Grade B, Mostly clear" },
+    C: { icon: "⛅", label: "Hazy", ariaLabel: "Grade C, Hazy" },
+    D: { icon: "🌫", label: "Foggy", ariaLabel: "Grade D, Foggy" },
+    E: { icon: "🌧️", label: "Murky", ariaLabel: "Grade E, Murky" }
+  };
 
   function gradeClass(score) {
     if (score >= 80) return "grade-good";
@@ -1418,8 +1574,12 @@
   function renderResults(r) {
     elHeadline.textContent = r.buzzMatches.length + " buzzword" + (r.buzzMatches.length === 1 ? "" : "s") + ". " + r.concreteMatches.length + " concrete fact" + (r.concreteMatches.length === 1 ? "" : "s") + ".";
 
-    elOverallGrade.textContent = letterGrade(r.overall) + " (" + r.overall + "/100)";
+    var gradeLetter = letterGrade(r.overall);
+    var overallGradeInfo = GRADE_INFO[gradeLetter];
+    elOverallGradeIcon.textContent = overallGradeInfo.icon;
+    elOverallGradeText.textContent = gradeLetter + " (" + r.overall + "/100)";
     elOverallGrade.className = gradeClass(r.overall);
+    elOverallGrade.setAttribute("aria-label", overallGradeInfo.ariaLabel + ". Score " + r.overall + " out of 100.");
     elOverallVerdict.textContent = verdictForScore(r.overall);
 
     if (r.boilerplateInfo) {
@@ -1491,7 +1651,7 @@
     $("body-sentence-length").innerHTML = segBody({
       finding: "Average sentence length: " + r.avgLength.toFixed(1) + " words. " + r.overLimit.length + " of " + r.sentenceData.length + " sentence" + (r.sentenceData.length === 1 ? "" : "s") + " " + (r.overLimit.length === 1 ? "is" : "are") + " over the " + r.limit + "-word guideline.",
       action: r.overLimit.length > 0 ? "Split the longest ones first — see Worst Offenders." : "No action needed.",
-      rationale: "People scan press releases rather than reading them. Long sentences survive that badly. The 30-word flag follows plain-language guidance rather than a specific study.",
+      rationale: "People scan press releases rather than reading them. Long sentences survive that badly. The 30-word flag follows " + srcLink("https://www.plainlanguage.gov/", "plainlanguage.gov", "plain-language guidance") + " rather than a specific study.",
       key: "sentence-length"
     });
 
@@ -1500,7 +1660,7 @@
     $("body-readability").innerHTML = segBody({
       finding: "Flesch-Kincaid grade level: " + (isFinite(r.grade) ? r.grade.toFixed(1) : "n/a") + ". " + gradeInfo.label,
       action: gradeInfo.action,
-      rationale: "Flesch-Kincaid estimates the US school grade needed to read a text, based on syllable and sentence length. It rewards short words and short sentences. It cannot tell whether the writing is any good.",
+      rationale: srcLink("https://eric.ed.gov/?id=ED108134", "Kincaid et al. 1975 US Navy readability report, ERIC", "Flesch-Kincaid") + " estimates the US school grade needed to read a text, based on syllable and sentence length. It rewards short words and short sentences. It cannot tell whether the writing is any good.",
       key: "readability"
     });
 
@@ -1532,7 +1692,7 @@
     $("body-nominalisation").innerHTML = segBody({
       finding: r.nominalMatches.length + " nominalisation" + (r.nominalMatches.length === 1 ? "" : "s") + " (e.g. \"the implementation of\" instead of \"implementing\") out of " + r.contentWords + " content words.",
       action: r.nominalRewrites.length > 0 ? "Swap for the verb form — see Rewrite suggestions for specific examples." : (r.nominalMatches.length > 0 ? "Swap for the verb form where you can." : "No action needed."),
-      rationale: "Turning a verb into a noun drains the action out of a sentence. \"The implementation of the policy\" is slower than \"implementing the policy\". Helen Sword calls these zombie nouns.",
+      rationale: "Turning a verb into a noun drains the action out of a sentence. \"The implementation of the policy\" is slower than \"implementing the policy\". " + srcLink("https://archive.nytimes.com/opinionator.blogs.nytimes.com/2012/07/23/zombie-nouns/", "Helen Sword, “Zombie Nouns,” New York Times", "Helen Sword") + " calls these zombie nouns.",
       key: "nominalisation"
     });
 
@@ -1625,7 +1785,8 @@
         key: "regulated-claims"
       });
     } else {
-      var rcFinding = "Sector: <strong>" + escapeHtml(CONFIG.sectorName) + "</strong>. " + r.regulatedMatches.length + " regulated term" + (r.regulatedMatches.length === 1 ? "" : "s") + " found" + (r.regulatedMatches.length ? ": " + r.regulatedMatches.map(function (m) { return escapeHtml(m.label); }).join(", ") : "") + ". This score is tracked separately and does not count toward your overall clarity grade above.";
+      var rcFinding = "Sector: <strong>" + escapeHtml(CONFIG.sectorName) + "</strong>. " + r.regulatedMatches.length + " regulated term" + (r.regulatedMatches.length === 1 ? "" : "s") + " found" + (r.regulatedMatches.length ? ": " + r.regulatedMatches.map(function (m) { return escapeHtml(m.label); }).join(", ") : "") + ". This score is tracked separately and does not count toward your overall clarity grade above." +
+        (CONFIG.sourceUrl ? " Regulator for this sector: " + srcLink(CONFIG.sourceUrl, "regulator for " + CONFIG.sectorName, CONFIG.sourceUrl.replace(/^https?:\/\//, "").replace(/\/$/, "")) + "." : "");
       $("body-regulated-claims").innerHTML = segBody({
         finding: rcFinding,
         action: escapeHtml(CONFIG.disclaimer),
@@ -1666,6 +1827,8 @@
     renderRewriteSuggestions(r);
     elAnnotated.innerHTML = buildAnnotatedHtml(r);
     lastReportText = buildReportText(r);
+
+    elAnnouncer.textContent = "Analysis complete. Grade " + overallGradeInfo.ariaLabel.replace("Grade ", "") + ", score " + r.overall + " out of 100. " + elHeadline.textContent;
   }
 
   function renderRewriteSuggestions(r) {
@@ -1707,6 +1870,7 @@
   function buildAnnotatedHtml(r) {
     var text = r.text;
     var ranges = [];
+    var tipCounter = 0;
 
     if (r.boilerplate) {
       ranges.push({ start: r.boilerplate.start, end: r.boilerplate.end, priority: -1, cls: "boilerplate-text", tooltip: null, plain: true });
@@ -1779,14 +1943,15 @@
       var open = "", close = "";
       var wrapBoilerplate = active.some(function (a) { return a.plain; });
       if (wrapBoilerplate) open += "<span class=\"boilerplate-text\">";
-      active.filter(function (a) { return !a.plain; }).forEach(function (rr) {
-        open += "<mark class=\"hl " + rr.cls + "\" tabindex=\"0\">";
+      var nonPlain = active.filter(function (a) { return !a.plain; });
+      var tipId = nonPlain.length ? "hl-tip-" + (tipCounter++) : null;
+      nonPlain.forEach(function (rr) {
+        open += "<mark class=\"hl " + rr.cls + "\" tabindex=\"0\" role=\"button\"" + (tipId ? " aria-describedby=\"" + tipId + "\"" : "") + ">";
         close = "</mark>" + close;
       });
       if (wrapBoilerplate) close += "</span>";
 
-      var nonPlain = active.filter(function (a) { return !a.plain; });
-      var tip = nonPlain.length ? "<span class=\"tip\">" + nonPlain[nonPlain.length - 1].tooltip + "</span>" : "";
+      var tip = tipId ? "<span class=\"tip\" id=\"" + tipId + "\">" + nonPlain[nonPlain.length - 1].tooltip + "</span>" : "";
       html += open + segText + tip + close;
     }
     return html;
@@ -1841,6 +2006,15 @@
       var panel = document.getElementById(whyBtn.getAttribute("aria-controls"));
       if (panel) panel.hidden = expanded;
     }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key !== "Enter" && e.key !== " " && e.key !== "Spacebar") return;
+    var hl = e.target.closest(".hl");
+    if (!hl) return;
+    e.preventDefault();
+    document.querySelectorAll(".hl.open").forEach(function (el) { if (el !== hl) el.classList.remove("open"); });
+    hl.classList.toggle("open");
   });
 
   elCopyBtn.addEventListener("click", function () {
