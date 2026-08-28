@@ -341,11 +341,12 @@
   body[data-view="working"] #annotated-text-section {
     display: none;
   }
-  body:not([data-view="full"]) .why-wrap { display: none; }
+  body[data-view="glance"] .why-wrap { display: none; }
 
   #worst-offenders ol, #rewrite-suggestions ol { margin: 0; padding-left: 1.25rem; }
   #worst-offenders li, #rewrite-suggestions li { margin-bottom: 0.9rem; }
   #worst-offenders .reason { display: block; font-size: 0.85rem; color: var(--color-muted); }
+  .worst-rewrite { display: block; margin-top: 0.5rem; font-size: 0.9rem; }
 
   .rewrite-tier {
     display: inline-block;
@@ -582,6 +583,12 @@
 
       <section id="boilerplate-note" class="card" hidden></section>
 
+      <section id="worst-offenders" class="card">
+        <h2>Top five fixes</h2>
+        <p style="margin-top:0;color:var(--color-muted);font-size:0.9rem;">The worst specific sentences, ranked worst to least-bad, with a suggested rewrite where the tool has one.</p>
+        <ol id="worst-offenders-list"></ol>
+      </section>
+
       <section id="sub-scores">
         <h2>Checks</h2>
 
@@ -664,12 +671,6 @@
           <summary><h3 class="summary-title">Regulated claims</h3><span class="summary-score" id="score-regulated-claims">&mdash;</span></summary>
           <div class="card-body" id="body-regulated-claims"></div>
         </details>
-      </section>
-
-      <section id="worst-offenders" class="card">
-        <h2>Worst offenders</h2>
-        <p style="margin-top:0;color:var(--color-muted);font-size:0.9rem;">The sentences to fix first, ranked worst to least-bad.</p>
-        <ol id="worst-offenders-list"></ol>
       </section>
 
       <section id="rewrite-suggestions" class="card">
@@ -1819,7 +1820,7 @@
         if (item.d.superlative > 0) reasons.push(item.d.superlative + " superlative" + (item.d.superlative === 1 ? "" : "s"));
         if (item.d.nominal > 0) reasons.push(item.d.nominal + " nominalisation" + (item.d.nominal === 1 ? "" : "s"));
         if (item.d.acronym > 0) reasons.push(item.d.acronym + " un-expanded acronym" + (item.d.acronym === 1 ? "" : "s"));
-        li2.innerHTML = escapeHtml(item.d.clippedText.trim()) + "<span class=\"reason\">" + escapeHtml(reasons.join(" · ")) + "</span>";
+        li2.innerHTML = escapeHtml(item.d.clippedText.trim()) + "<span class=\"reason\">" + escapeHtml(reasons.join(" · ")) + "</span>" + rewriteHtmlForSentence(r, item.d.sentence);
         elWorstList.appendChild(li2);
       });
     }
@@ -1829,6 +1830,33 @@
     lastReportText = buildReportText(r);
 
     elAnnouncer.textContent = "Analysis complete. Grade " + overallGradeInfo.ariaLabel.replace("Grade ", "") + ", score " + r.overall + " out of 100. " + elHeadline.textContent;
+  }
+
+  // Reuses the same rewrite candidates as renderRewriteSuggestions() — just matched
+  // back to a specific worst-offender sentence by position, instead of listed loose.
+  function rewriteHtmlForSentence(r, sentence) {
+    function within(x) { return x.start >= sentence.start && x.end <= sentence.end; }
+    var found = null;
+    r.passiveSplit.withAgent.concat(r.nominalRewrites, r.wordSwapRewrites).some(function (x) {
+      if (within(x)) { found = "<span class=\"rewrite-tier\">Suggested rewrite</span><br>" +
+        "<span class=\"rewrite-original\">" + escapeHtml(x.original) + "</span> <span class=\"rewrite-arrow\">&rarr;</span> <span class=\"rewrite-new\">" + escapeHtml(x.rewrite) + "</span>"; }
+      return found;
+    });
+    if (!found) {
+      r.passiveSplit.noAgent.some(function (x) {
+        if (within(x)) { found = "<span class=\"rewrite-tier\">Worth asking yourself</span><br>" +
+          "<span class=\"rewrite-question\">Who did it? If you'd rather not say, make that a deliberate choice rather than an accident of grammar.</span>"; }
+        return found;
+      });
+    }
+    if (!found) {
+      r.emptyQuotes.some(function (q) {
+        if (within(q)) { found = "<span class=\"rewrite-tier\">Worth asking yourself</span><br>" +
+          "<span class=\"rewrite-question\">A useful quote gives a reason, a number, or a next step. This gives none. Ask your spokesperson why you actually did this.</span>"; }
+        return found;
+      });
+    }
+    return found ? "<div class=\"worst-rewrite\">" + found + "</div>" : "";
   }
 
   function renderRewriteSuggestions(r) {
