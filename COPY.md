@@ -24,6 +24,8 @@ Place at the top of the page, near the input box. Small, but not hidden.
 
 ## Disclaimer
 
+**Not yet implemented as specified.** The footer currently shows its own short, paraphrased disclaimer text inline (see `index.html`'s `<footer>`) rather than this full version behind a "What this tool can and can't tell you" link, and the short version below isn't shown under the grade. Building this is tracked in README's "Not yet built" list.
+
 Full version. Put it behind a link labelled "What this tool can and can't tell you", in the footer and in the README.
 
 > ### What this tool can and can't tell you
@@ -70,6 +72,8 @@ The emoji must never be the only carrier of meaning. Always pair with the letter
 
 ## Empty state
 
+**Not yet implemented as specified.** The textarea currently shows its own placeholder text ("Paste your press release or pitch here…") instead of this copy. Tracked in README's "Not yet built" list.
+
 Before anything is pasted:
 
 > Paste a press release, pitch or announcement. Nothing is sent anywhere.
@@ -77,6 +81,8 @@ Before anything is pasted:
 ---
 
 ## Share button
+
+**Not yet built.** No share button exists in the interface yet — only "Copy report" is implemented. Tracked in README's "Not yet built" list.
 
 Label: **Share score**
 
@@ -90,6 +96,8 @@ Never include the analysed text or any flagged sentence in a share link. Share l
 ---
 
 ## Export footer
+
+**Not yet implemented as specified.** The "Copy report" output (`js/render.js`'s `buildReportText`) currently ends with its own line ("comms-clarity-scorer — analysis runs entirely in the browser, nothing uploaded.") instead of this exact copy, and doesn't include a URL. Tracked in README's "Not yet built" list.
 
 > Scored with Comms Clarity Scorer — [URL]
 > Runs in your browser. Nothing is uploaded.
