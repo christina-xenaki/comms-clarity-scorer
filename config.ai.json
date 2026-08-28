@@ -216,14 +216,38 @@
     "most trusted",
     "most reliable"
   ],
-  "selfReferenceTerms": [
+  "companyFacingTerms": [
     "we",
     "us",
     "our",
     "ours",
     "ourselves",
     "the company",
-    "the team"
+    "the team",
+    "the firm",
+    "the organisation"
+  ],
+  "audienceFacingTerms": [
+    "you",
+    "your",
+    "yours",
+    "customers",
+    "users",
+    "readers",
+    "subscribers",
+    "clients",
+    "members",
+    "patients"
+  ],
+  "thirdPartyTerms": [
+    "analysts",
+    "regulators",
+    "competitors",
+    "the market",
+    "industry observers",
+    "critics",
+    "investors",
+    "shareholders"
   ],
   "irregularVerbs": {
     "done": "do",
@@ -517,7 +541,11 @@
     ]
   ],
   "boilerplateHeadingPatterns": [
-    "about "
+    "about ",
+    "notes to editors",
+    "note to editors",
+    "notes for editors",
+    "references"
   ],
   "contactIndicators": [
     "media contact",
@@ -754,8 +782,8 @@
     "superlativePenaltyPerPercent": 15,
     "nominalisationDensityTarget": 1,
     "nominalisationPenaltyPerPercent": 10,
-    "selfReferenceDensityTarget": 3,
-    "selfReferencePenaltyPerPercent": 6,
+    "selfReferenceCompanyShareTarget": 70,
+    "selfReferencePenaltyPerSharePoint": 1.5,
     "acronymNeverExpandedPenaltyEach": 12,
     "concretenessTargetPer100Words": 3,
     "emptyQuoteMinWords": 6,
@@ -786,7 +814,6 @@
     "strengths": 2,
     "invertedPyramid": 1,
     "consistency": 1,
-    "englishVariant": 1,
-    "regulatedClaims": 1
+    "englishVariant": 1
   }
 }

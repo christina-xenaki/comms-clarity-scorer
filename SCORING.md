@@ -25,9 +25,19 @@ Every check produces a sub-score from 0 (worst) to 100 (best). The overall score
 overall = (score₁×weight₁ + score₂×weight₂ + … ) / (weight₁ + weight₂ + …)
 ```
 
-Most checks default to a weight of `1`. **Concreteness** and **strengths** default to `2` — a deliberate choice: concreteness because a total absence of concrete detail is "the single biggest red flag" a release can have, and strengths for the same reason in reverse, so the tool visibly rewards good writing and not just penalises bad writing. **Regulated claims** only enters the average at all when a sector config turns it on (see section E below) — off by default, it simply isn't counted, rather than silently scoring 100. Change any weight in `config.json` to rebalance what the tool cares about most, or set a weight to `0` to switch a check off entirely.
+Most checks default to a weight of `1`. **Concreteness** and **strengths** default to `2` — a deliberate choice: concreteness because a total absence of concrete detail is "the single biggest red flag" a release can have, and strengths for the same reason in reverse, so the tool visibly rewards good writing and not just penalises bad writing. **Regulated claims never enters this average, under any sector** — it isn't a `weights` key at all any more. It's a compliance flag, not a clarity signal, so switching sectors (see section E below) never moves your overall grade, even when it finds matches. Change any other weight in `config.json` to rebalance what the tool cares about most, or set a weight to `0` to switch a check off entirely.
 
 The overall score maps to a letter grade the same way school grades usually do: A ≥ 90, B ≥ 80, C ≥ 70, D ≥ 60, F below 60.
+
+## How each check is presented: Finding, Action, Rationale
+
+Every check's card body is split into up to three labelled parts, styled differently on purpose:
+
+- **Finding** — the factual observation: what the tool actually counted or detected. Normal size, normal contrast.
+- **Action** — what to do about it, in plain imperative language ("Swap them for concrete facts," "No action needed"). Its label is in the accent colour so it's easy to scan for across cards.
+- **Rationale** — the generic background: why the check exists, where a threshold came from, or a link to further reading. This is reference material you only need once, not every time, so it's deliberately **smaller, indented, lower-contrast, and collapsed by default** inside its own `<details>` toggle — click "Rationale" on any card to expand it.
+
+Where a claim is genuinely sourced (Flesch-Kincaid, the inverted-pyramid convention, Helen Sword's "zombie nouns," Oxford spelling, a sector's regulator), the Rationale links to it — opening in a new tab, with an accessible label describing the destination rather than a bare "click here." Where a number is a convention rather than a citable finding (the 20% passive-voice threshold, this tool's own scoring targets), the Rationale says so explicitly and deliberately carries **no** link, so a link's presence or absence is itself an honest signal of how sourced a number is.
 
 ## Shared building blocks (section A: the denominator problem)
 
@@ -36,19 +46,27 @@ Rating things as a percentage of *every* word is misleading, because function wo
 - **Content words**, not total words, for buzzwords, hedging, superlatives, and nominalisation. Content words = every word minus a `stopwords` list of ~130 common function words in `config.json`. A release that's 10% buzzwords-by-content-word is a much stronger signal than 10%-by-total-word would suggest, since content words are the words actually carrying meaning.
 - **Per 100 words** (of whichever denominator applies) so a 200-word pitch and a 900-word release are directly comparable — this is just what "density" means throughout this document.
 - **Per sentence**, reported alongside density where it's more intuitive to read: buzzword, hedge, and other check cards say things like *"7 of your 14 sentences contain a buzzword"* in addition to the density number.
-- **Absolute counts**, not a density, for acronym load specifically — see section 11 below; a percentage doesn't capture "how many distinct acronyms did you never explain," a count does.
+- **Absolute counts**, not a density, for acronym load specifically — see section 12 below; a percentage doesn't capture "how many distinct acronyms did you never explain," a count does.
 - **Clustering.** When enough matches exist (`clusteringMinMatches`, default 3) and one paragraph holds an outsized share of them (`clusteringShareThreshold`, default 40%), the buzzword card adds a line like *"6 of your 11 buzzwords are in paragraph 3."* Paragraphs are detected by blank-line breaks in the pasted text.
 - **Boilerplate excluded.** See the dedicated section right below — the trailing "About [Company]" and media-contact block is stripped out of every score and reported on its own, separately.
 
 **Sentence splitting**, used throughout, splits text on `.`, `!`, or `?` followed by whitespace or end-of-text. This is a simple heuristic: it doesn't know about abbreviations like "Inc." or "Dr.", so those occasionally cause a mis-split. It also means a period with **no** following space (a genuine typo, e.g. "…in 2026.The rollout…") doesn't end a sentence for scoring purposes — the sentence keeps running until the next real terminator, which the consistency check (section F) separately flags as a "missing space after full stop" issue. Good enough for scoring; not a substitute for a real sentence tokenizer.
 
-## Boilerplate exclusion
+## Structural zones and boilerplate exclusion
 
-The tool looks at your paragraphs (blank-line-separated blocks) from the end, backwards, and treats any consecutive trailing paragraph as boilerplate if it starts with "About " or contains a contact indicator (`media contact`, `press contact`, `contact:`, `for more information`, or an email address) — configured via `boilerplateHeadingPatterns` and `contactIndicators`. It stops at the first paragraph (from the end) that matches neither.
+The tool detects a handful of structural zones in the pasted text:
 
-Everything inside that detected range is **excluded from every check and from the overall score**, but still shown in the annotated text, faded, so you can see what was excluded and why. It gets its own small info card instead, reporting its word count and buzzword count on their own — graded separately, never folded into your main grade, per the spec.
+- **Headline** — the first paragraph, if it's a single line of 20 words or fewer (a proxy for "this looks like a headline, not a lede sentence").
+- **Lede** — the first sentence that starts at or after the headline (used by the inverted-pyramid check, section D).
+- **Quotes** — every quoted span (used by the empty-quote check and to exclude quoted sentences from self-reference classification, section 11).
+- **Boilerplate** (including "Notes to editors"/references and contact blocks) — see below.
+- **Body** — everything else.
 
-**Known limitation:** if a sentence starts just before the boilerplate boundary but has no terminating punctuation before it (so the sentence-splitter's next terminator lands inside the boilerplate), that sentence's word count for scoring purposes is clipped exactly at the boilerplate boundary — it does not count boilerplate words as part of the sentence's length, even though the same sentence-splitting quirk described above briefly merges the two regions internally.
+**Boilerplate detection:** the tool looks at your paragraphs (blank-line-separated blocks) from the end, backwards, and treats any consecutive trailing paragraph as boilerplate if it starts with one of `boilerplateHeadingPatterns` in `config.json` (by default: "about ", "notes to editors", "note to editors", "notes for editors", "references") or contains a contact indicator (`media contact`, `press contact`, `contact:`, `for more information`, or an email address) — configured via `contactIndicators`. It stops at the first paragraph (from the end) that matches neither, so a trailing "About the company" paragraph immediately followed by "Notes to editors" and a contact line are all correctly caught as one boilerplate block, in any order.
+
+Everything inside that detected range is **excluded from every check and from the overall score** — including the acronym check specifically, so a "Notes to editors" block that re-lists trademark acronyms, or a references list full of citations, doesn't inflate your acronym count. It's still shown in the annotated text, faded, so you can see what was excluded and why, and it gets its own small info card reporting its word count and buzzword count on their own — graded separately, never folded into your main grade.
+
+**Known limitation:** if a sentence starts just before the boilerplate boundary but has no terminating punctuation before it (so the sentence-splitter's next terminator lands inside the boilerplate), that sentence's word count for scoring purposes is clipped exactly at the boilerplate boundary — it does not count boilerplate words as part of the sentence's length, even though the same sentence-splitting quirk described above briefly merges the two regions internally. The headline heuristic is intentionally simple (single line, ≤20 words) and can misfire on a very short first paragraph of ordinary body text; it currently only feeds the lede-position calculation, so a misfire has a narrow, low-stakes effect.
 
 ## The checks
 
@@ -86,7 +104,7 @@ with `strengthsTargetPer100ContentWords` defaulting to **4**. There's no zero-fl
 
 **What's deliberately not counted as a strength here:** specific timeframes ("from 3 March" vs. "in the coming months") aren't given a separate highlight or score contribution, because a specific date is already exactly what the concreteness check (and its green highlight) rewards — adding a second, overlapping highlight for the same span would just be visual noise. Vague timeframe phrases (`vagueTimeframes`: "in the coming months," "going forward," …) are counted and reported in the Strengths card as a caution, but don't move the score — informational only, to keep the scoring formula from getting any more tangled than it already is.
 
-### 3. Empty quote detector — weight `1` (with Tier-2 guidance — section C)
+### 3. Empty quote detector — weight `1` (with a "Worth asking yourself" prompt — section C)
 
 **The signature feature.** Extracts every quoted span in the text (inside straight `"…"` or curly `"…"` quotation marks) and judges each one independently.
 
@@ -100,7 +118,7 @@ score = 100 × (1 − emptyQuotesFound ÷ totalQuotesFound)
 ```
 No quotes in the text at all → score is 100 with a note that the check didn't have anything to evaluate.
 
-**Presentation:** every flagged quote is shown verbatim in its score card under the shareable line *"This quote would work equally well in a press release about a completely different product"* — and, per the Tier-2 rewrite system (section C below), paired with a fixed guided question rather than an invented rewrite: *"A useful quote gives a reason, a number, or a next step. This gives none. Ask your spokesperson why you actually did this."* The tool can identify the problem; only a human can supply what the quote is missing, so it asks rather than guesses.
+**Presentation:** every flagged quote is shown verbatim in its score card under the shareable line *"This quote would work equally well in a press release about a completely different product"* — and, per the three-tier rewrite system (section C below), paired with a fixed guided question rather than an invented rewrite: *"A useful quote gives a reason, a number, or a next step. This gives none. Ask your spokesperson why you actually did this."* The tool can identify the problem; only a human can supply what the quote is missing, so it asks rather than guesses.
 
 **Known limitation:** a quote is only recognised if it sits entirely within one paragraph (no line break inside the quotation marks) and is under 600 characters. Genuinely concrete quotes that avoid numbers entirely (naming a specific product or person only) will still be flagged empty, for the same named-entity-detection reason as the concreteness check.
 
@@ -144,7 +162,7 @@ grade = 0.39 × (words ÷ sentences) + 11.8 × (syllables ÷ words) − 15.59
 score = 100 − max(0, grade − 8) × readabilityPenaltyPerGrade (default 8)
 ```
 
-### 7. Passive voice — weight `1` (with Tier-1/Tier-2 rewrites — section C)
+### 7. Passive voice — weight `1` (with "Suggested rewrite" & "Worth asking yourself" — section C)
 
 **What it looks for:** a "to be" verb (`is/are/was/were/be/been/being/am`), optionally followed by an adverb, followed by a word that either ends in "-ed" or appears in the `irregularVerbs` map (for irregular participles like "written," "given," "shown" — the map also stores each one's base verb form, used for the rewrite suggestions below).
 
@@ -164,58 +182,75 @@ score = 100 − max(0, passivePercent − 20) × passiveVoicePenaltyPerPercent (
 
 **Scoring:** density-based against content words, target `0.5%` (`hedgeDensityTarget`), penalty `15` points per percentage point over (`hedgePenaltyPerPercent`).
 
-### 9. Superlatives & absolute claims — weight `1` (Tier 3 — flag only)
+### 9. Superlatives & absolute claims — weight `1` ("Flag only" — no rewrite offered)
 
 **What it looks for:** exact matches against `superlativesAndAbsolutes` — "best," "only," "guaranteed," "always," "never," "100%," "unmatched."
 
 **Scoring:** density-based against content words, target `0.5%` (`superlativeDensityTarget`), penalty `15` points per percentage point over (`superlativePenaltyPerPercent`).
 
-**Tier 3, flag only:** per the three-tier rewrite system (section C), no automatic rewrite is offered for superlatives, and the card says so — the fix here is factual or legal ("can you actually prove this is the *best*?"), not a wording choice, so pretending to auto-fix it would be dishonest.
+**"Flag only":** per the three-tier rewrite system (section C), no automatic rewrite is offered for superlatives, and the card says so — the fix here is factual or legal ("can you actually prove this is the *best*?"), not a wording choice, so pretending to auto-fix it would be dishonest.
 
-### 10. Nominalisation — weight `1` (with Tier-1 rewrites — section C)
+### 10. Nominalisation — weight `1` (with a "Suggested rewrite" — section C)
 
 **What it looks for:** a verb turned into a noun, immediately followed by "of" — e.g. "the implementation of" instead of "implementing." Detected as any word ending in `-tion`, `-ment`, `-ance`, or `-ence` followed by "of."
 
 **Scoring:** density-based against content words, target `1%` (`nominalisationDensityTarget`), penalty `10` points per percentage point over (`nominalisationPenaltyPerPercent`). Helen Sword calls these "zombie nouns" — using the verb directly is usually punchier.
 
-### 11. Self-reference ratio — weight `1`
+### 11. Self-reference — weight `1`
 
-**What it looks for:** how often the text refers to the company itself — "we," "us," "our," "ours," "ourselves," "the company," "the team" — as a share of **all** words (not content words — self-reference words are themselves common function-word-like terms, so the total-word denominator is the more natural comparison here).
+**What it looks for:** not a word density any more, but a per-sentence classification of who each (non-quoted, non-boilerplate) sentence is actually about. For each eligible sentence, the tool looks at its first eight words for the earliest match against three word lists in `config.json`:
 
-**Scoring:** density-based, target `3%` (`selfReferenceDensityTarget`), penalty `6` points per percentage point over (`selfReferencePenaltyPerPercent`) — the gentlest penalty of any density check, since talking about the company that issued the release is completely normal.
+- **`companyFacingTerms`** — we, us, our, ours, ourselves, the company, the team, the firm, the organisation
+- **`audienceFacingTerms`** — you, your, yours, customers, users, readers, subscribers, clients, members, patients
+- **`thirdPartyTerms`** — analysts, regulators, competitors, the market, industry observers, critics, investors, shareholders
 
-**Deliberately not highlighted inline:** "we" and "our" are common enough that highlighting every instance would clutter the annotated text without adding insight. This check reports only the ratio, in its score card.
+Whichever list's term appears earliest wins; a sentence matching none of the three is reported as unclassified rather than forced into a bucket.
+
+**Excluded from classification:** any sentence that starts inside a quotation (the quote reflects the *speaker's* framing, not the release's own voice) and anything inside boilerplate (already excluded from every check). This is why the check's own name dropped "ratio" — it's no longer a percentage of words at all.
+
+**Reported as sentence counts, not a percentage of words:** *"8 sentences company-facing, 2 audience-facing, 3 third-party (13 of 15 sentences classified; 2 quote sentences excluded)."* "Subject of the sentence" is a per-sentence property, so a per-sentence count is the more natural unit than a word-density figure.
+
+**Scoring:**
+```
+companyShare = companyFacingSentences ÷ classifiedSentences × 100
+score = 100 − max(0, companyShare − selfReferenceCompanyShareTarget) × selfReferencePenaltyPerSharePoint
+```
+`selfReferenceCompanyShareTarget` defaults to **70%** and `selfReferencePenaltyPerSharePoint` to **1.5** — a release talking mostly about itself is completely normal (a press release is, after all, a company's own announcement), so only a heavily lopsided share costs points, and gently. If no sentences classify at all, the score is 100 (nothing to judge).
+
+**Known limitation:** this is a first-eight-words heuristic proxy for "the sentence's subject," not a real grammatical parse — a company name used as the actual subject (e.g. "Acme Corp today announced…") won't be recognised as company-facing unless it also contains a word from `companyFacingTerms`, since the tool has no named-entity detection (the same limitation as the concreteness check). **Deliberately not highlighted inline:** "we" and "your" are common enough that highlighting every instance would clutter the annotated text without adding insight — this check reports only the counts, in its score card.
 
 ### 12. Acronym load — weight `1`
 
-**What it looks for:** runs of 2–6 capital letters (`\b[A-Z]{2,6}\b`), excluding a configurable allowlist of acronyms common enough not to need spelling out (CEO, CFO, US, UK, AI, IT, and similar, in `acronymAllowlist`).
+**What it looks for:** runs of 2–6 capital letters (`\b[A-Z]{2,6}\b`), excluding a configurable allowlist of acronyms that never need expanding (CEO, CFO, US, UK, AI, IT, and similar, in `acronymAllowlist`) — that list is the direct answer to "which acronyms should this tool never bother me about," and is the first place to add your own organisation's everyday abbreviations. Acronyms inside a **boilerplate, "Notes to editors"/references, or contact zone** (see "Structural zones," above) are excluded from this check entirely, so a references list re-citing acronyms, or a "Notes to editors" block spelling out a trademark, doesn't inflate the count.
+
+**Only the first use of each acronym is flagged and highlighted** — later repeats of the same acronym in the body aren't re-flagged, since the reader has already met it once; the score and the "never expanded" list still account for the acronym properly regardless of how many times it repeats.
 
 **Scoring — absolute counts, not a density (per section A):**
 ```
 score = 100 − neverExpandedCount × acronymNeverExpandedPenaltyEach (default 12)
 ```
-An acronym counts as **expanded** if its full form appears in parentheses next to it anywhere in the text, in either order — "Natural Language Processing (NLP)" or "NLP (Natural Language Processing)" both count. The card reports it exactly as the spec asked: *"Nine acronyms, four never expanded."*
+An acronym counts as **expanded** if its full form appears in parentheses next to it anywhere in the (non-boilerplate) text, in either order — "Natural Language Processing (NLP)" or "NLP (Natural Language Processing)" both count. The card reports it exactly as the spec asked: *"Nine acronyms, four never expanded."*
 
-**Known limitation:** this is a capitalisation pattern, not a dictionary of real acronyms — it will flag any all-caps word of the right length, including a company's own all-caps brand name (e.g. "ACME"). Add your own organisation's all-caps terms to `acronymAllowlist` if they shouldn't count. The expansion check is a simple parenthetical-proximity pattern, not true coreference — an expansion phrased differently ("NLP, short for Natural Language Processing,") won't be recognised.
+**Known limitation:** this is a capitalisation pattern, not a dictionary of real acronyms — it will flag any all-caps word of the right length in the body text, including a company's own all-caps brand name (e.g. "ACME"). Add your own organisation's all-caps terms to `acronymAllowlist` if they shouldn't count. The expansion check is a simple parenthetical-proximity pattern, not true coreference — an expansion phrased differently ("NLP, short for Natural Language Processing,") won't be recognised.
 
 ---
 
 ## C. The three-tier rewrite system
 
-The **Rewrite suggestions** panel lists concrete fixes, but is explicit about how confident each one is — the tier is shown on every entry, so the tool never implies more certainty than it has.
+The **Rewrite suggestions** panel lists concrete fixes, but is explicit about how confident each one is — the tier is shown as a plain-English label on every entry, so the tool never implies more certainty than it has: **"Suggested rewrite,"** **"Worth asking yourself,"** or **"Flag only"** (this last one isn't shown as an entry in the panel at all — see below).
 
-**Tier 1 — automatic rewrite, shown directly:**
+**"Suggested rewrite" — automatic rewrite, shown directly:**
 - **Passive with a named agent** ("X was impacted by the delay") → the fragment is swapped to active order ("the delay impacted"). Requires a "by …" phrase to follow the passive verb within the same clause; the participle's base form comes from the `irregularVerbs` map for irregular verbs, or a small rule-based stemmer for regular "-ed" verbs (strip "-ed"; de-double a doubled final consonant, e.g. "stopped"→"stop"; restore a dropped silent "e" for common endings like "-at/-it/-et/-ct", e.g. "completed"→"complete"). **This is an approximation, not a dictionary lookup** — it can get tense agreement wrong (showing "team complete" rather than "team completes") and is flagged in the UI as something to double-check before using.
 - **Nominalisations with a known verb** — `nominalisationVerbMap` maps ~35 common nominalised nouns to their verb (implementation→implement, provision→provide, consideration→consider, …; the spec's five examples plus common extensions). "The implementation of the policy" → "implementing the policy."
 - **Word swaps** — a direct substitution dictionary, `wordSwaps` in `config.json`: leverage→use, facilitate→help, commence→start, "in order to"→to, "at this point in time"→now, "is designed to"→does, utilise/utilize→use, prior to→before (the spec's exact list).
 
-**Tier 2 — a guided question, no automatic fix:**
+**"Worth asking yourself" — a guided question, no automatic fix:**
 - **Passive with no agent** ("Mistakes were made.") → *"Who did it? If you'd rather not say, make that a deliberate choice rather than an accident of grammar."* (verbatim from the spec)
 - **Empty quotes** → *"A useful quote gives a reason, a number, or a next step. This gives none. Ask your spokesperson why you actually did this."* (verbatim from the spec)
 
 Neither the passive-agent question nor the empty-quote question tries to guess an answer, because the tool genuinely doesn't know who did it or what the spokesperson meant — asking is more honest than inventing a plausible-sounding fix.
 
-**Tier 3 — flag only, no rewrite offered:** superlatives, absolute claims, and regulated claims. Their card bodies say so explicitly: the fix is factual or legal ("can you back this up?"), not linguistic, so an auto-rewrite would be actively misleading.
+**"Flag only" — no rewrite offered, and no entry in the Rewrite suggestions panel at all:** superlatives, absolute claims, and regulated claims. Their own card bodies say so explicitly instead: the fix is factual or legal ("can you back this up?"), not linguistic, so even offering a rewrite suggestion would be actively misleading.
 
 ---
 
@@ -232,27 +267,27 @@ A single composite check made of four independent sub-signals, each worth `25` p
 
 ---
 
-## E. Regulated claims — off by default, config-driven, weight `1` when active
+## E. Regulated claims — off by default, config-driven, never counted in the overall grade
 
-Five config files ship with the tool, all sharing the exact same schema (word lists, thresholds, weights):
+A **Sector** selector at the top of the page — General, Healthcare, Environmental claims, AI, or Forward-looking statements — switches which config file is loaded and **re-runs the analysis immediately** if there's already text in the box. Five config files back it, all sharing the exact same schema (word lists, thresholds, weights):
 
-| File | Sector | Regulated claims |
+| Sector selector | File | Regulated claims |
 |---|---|---|
-| `config.json` / `config.default.json` | Default | Off |
-| `config.greenwashing.json` | Environmental claims | carbon neutral, net zero, sustainable, eco-friendly, biodegradable, 100% recyclable, plastic-free, climate positive, offset |
-| `config.healthcare.json` | Healthcare / pharma / oncology | cure, breakthrough, safe, proven, well-tolerated, life-saving, miracle, first-in-class, revolutionary |
-| `config.ai.json` | Responsible AI | unbiased, fair, explainable, fully autonomous, human-level, hallucination-free, guaranteed accuracy, solved |
-| `config.forward-looking.json` | Forward-looking / financial statements | will, expects to, is on track to, anticipates, projects, guidance, confident that |
+| General | `config.json` / `config.default.json` | Off |
+| Environmental claims | `config.greenwashing.json` | carbon neutral, net zero, sustainable, eco-friendly, biodegradable, 100% recyclable, plastic-free, climate positive, offset |
+| Healthcare | `config.healthcare.json` | cure, breakthrough, safe, proven, well-tolerated, life-saving, miracle, first-in-class, revolutionary |
+| AI | `config.ai.json` | unbiased, fair, explainable, fully autonomous, human-level, hallucination-free, guaranteed accuracy, solved |
+| Forward-looking statements | `config.forward-looking.json` | will, expects to, is on track to, anticipates, projects, guidance, confident that |
 
-**Loading a sector config:** append `?config=healthcare` (or `greenwashing`, `ai`, `forward-looking`) to the page URL — `index.html?config=healthcare`. There's no in-page switcher yet (see "Not yet built," below); the URL parameter is the way to test a sector config today. `config.json` (no parameter) loads the default with regulated claims off.
+Advanced/custom use: appending `?config=<name>` to the page URL still works for any `config.<name>.json` file you add yourself, even one not in the fixed dropdown list above — useful for building and testing your own sector config (see "Editing the numbers," below) before it earns a permanent spot in the selector.
 
 **Scoring, only when `regulatedClaims.enabled` is true:**
 ```
 score = 100 − matchCount × regulatedClaimPenaltyPerMatch (default 15)
 ```
-When disabled (the default), this check is **excluded from the weighted average entirely** — not silently scored 100, genuinely not counted, matching "off by default."
+This score is always shown in its own card when a sector is active, but **it is never part of the overall weighted average, under any sector** — `regulatedClaims` isn't a key in `weights` at all. Switching from General to Healthcare on the same text changes the Regulated Claims card's own number but leaves the Overall grade exactly where it was. This is a deliberate design choice: a regulated-claim match is a compliance flag, not a clarity defect, and folding it into the clarity score would conflate two different questions ("is this well written" vs. "should legal see this first").
 
-Each sector config also carries a `sectorName`, a `disclaimer` (extending the base disclaimer with sector-specific regulatory context), and a `sourceUrl` pointing at the relevant regulator or code — both shown in the check's own card when active. **None of this is legal advice** — every sector card repeats that a flagged term is a prompt to consult your own legal/compliance/medical-affairs team, not a verdict.
+Each sector config also carries a `sectorName`, a `disclaimer` (extending the base disclaimer with sector-specific regulatory context) shown as the card's **Action**, and a `sourceUrl` pointing at the relevant regulator or code, shown as a clickable link in the card's **Rationale**. **None of this is legal advice** — every sector card repeats that a flagged term is a prompt to consult your own legal/compliance/medical-affairs team, not a verdict.
 
 ---
 
@@ -316,16 +351,16 @@ Buzzwords count for the most per instance (×3) because they're the check with z
 
 ## Not yet built
 
-An in-page settings panel for editing word lists without touching `config.json` directly, and an in-page switcher for the four sector regulated-claims configs (currently loaded via a `?config=` URL parameter — see section E). Both are still open items.
+An in-page settings panel for editing word lists without touching `config.json` directly. The sector switcher itself is now built (the Sector selector at the top of the page); what's still missing is a way to edit a sector's own terms from inside the browser rather than by hand-editing its JSON file.
 
 ## Editing the numbers
 
 Everything above lives in `config.json`. To recalibrate:
 
 - Change a `target` value to make a check stricter (lower target) or more forgiving (higher target).
-- Change a `penaltyPerPercent`/`penaltyPerGrade`/`penaltyPerWordOverAverage`/`penaltyEach`/`penaltyPerMismatch`/`penaltyPerIssueType`/`penaltyPerMatch` value to make the score fall faster or slower once past the target.
-- Change a value in `weights` to make a check matter more or less to the overall grade, or set it to `0` to turn it off entirely.
-- Add or remove words from any list (`buzzwords`, `hedges`, `superlativesAndAbsolutes`, `selfReferenceTerms`, `irregularVerbs`, `nominalisationSuffixes`, `nominalisationVerbMap`, `acronymAllowlist`, `wordSwaps`, `baselineIndicators`, `preciseVerbs`, `vagueTimeframes`, `reasonIndicators`, `decisionIndicators`, `confusionGroups`, `variantWordPairs`, `alwaysIseWords`, `titleAbbreviations`, `stopwords`) to match your own house style or sector.
-- Build a new sector config for regulated claims by copying `config.json`, changing `sectorName`/`disclaimer`/`sourceUrl`, and setting `regulatedClaims.enabled: true` with your own `terms` list — then load it with `?config=<yourname>` (matching a file named `config.<yourname>.json`).
+- Change a `penaltyPerPercent`/`penaltyPerGrade`/`penaltyPerWordOverAverage`/`penaltyEach`/`penaltyPerMismatch`/`penaltyPerIssueType`/`penaltyPerMatch`/`penaltyPerSharePoint` value to make the score fall faster or slower once past the target.
+- Change a value in `weights` to make a check matter more or less to the overall grade, or set it to `0` to turn it off entirely. (`regulatedClaims` is deliberately not a `weights` key — see section E.)
+- Add or remove words from any list (`buzzwords`, `hedges`, `superlativesAndAbsolutes`, `companyFacingTerms`, `audienceFacingTerms`, `thirdPartyTerms`, `irregularVerbs`, `nominalisationSuffixes`, `nominalisationVerbMap`, `acronymAllowlist`, `wordSwaps`, `baselineIndicators`, `preciseVerbs`, `vagueTimeframes`, `reasonIndicators`, `decisionIndicators`, `confusionGroups`, `variantWordPairs`, `alwaysIseWords`, `titleAbbreviations`, `stopwords`, `boilerplateHeadingPatterns`, `contactIndicators`) to match your own house style or sector.
+- Build a new sector config for regulated claims by copying `config.json`, changing `sectorName`/`disclaimer`/`sourceUrl`, and setting `regulatedClaims.enabled: true` with your own `terms` list — then load it with `?config=<yourname>` (matching a file named `config.<yourname>.json`) until it earns a permanent spot in the Sector selector's dropdown.
 
 No code changes required for any of that — reload the page after editing `config.json` and the new numbers take effect immediately.
