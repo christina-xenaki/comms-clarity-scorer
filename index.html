@@ -27,6 +27,8 @@
     --c-acronym-bg: #e2e2e2;   --c-acronym-border: #616161;
     --c-concrete-bg: #dcf3d3;  --c-concrete-border: #3f8f2a;
     --c-quote-bg: #ffbdbd;     --c-quote-border: #c0392b;
+    --c-strength-bg: #c8f0e6;  --c-strength-border: #1f8a6b;
+    --c-regulated-bg: #f3c9c9; --c-regulated-border: #7a1f1f;
 
     --radius: 10px;
   }
@@ -78,6 +80,18 @@
     font-family: inherit;
   }
 
+  .variant-row { margin-top: 0.75rem; }
+  .variant-row label { display: inline; font-weight: 600; margin-right: 0.5rem; }
+  select {
+    font-size: 0.95rem;
+    padding: 0.5rem 0.6rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+    color: var(--color-text);
+    font-family: inherit;
+  }
+
   button {
     display: block;
     width: 100%;
@@ -112,6 +126,14 @@
     border: 1px solid var(--color-border);
     border-radius: var(--radius);
     padding: 1rem;
+  }
+
+  #headline-metric {
+    text-align: center;
+    font-size: 1.3rem;
+    font-weight: 700;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.75rem;
   }
 
   #overall-card { text-align: center; }
@@ -160,12 +182,35 @@
     padding-left: 0.6rem;
     margin: 0.5rem 0;
   }
+  .card-body .source-note { font-size: 0.8rem; font-style: italic; }
+  .card-body .tier3-note { font-size: 0.8rem; border-left: 3px solid var(--color-border); padding-left: 0.6rem; }
 
-  #worst-offenders ol { margin: 0; padding-left: 1.25rem; }
-  #worst-offenders li { margin-bottom: 0.75rem; }
+  #boilerplate-note { font-size: 0.85rem; color: var(--color-muted); border-style: dashed; }
+
+  #worst-offenders ol, #rewrite-suggestions ol { margin: 0; padding-left: 1.25rem; }
+  #worst-offenders li, #rewrite-suggestions li { margin-bottom: 0.9rem; }
   #worst-offenders .reason { display: block; font-size: 0.85rem; color: var(--color-muted); }
 
+  .rewrite-tier {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    color: var(--color-muted);
+    margin-bottom: 0.3rem;
+  }
+  .rewrite-arrow { color: var(--color-muted); }
+  .rewrite-original { text-decoration: line-through; color: var(--color-muted); }
+  .rewrite-new { color: var(--color-good); font-weight: 600; }
+  .rewrite-question { font-style: italic; }
+
   #annotated-output { white-space: pre-wrap; font-size: 1rem; line-height: 1.7; }
+  .boilerplate-text { opacity: 0.55; }
 
   .legend { display: flex; flex-wrap: wrap; gap: 0.6rem; font-size: 0.8rem; color: var(--color-muted); margin-bottom: 0.75rem; }
   .legend span { display: inline-flex; align-items: center; gap: 0.3rem; }
@@ -180,6 +225,8 @@
   .swatch.acronym { background: var(--c-acronym-bg); border: 1px solid var(--c-acronym-border); }
   .swatch.concrete { background: var(--c-concrete-bg); border: 1px solid var(--c-concrete-border); }
   .swatch.quote { background: var(--c-quote-bg); border: 1px solid var(--c-quote-border); }
+  .swatch.strength { background: var(--c-strength-bg); border: 1px solid var(--c-strength-border); }
+  .swatch.regulated { background: var(--c-regulated-bg); border: 1px solid var(--c-regulated-border); }
 
   mark.hl { position: relative; background: transparent; color: inherit; cursor: pointer; border-radius: 3px; }
 
@@ -192,6 +239,8 @@
   mark.hl-acronym { background: var(--c-acronym-bg); border-bottom: 2px solid var(--c-acronym-border); padding: 0 1px; }
   mark.hl-concrete { background: var(--c-concrete-bg); border-bottom: 2px solid var(--c-concrete-border); padding: 0 1px; }
   mark.hl-quote { background: var(--c-quote-bg); box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+  mark.hl-strength { background: var(--c-strength-bg); border-bottom: 2px solid var(--c-strength-border); padding: 0 1px; }
+  mark.hl-regulated { background: var(--c-regulated-bg); border-bottom: 2px solid var(--c-regulated-border); padding: 0 1px; }
 
   mark.hl .tip {
     display: none;
@@ -253,6 +302,16 @@
     <section id="input-section">
       <label for="input-text">Your text</label>
       <textarea id="input-text" placeholder="Paste your press release or pitch here…"></textarea>
+
+      <div class="variant-row">
+        <label for="variant-select">English variant</label>
+        <select id="variant-select">
+          <option value="british-oxford">British (Oxford, -ize)</option>
+          <option value="british">British (-ise)</option>
+          <option value="american">American</option>
+        </select>
+      </div>
+
       <button id="analyze-btn" type="button">Analyze</button>
       <p class="privacy-note">Nothing you paste here leaves your browser. There's no server, no account and no upload &mdash; the analysis runs entirely on your device.</p>
       <p id="config-status" class="config-status">Loading word lists…</p>
@@ -261,17 +320,19 @@
     <section id="annotated-text-section" hidden>
       <h2>Your text, annotated</h2>
       <div class="legend">
+        <span><span class="swatch strength"></span> Strength (good)</span>
+        <span><span class="swatch concrete"></span> Concrete detail (good)</span>
         <span><span class="swatch buzz"></span> Buzzword</span>
         <span><span class="swatch hedge"></span> Hedge word</span>
         <span><span class="swatch superlative"></span> Superlative / absolute claim</span>
         <span><span class="swatch passive"></span> Passive voice</span>
         <span><span class="swatch nominal"></span> Nominalisation</span>
         <span><span class="swatch acronym"></span> Acronym</span>
-        <span><span class="swatch concrete"></span> Concrete detail (good)</span>
         <span><span class="swatch long"></span> Long sentence</span>
         <span><span class="swatch quote"></span> Empty quote</span>
+        <span><span class="swatch regulated"></span> Regulated claim</span>
       </div>
-      <p style="margin-top:-0.5rem;color:var(--color-muted);font-size:0.85rem;">Tap a highlight for the explanation.</p>
+      <p style="margin-top:-0.5rem;color:var(--color-muted);font-size:0.85rem;">Tap a highlight for the explanation. Faded text is boilerplate (an "About" or contact block) — excluded from your score and graded separately below.</p>
       <div id="annotated-output" class="card"></div>
     </section>
   </div>
@@ -279,11 +340,15 @@
   <div class="col-scores">
     <section id="results-panel" hidden>
 
+      <div id="headline-metric" class="card"></div>
+
       <section id="overall-card" class="card">
         <div class="summary-title">Overall grade</div>
         <div id="overall-grade">&mdash;</div>
         <p id="overall-verdict"></p>
       </section>
+
+      <section id="boilerplate-note" class="card" hidden></section>
 
       <section id="sub-scores">
         <h2>Checks</h2>
@@ -291,6 +356,11 @@
         <details class="card" id="card-concreteness">
           <summary><span class="summary-title">Concreteness</span><span class="summary-score" id="score-concreteness">&mdash;</span></summary>
           <div class="card-body" id="body-concreteness"></div>
+        </details>
+
+        <details class="card" id="card-strengths">
+          <summary><span class="summary-title">Strengths</span><span class="summary-score" id="score-strengths">&mdash;</span></summary>
+          <div class="card-body" id="body-strengths"></div>
         </details>
 
         <details class="card" id="card-empty-quote">
@@ -342,6 +412,26 @@
           <summary><span class="summary-title">Acronym load</span><span class="summary-score" id="score-acronym">&mdash;</span></summary>
           <div class="card-body" id="body-acronym"></div>
         </details>
+
+        <details class="card" id="card-inverted-pyramid">
+          <summary><span class="summary-title">Inverted pyramid</span><span class="summary-score" id="score-inverted-pyramid">&mdash;</span></summary>
+          <div class="card-body" id="body-inverted-pyramid"></div>
+        </details>
+
+        <details class="card" id="card-consistency">
+          <summary><span class="summary-title">Consistency &amp; typos</span><span class="summary-score" id="score-consistency">&mdash;</span></summary>
+          <div class="card-body" id="body-consistency"></div>
+        </details>
+
+        <details class="card" id="card-english-variant">
+          <summary><span class="summary-title">English variant</span><span class="summary-score" id="score-english-variant">&mdash;</span></summary>
+          <div class="card-body" id="body-english-variant"></div>
+        </details>
+
+        <details class="card" id="card-regulated-claims">
+          <summary><span class="summary-title">Regulated claims</span><span class="summary-score" id="score-regulated-claims">&mdash;</span></summary>
+          <div class="card-body" id="body-regulated-claims"></div>
+        </details>
       </section>
 
       <section id="worst-offenders" class="card">
@@ -350,149 +440,66 @@
         <ol id="worst-offenders-list"></ol>
       </section>
 
+      <section id="rewrite-suggestions" class="card">
+        <h2>Rewrite suggestions</h2>
+        <p style="margin-top:0;color:var(--color-muted);font-size:0.9rem;">Tier 1 is an automatic suggested rewrite — check the grammar before using it. Tier 2 is a question worth asking yourself; the tool can't answer it for you.</p>
+        <ol id="rewrite-suggestions-list"></ol>
+      </section>
+
       <button id="copy-report-btn" type="button" class="secondary">Copy report</button>
     </section>
   </div>
 </main>
 
 <footer>
-  <p>Checks: buzzword density, sentence length, readability, passive voice, empty-quote detection, hedging, concreteness, nominalisation, self-reference ratio, superlatives &amp; absolute claims, and acronym load. See <a href="SCORING.md">SCORING.md</a> for exactly how each is calculated. Regulated-claim flags (sector-specific, config-driven) aren't built yet.</p>
+  <p>Checks: concreteness, strengths, empty-quote detection, buzzword density, sentence length, readability, passive voice, hedging, superlatives &amp; absolute claims, nominalisation, self-reference ratio, acronym load, inverted pyramid structure, consistency &amp; typos, English variant, and regulated claims (off by default). See <a href="SCORING.md">SCORING.md</a> for exactly how each is calculated, including known limitations. This tool is directional, not authoritative — it does not replace an editor, and regulated-claim flags are a prompt to consult your legal/compliance/medical-affairs team, not a sign-off. A good score does not mean the release is accurate, newsworthy, or that it will earn coverage.</p>
 </footer>
 
 <script>
 (function () {
   "use strict";
 
-  var DEFAULT_CONFIG = {
-    sectorName: "Default (built-in fallback)",
-    buzzwords: [
-      "leverage", "synergy", "best-in-class", "world-class", "cutting-edge",
-      "innovative", "solution", "ecosystem", "robust", "seamless", "empower",
-      "unlock", "journey", "passionate", "delighted", "thrilled",
-      "excited to announce", "game-changing", "paradigm", "disruptive",
-      "holistic", "strategic", "committed to", "mission-critical",
-      "next-generation", "transformative", "revolutionise", "revolutionize",
-      "pioneering", "landmark", "unparalleled", "industry-leading"
-    ],
-    hedges: [
-      "may", "might", "could", "potentially", "aims to", "seeks to", "helps to",
-      "is designed to", "up to", "as much as", "some of the", "a number of"
-    ],
-    superlativesAndAbsolutes: [
-      "best", "greatest", "biggest", "smallest", "first-ever", "first ever",
-      "only", "unique", "unmatched", "unrivalled", "unrivaled", "world's first",
-      "number one", "never before", "like no other", "most advanced", "fastest",
-      "largest", "best-ever", "undisputed", "always", "never", "guarantee",
-      "guaranteed", "every single", "completely", "totally", "entirely",
-      "without exception", "most trusted", "most reliable"
-    ],
-    selfReferenceTerms: ["we", "us", "our", "ours", "ourselves", "the company", "the team"],
-    irregularPastParticiples: [
-      "done", "made", "said", "gone", "known", "given", "taken", "seen", "shown",
-      "held", "sent", "built", "brought", "bought", "caught", "chosen", "driven",
-      "eaten", "fallen", "felt", "found", "flown", "forgotten", "gotten", "hidden",
-      "kept", "left", "lost", "meant", "paid", "put", "read", "run", "sold",
-      "spoken", "spent", "stood", "stolen", "swum", "taught", "thrown",
-      "understood", "worn", "won", "written", "begun", "broken", "drawn", "drunk",
-      "frozen", "grown", "ridden", "risen", "sworn", "torn", "woken", "born",
-      "bound", "bred", "dealt", "dug", "fed", "fought", "fled", "hung", "hurt",
-      "laid", "led", "lent", "lit", "met", "rung", "sat", "set", "shaken", "shot",
-      "shut", "slept", "slid", "spread", "struck", "swept", "swung", "thought",
-      "upset", "woven"
-    ],
-    nominalisationSuffixes: ["tion", "ment", "ance", "ence"],
-    monthNames: [
-      "January", "February", "March", "April", "May", "June", "July", "August",
-      "September", "October", "November", "December",
-      "Jan", "Feb", "Mar", "Apr", "Jun", "Jul", "Aug", "Sep", "Sept", "Oct", "Nov", "Dec"
-    ],
-    acronymAllowlist: [
-      "CEO", "CFO", "COO", "CTO", "CMO", "US", "UK", "EU", "UN", "USA",
-      "AI", "IT", "PR", "HR", "API", "FAQ", "OK", "TV", "PC", "ID", "VP", "SVP", "EVP"
-    ],
-    thresholds: {
-      sentenceLengthLimit: 30,
-      sentenceLengthComfortableAverage: 15,
-      sentenceLengthPenaltyPerWordOverAverage: 2.5,
-      sentenceLengthPenaltyPerPercentOverLimit: 1,
-      targetReadabilityGrade: 8,
-      readabilityPenaltyPerGrade: 8,
-      buzzwordPenaltyPerPercent: 12,
-      passiveVoiceAcceptablePercent: 20,
-      passiveVoicePenaltyPerPercent: 2,
-      hedgeDensityTarget: 0.5,
-      hedgePenaltyPerPercent: 15,
-      superlativeDensityTarget: 0.5,
-      superlativePenaltyPerPercent: 15,
-      nominalisationDensityTarget: 1,
-      nominalisationPenaltyPerPercent: 10,
-      selfReferenceDensityTarget: 3,
-      selfReferencePenaltyPerPercent: 6,
-      acronymDensityTarget: 1.5,
-      acronymPenaltyPerPercent: 10,
-      concretenessTargetPer100Words: 3,
-      emptyQuoteMinWords: 6
-    },
-    weights: {
-      buzzwordDensity: 1, sentenceLength: 1, readability: 1, passiveVoice: 1,
-      emptyQuote: 1, hedging: 1, concreteness: 2, nominalisation: 1,
-      selfReference: 1, superlatives: 1, acronymLoad: 1
-    }
-  };
-
   var CONFIG = null;
 
   function $(id) { return document.getElementById(id); }
 
   var elInputText = $("input-text");
+  var elVariantSelect = $("variant-select");
   var elAnalyzeBtn = $("analyze-btn");
   var elConfigStatus = $("config-status");
   var elResultsPanel = $("results-panel");
   var elAnnotatedSection = $("annotated-text-section");
+  var elHeadline = $("headline-metric");
   var elOverallGrade = $("overall-grade");
   var elOverallVerdict = $("overall-verdict");
+  var elBoilerplateNote = $("boilerplate-note");
   var elWorstList = $("worst-offenders-list");
+  var elRewriteList = $("rewrite-suggestions-list");
   var elAnnotated = $("annotated-output");
   var elCopyBtn = $("copy-report-btn");
 
   var lastReportText = "";
 
-  fetch("config.json")
+  var urlParams = new URLSearchParams(location.search);
+  var sectorParam = urlParams.get("config");
+  var configFile = sectorParam ? "config." + sectorParam.replace(/[^a-z0-9-]/gi, "") + ".json" : "config.json";
+
+  fetch(configFile)
     .then(function (res) {
       if (!res.ok) throw new Error("HTTP " + res.status);
       return res.json();
     })
     .then(function (json) {
-      CONFIG = mergeWithDefaults(json);
-      elConfigStatus.textContent = "Word lists loaded: " + (CONFIG.sectorName || "config.json") + " (" + CONFIG.buzzwords.length + " buzzwords, " + CONFIG.hedges.length + " hedges, " + CONFIG.superlativesAndAbsolutes.length + " superlatives).";
+      CONFIG = json;
+      if (CONFIG.defaultEnglishVariant) elVariantSelect.value = CONFIG.defaultEnglishVariant;
+      elConfigStatus.textContent = "Word lists loaded: " + (CONFIG.sectorName || configFile) + " (" + CONFIG.buzzwords.length + " buzzwords, " + CONFIG.hedges.length + " hedges)." +
+        (CONFIG.regulatedClaims && CONFIG.regulatedClaims.enabled ? " Regulated-claim flags: on." : "");
       elConfigStatus.classList.remove("warn");
     })
     .catch(function (err) {
-      CONFIG = DEFAULT_CONFIG;
-      elConfigStatus.textContent = "Couldn't load config.json (" + err.message + ") — using the built-in default word lists instead.";
+      elConfigStatus.textContent = "Couldn't load " + configFile + " (" + err.message + "). This tool needs its config file to run — serve the folder with a local web server rather than opening the file directly, and check the ?config= name if you used one.";
       elConfigStatus.classList.add("warn");
     });
-
-  function mergeWithDefaults(json) {
-    var cfg = {};
-    cfg.sectorName = json.sectorName || "config.json";
-    ["buzzwords", "hedges", "superlativesAndAbsolutes", "selfReferenceTerms",
-     "irregularPastParticiples", "nominalisationSuffixes", "monthNames", "acronymAllowlist"
-    ].forEach(function (key) {
-      cfg[key] = Array.isArray(json[key]) && json[key].length ? json[key] : DEFAULT_CONFIG[key];
-    });
-    cfg.thresholds = {};
-    Object.keys(DEFAULT_CONFIG.thresholds).forEach(function (key) {
-      var v = json.thresholds && json.thresholds[key];
-      cfg.thresholds[key] = typeof v === "number" ? v : DEFAULT_CONFIG.thresholds[key];
-    });
-    cfg.weights = {};
-    Object.keys(DEFAULT_CONFIG.weights).forEach(function (key) {
-      var v = json.weights && json.weights[key];
-      cfg.weights[key] = typeof v === "number" ? v : DEFAULT_CONFIG.weights[key];
-    });
-    return cfg;
-  }
 
   function escapeHtml(str) {
     return str
@@ -524,9 +531,32 @@
     return sentences;
   }
 
+  function splitParagraphs(text) {
+    var paras = [];
+    var re = /\n[ \t]*\n+/g;
+    var lastIndex = 0, m;
+    var breaks = [];
+    while ((m = re.exec(text)) !== null) breaks.push({ start: m.index, end: m.index + m[0].length });
+    var cursor = 0;
+    breaks.forEach(function (b) {
+      paras.push({ start: cursor, end: b.start });
+      cursor = b.end;
+    });
+    paras.push({ start: cursor, end: text.length });
+    return paras.map(function (p) { return { start: p.start, end: p.end, text: text.slice(p.start, p.end) }; })
+      .filter(function (p) { return p.text.trim().length > 0; });
+  }
+
   function findSentenceIndex(sentences, pos) {
     for (var i = 0; i < sentences.length; i++) {
       if (pos >= sentences[i].start && pos < sentences[i].end) return i;
+    }
+    return -1;
+  }
+
+  function findParagraphIndex(paragraphs, pos) {
+    for (var i = 0; i < paragraphs.length; i++) {
+      if (pos >= paragraphs[i].start && pos < paragraphs[i].end) return i;
     }
     return -1;
   }
@@ -557,7 +587,6 @@
     return "grade-bad";
   }
 
-  // Dedupe overlapping matches within ONE category: keep earliest/longest.
   function dedupeOverlaps(matches) {
     matches.sort(function (a, b) { return a.start - b.start || (b.end - b.start) - (a.end - a.start); });
     var out = [];
@@ -568,37 +597,73 @@
     return out;
   }
 
-  // Find every occurrence of any phrase in `list` inside `text`, whole-word matched, case-insensitive.
   function genericPhraseMatches(text, list) {
     var matches = [];
     list.forEach(function (phrase) {
       var re = new RegExp("\\b" + escapeRegExp(phrase) + "\\b", "gi");
       var m;
       while ((m = re.exec(text)) !== null) {
-        matches.push({ start: m.index, end: m.index + m[0].length, label: phrase });
+        matches.push({ start: m.index, end: m.index + m[0].length, label: m[0] });
         if (m[0].length === 0) re.lastIndex++;
       }
     });
     return dedupeOverlaps(matches);
   }
 
-  // "to be" verb + participle (regular -ed or from the irregular list).
-  function findPassiveMatches(text, irregularList) {
-    var irregularSet = {};
-    irregularList.forEach(function (w) { irregularSet[w.toLowerCase()] = true; });
+  function excludeAfter(matches, cutoff) {
+    return matches.filter(function (m) { return m.start < cutoff; });
+  }
+
+  function findPassiveMatches(text, irregularMap) {
     var re = /\b(is|are|was|were|be|been|being|am)\b(\s+\w+ly)?\s+(\w+)/gi;
     var matches = [];
     var m;
     while ((m = re.exec(text)) !== null) {
       var candidate = m[3].toLowerCase();
-      if (/ed$/.test(candidate) || irregularSet[candidate]) {
+      if (/ed$/.test(candidate) || irregularMap[candidate]) {
         matches.push({ start: m.index, end: m.index + m[0].length, label: m[0].trim() });
       }
     }
     return dedupeOverlaps(matches);
   }
 
-  // "<word ending in -tion/-ment/-ance/-ence> of"
+  function regularParticipleToBase(word) {
+    var w = word.toLowerCase();
+    if (!/ed$/.test(w)) return w;
+    var stem = w.slice(0, -2);
+    if (/([bcdfgklmnprtvz])\1$/.test(stem)) return stem.slice(0, -1);
+    if (/(at|it|et|ct|nc|rc|uc|iv|olv|erv)$/.test(stem)) return stem + "e";
+    return stem;
+  }
+
+  function participleToBase(word, irregularMap) {
+    var lower = word.toLowerCase();
+    return irregularMap[lower] || regularParticipleToBase(word);
+  }
+
+  function findPassiveWithAgent(passiveMatches, text, irregularMap) {
+    var withAgent = [];
+    var noAgent = [];
+    passiveMatches.forEach(function (m) {
+      var tail = text.slice(m.end, m.end + 60);
+      var am = /^\s+by\s+([A-Za-z][\w' -]{1,40}?)(?=[,.;:\n]|$)/.exec(tail);
+      if (am) {
+        var fullEnd = m.end + am[0].length;
+        var participleWord = m.label.split(/\s+/).pop();
+        var base = participleToBase(participleWord, irregularMap);
+        var agent = am[1].trim();
+        withAgent.push({
+          start: m.start, end: fullEnd,
+          original: text.slice(m.start, fullEnd),
+          rewrite: agent.charAt(0).toUpperCase() + agent.slice(1) + " " + base
+        });
+      } else {
+        noAgent.push(m);
+      }
+    });
+    return { withAgent: withAgent, noAgent: noAgent };
+  }
+
   function findNominalisationMatches(text, suffixes) {
     var re = new RegExp("\\b(\\w+(?:" + suffixes.join("|") + "))\\s+of\\b", "gi");
     var matches = [];
@@ -609,7 +674,35 @@
     return dedupeOverlaps(matches);
   }
 
-  // Runs of 2-6 capital letters, minus the allowlist.
+  function findNominalisationRewrites(text, suffixes, verbMap) {
+    var re = new RegExp("\\b(?:the|a|an)?\\s*(\\w+(?:" + suffixes.join("|") + "))\\s+of\\s+([^,.;\\n]{1,60}?)(?=\\s+\\b(?:was|is|are|were|and|but|which|who)\\b|[,.;\\n]|$)", "gi");
+    var results = [];
+    var m;
+    while ((m = re.exec(text)) !== null) {
+      var verb = verbMap[m[1].toLowerCase()];
+      if (verb) {
+        results.push({
+          start: m.index, end: m.index + m[0].length,
+          original: m[0].trim(),
+          rewrite: verb + "ing " + m[2].trim()
+        });
+      }
+    }
+    return dedupeOverlaps(results);
+  }
+
+  function findWordSwapRewrites(text, swaps) {
+    var results = [];
+    Object.keys(swaps).forEach(function (from) {
+      var re = new RegExp("\\b" + escapeRegExp(from) + "\\b", "gi");
+      var m;
+      while ((m = re.exec(text)) !== null) {
+        results.push({ start: m.index, end: m.index + m[0].length, original: m[0], rewrite: swaps[from] });
+      }
+    });
+    return dedupeOverlaps(results);
+  }
+
   function findAcronymMatches(text, allowlist) {
     var allowSet = {};
     allowlist.forEach(function (a) { allowSet[a] = true; });
@@ -622,28 +715,53 @@
     return dedupeOverlaps(matches);
   }
 
-  // Numbers, percentages, currency amounts, and dates — the raw material of "concreteness".
-  function findConcreteSignals(text, monthNames) {
+  function acronymExpansionInfo(text, matches) {
+    var counts = {};
+    matches.forEach(function (m) { counts[m.label] = (counts[m.label] || 0) + 1; });
+    var neverExpanded = [];
+    Object.keys(counts).forEach(function (acr) {
+      var p1 = new RegExp("\\(\\s*" + acr + "\\s*\\)").test(text);
+      var p2 = new RegExp(acr + "\\s*\\([^)]{3,80}\\)").test(text);
+      if (!p1 && !p2) neverExpanded.push(acr);
+    });
+    return { uniqueCount: Object.keys(counts).length, neverExpanded: neverExpanded };
+  }
+
+  // Numbers, percentages, currency amounts — general concreteness signals (not dates).
+  function findNumericSignals(text) {
     var patterns = [
       /[$£€]\s?\d[\d,]*(\.\d+)?\s?(million|billion|thousand|k|m|bn)?/gi,
       /\b\d+(\.\d+)?\s?%/g,
-      /\b\d{1,2}(st|nd|rd|th)\b/gi,
-      new RegExp("\\b(" + monthNames.join("|") + ")\\.?\\s+\\d{1,2}(st|nd|rd|th)?(,?\\s+\\d{4})?\\b", "gi"),
-      /\b(19|20)\d{2}\b/g,
       /\b\d[\d,]*(\.\d+)?\b/g
     ];
     var matches = [];
     patterns.forEach(function (re) {
       var m;
-      while ((m = re.exec(text)) !== null) {
-        matches.push({ start: m.index, end: m.index + m[0].length, label: m[0] });
-        if (m[0].length === 0) re.lastIndex++;
-      }
+      while ((m = re.exec(text)) !== null) matches.push({ start: m.index, end: m.index + m[0].length, label: m[0] });
     });
-    return dedupeOverlaps(matches);
+    return matches;
   }
 
-  // Straight " " and curly " " quoted spans, at least a few words long.
+  // Dates and ordinal day references — the "specific timeframe" half of concreteness.
+  function findSpecificDates(text, monthNames) {
+    var patterns = [
+      /\b\d{1,2}(st|nd|rd|th)\b/gi,
+      new RegExp("\\b(" + monthNames.join("|") + ")\\.?\\s+\\d{1,2}(st|nd|rd|th)?(,?\\s+\\d{4})?\\b", "gi"),
+      new RegExp("\\b\\d{1,2}\\s+(" + monthNames.join("|") + ")\\.?(,?\\s+\\d{4})?\\b", "gi"),
+      /\b(19|20)\d{2}\b/g
+    ];
+    var matches = [];
+    patterns.forEach(function (re) {
+      var m;
+      while ((m = re.exec(text)) !== null) matches.push({ start: m.index, end: m.index + m[0].length, label: m[0] });
+    });
+    return matches;
+  }
+
+  function findConcreteSignals(text, monthNames) {
+    return dedupeOverlaps(findNumericSignals(text).concat(findSpecificDates(text, monthNames)));
+  }
+
   function findQuotes(text) {
     var re = /"([^"\n]{3,600})"|“([^”\n]{3,600})”/g;
     var quotes = [];
@@ -655,18 +773,60 @@
     return quotes;
   }
 
+  function detectBoilerplate(text, paragraphs, config) {
+    if (paragraphs.length === 0) return null;
+    var idx = paragraphs.length - 1;
+    var boundary = null;
+    while (idx >= 0) {
+      var p = paragraphs[idx];
+      var lower = p.text.toLowerCase().trim();
+      var isAbout = config.boilerplateHeadingPatterns.some(function (pat) { return lower.indexOf(pat) === 0; });
+      var isContact = config.contactIndicators.some(function (ind) { return lower.indexOf(ind) !== -1; }) ||
+        /[\w.+-]+@[\w-]+\.[\w.-]+/.test(p.text);
+      if (isAbout || isContact) { boundary = p.start; idx--; } else break;
+    }
+    return boundary === null ? null : { start: boundary, end: text.length };
+  }
+
+  function describeClustering(matches, paragraphs, thresholds, itemLabel) {
+    if (matches.length < thresholds.clusteringMinMatches || paragraphs.length < 2) return "";
+    var counts = paragraphs.map(function () { return 0; });
+    matches.forEach(function (m) {
+      var idx = findParagraphIndex(paragraphs, m.start);
+      if (idx >= 0) counts[idx]++;
+    });
+    var maxCount = Math.max.apply(null, counts);
+    var maxIdx = counts.indexOf(maxCount);
+    if (maxCount >= 2 && maxCount / matches.length >= thresholds.clusteringShareThreshold) {
+      return " " + maxCount + " of " + matches.length + " " + itemLabel + " " + (maxCount === 1 ? "is" : "are") + " in paragraph " + (maxIdx + 1) + ".";
+    }
+    return "";
+  }
+
+  function sentenceCoveragePhrase(matches, sentences, itemLabel) {
+    if (sentences.length === 0) return "";
+    var sentSet = {};
+    matches.forEach(function (m) {
+      var idx = findSentenceIndex(sentences, m.start);
+      if (idx >= 0) sentSet[idx] = true;
+    });
+    var n = Object.keys(sentSet).length;
+    if (n === 0) return "";
+    return n + " of your " + sentences.length + " sentence" + (sentences.length === 1 ? "" : "s") + " contain" + (n === 1 ? "s" : "") + " " + itemLabel + ".";
+  }
+
+  function densityScore(matchCount, denominator, target, penaltyPerPercent) {
+    var density = denominator ? (matchCount / denominator) * 100 : 0;
+    var score = clamp(100 - Math.max(0, density - target) * penaltyPerPercent, 0, 100);
+    return { density: density, score: score };
+  }
+
   function interpretGrade(grade) {
     if (grade <= 6) return "Very easy to read — clear to most readers, including younger teens.";
     if (grade <= 8) return "Plain and clear — about the level of a well-written newspaper article.";
     if (grade <= 10) return "A bit dense — high-school reading level. Fine for trade press, harder for a general audience.";
     if (grade <= 13) return "Dense — some college-level phrasing. Consider shortening sentences and simplifying words.";
     return "Very dense — reads like an academic paper, not a press release. Simplify substantially.";
-  }
-
-  function densityScore(matchCount, totalWords, target, penaltyPerPercent) {
-    var density = totalWords ? (matchCount / totalWords) * 100 : 0;
-    var score = clamp(100 - Math.max(0, density - target) * penaltyPerPercent, 0, 100);
-    return { density: density, score: score };
   }
 
   function verdictForScore(score) {
@@ -677,31 +837,194 @@
     return "Heavy rewrite recommended before this goes out.";
   }
 
+  // ---------- Consistency checks (section F) ----------
+
+  function findDoubledWords(text) {
+    var re = /\b(\w+)\s+\1\b/gi;
+    var out = [], m;
+    while ((m = re.exec(text)) !== null) out.push(m[0]);
+    return out;
+  }
+
+  function findMissingSpaceAfterPeriod(text) {
+    var re = /[a-z0-9]\.[A-Z][a-z]/g;
+    var count = 0, m;
+    while ((m = re.exec(text)) !== null) count++;
+    return count;
+  }
+
+  function findInconsistentCapitalisation(tokens) {
+    var forms = {};
+    tokens.forEach(function (w) {
+      if (w.length < 3 || !/^[a-zA-Z]+$/.test(w)) return;
+      var lower = w.toLowerCase();
+      forms[lower] = forms[lower] || {};
+      forms[lower][w] = true;
+    });
+    var flagged = [];
+    Object.keys(forms).forEach(function (lower) {
+      var variants = Object.keys(forms[lower]).filter(function (v) { return /[A-Z]/.test(v); });
+      if (variants.length > 1) flagged.push(lower + " (" + variants.join(" / ") + ")");
+    });
+    return flagged;
+  }
+
+  function runConsistencyChecks(text, tokens, config) {
+    var issues = [];
+
+    var doubled = findDoubledWords(text);
+    if (doubled.length) issues.push({ type: "Doubled words", detail: doubled.slice(0, 5).join(", ") + (doubled.length > 5 ? ", …" : "") });
+
+    var doubleSpaceCount = (text.match(/[^\S\n]{2,}/g) || []).length;
+    if (doubleSpaceCount) issues.push({ type: "Double spaces", detail: doubleSpaceCount + " instance(s)" });
+
+    var missingSpace = findMissingSpaceAfterPeriod(text);
+    if (missingSpace) issues.push({ type: "Missing space after full stop", detail: missingSpace + " instance(s)" });
+
+    var straightCount = (text.match(/"/g) || []).length;
+    if (straightCount % 2 !== 0) issues.push({ type: "Unclosed straight quotation marks", detail: "odd number of \" characters (" + straightCount + ")" });
+    var curlyOpen = (text.match(/“/g) || []).length;
+    var curlyClose = (text.match(/”/g) || []).length;
+    if (curlyOpen !== curlyClose) issues.push({ type: "Unclosed curly quotation marks", detail: curlyOpen + " opening vs " + curlyClose + " closing" });
+
+    var caps = findInconsistentCapitalisation(tokens);
+    if (caps.length) issues.push({ type: "Inconsistent capitalisation", detail: caps.slice(0, 4).join("; ") + (caps.length > 4 ? "; …" : "") });
+
+    var hasCommaGrouped = /\b\d{1,3}(,\d{3})+\b/.test(text);
+    var hasPlainLarge = /\b\d{4,}\b/.test(text.replace(/\b\d{1,3}(,\d{3})+\b/g, ""));
+    if (hasCommaGrouped && hasPlainLarge) issues.push({ type: "Mixed number formats", detail: "both 1,000-style and 1000-style numbers appear" });
+
+    var hasMonthName = new RegExp("\\b(" + config.monthNames.join("|") + ")\\b", "i").test(text);
+    var hasNumericDate = /\b\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}\b/.test(text);
+    var hasIsoDate = /\b\d{4}-\d{2}-\d{2}\b/.test(text);
+    if ([hasMonthName, hasNumericDate, hasIsoDate].filter(Boolean).length >= 2) issues.push({ type: "Mixed date formats", detail: "more than one date style appears" });
+
+    var hasStraightQuote = /"/.test(text);
+    var hasCurlyQuote = /[“”]/.test(text);
+    if (hasStraightQuote && hasCurlyQuote) issues.push({ type: "Mixed straight and curly quotes", detail: "both \" and “ ” appear" });
+    var hasStraightApos = /(?:^|[^A-Za-z])'|'(?:$|[^A-Za-z])/.test(text) && /'/.test(text);
+    var hasCurlyApos = /’/.test(text);
+    if (/'/.test(text) && hasCurlyApos) issues.push({ type: "Mixed straight and curly apostrophes", detail: "both ' and ’ appear" });
+
+    return issues;
+  }
+
+  // ---------- English variant checks (section G) ----------
+
+  function computeVariantMismatches(text, variant, config) {
+    var mismatches = [];
+    var alwaysIse = {};
+    config.alwaysIseWords.forEach(function (w) { alwaysIse[w.toLowerCase()] = true; });
+
+    Object.keys(config.variantWordPairs).forEach(function (category) {
+      config.variantWordPairs[category].forEach(function (pair) {
+        var british = pair[0], american = pair[1];
+        var correct;
+        if (category === "-ise/-ize") {
+          correct = (variant === "american" || variant === "british-oxford") ? american : british;
+          if (variant === "british-oxford" && alwaysIse[british.toLowerCase()]) return;
+        } else {
+          correct = (variant === "american") ? american : british;
+        }
+        var wrong = (correct === british) ? american : british;
+        var re = new RegExp("\\b" + escapeRegExp(wrong) + "\\w*\\b", "gi");
+        var m;
+        while ((m = re.exec(text)) !== null) {
+          mismatches.push({ label: m[0], suggestion: correct + "…" });
+        }
+      });
+    });
+
+    var wantPeriod = variant === "american";
+    config.titleAbbreviations.forEach(function (title) {
+      var re = wantPeriod
+        ? new RegExp("\\b" + title + "\\b(?!\\.)", "g")
+        : new RegExp("\\b" + title + "\\.", "g");
+      var m;
+      while ((m = re.exec(text)) !== null) {
+        mismatches.push({ label: m[0], suggestion: wantPeriod ? title + "." : title });
+      }
+    });
+
+    var ambiguousDates = (text.match(/\b\d{1,2}\/\d{1,2}\/\d{2,4}\b/g) || []);
+    ambiguousDates.forEach(function (d) { mismatches.push({ label: d, suggestion: "spell out the month — this format is ambiguous" }); });
+
+    var wantInside = variant === "american";
+    var insideCount = (text.match(/[.,]["”]/g) || []).length;
+    var outsideCount = (text.match(/["”][.,]/g) || []).length;
+    if (wantInside && outsideCount > 0) {
+      mismatches.push({ label: outsideCount + " quote(s) with punctuation outside", suggestion: "American style: put periods/commas inside the closing quote" });
+    } else if (!wantInside && insideCount > 0) {
+      mismatches.push({ label: insideCount + " quote(s) with punctuation inside", suggestion: "British style: put periods/commas outside the closing quote unless they're part of what's quoted" });
+    }
+
+    return mismatches;
+  }
+
+  // ---------- Main analysis ----------
+
   function analyze() {
-    var text = elInputText.value;
-    if (!text || !text.trim()) {
+    var rawText = elInputText.value;
+    if (!rawText || !rawText.trim()) {
       alert("Paste some text first.");
       return;
     }
-    if (!CONFIG) CONFIG = DEFAULT_CONFIG;
+    if (!CONFIG) { alert("Word lists haven't finished loading yet — try again in a moment."); return; }
     var T = CONFIG.thresholds;
+    var variant = elVariantSelect.value;
 
-    var sentences = splitSentences(text);
-    var totalWords = tokenizeWords(text).length;
+    var stopSet = {};
+    CONFIG.stopwords.forEach(function (w) { stopSet[w.toLowerCase()] = true; });
 
-    var buzzMatches = genericPhraseMatches(text, CONFIG.buzzwords);
-    var hedgeMatches = genericPhraseMatches(text, CONFIG.hedges);
-    var superlativeMatches = genericPhraseMatches(text, CONFIG.superlativesAndAbsolutes);
-    var selfRefMatches = genericPhraseMatches(text, CONFIG.selfReferenceTerms);
-    var passiveMatches = findPassiveMatches(text, CONFIG.irregularPastParticiples);
-    var nominalMatches = findNominalisationMatches(text, CONFIG.nominalisationSuffixes);
-    var acronymMatches = findAcronymMatches(text, CONFIG.acronymAllowlist);
-    var concreteMatches = findConcreteSignals(text, CONFIG.monthNames);
-    var quotes = findQuotes(text);
+    var allSentences = splitSentences(rawText);
+    var paragraphs = splitParagraphs(rawText);
+    var boilerplate = detectBoilerplate(rawText, paragraphs, CONFIG);
+    var scoringEnd = boilerplate ? boilerplate.start : rawText.length;
 
-    // Per-sentence data, for the sentence-length check and worst-offenders ranking.
+    var sentences = allSentences.filter(function (s) { return s.start < scoringEnd; });
+    var scoringWords = tokenizeWords(rawText.slice(0, scoringEnd));
+    var totalWords = scoringWords.length;
+    var contentWords = scoringWords.filter(function (w) { return !stopSet[w.toLowerCase()]; }).length;
+
+    function inScope(matches) { return excludeAfter(matches, scoringEnd); }
+
+    // All matches computed against the FULL text (so highlight offsets are correct),
+    // then filtered to the non-boilerplate scoring window for every score/count.
+    var buzzMatchesAll = genericPhraseMatches(rawText, CONFIG.buzzwords);
+    var hedgeMatchesAll = genericPhraseMatches(rawText, CONFIG.hedges);
+    var superlativeMatchesAll = genericPhraseMatches(rawText, CONFIG.superlativesAndAbsolutes);
+    var selfRefMatchesAll = genericPhraseMatches(rawText, CONFIG.selfReferenceTerms);
+    var passiveMatchesAll = findPassiveMatches(rawText, CONFIG.irregularVerbs);
+    var nominalMatchesAll = findNominalisationMatches(rawText, CONFIG.nominalisationSuffixes);
+    var acronymMatchesAll = findAcronymMatches(rawText, CONFIG.acronymAllowlist);
+    var concreteMatchesAll = findConcreteSignals(rawText, CONFIG.monthNames);
+    var quotesAll = findQuotes(rawText);
+    var baselineMatchesAll = genericPhraseMatches(rawText, CONFIG.baselineIndicators);
+    var preciseVerbMatchesAll = genericPhraseMatches(rawText, CONFIG.preciseVerbs);
+    var vagueTimeframeMatchesAll = genericPhraseMatches(rawText, CONFIG.vagueTimeframes);
+    var plainWordMatchesAll = genericPhraseMatches(rawText, Object.keys(CONFIG.wordSwaps).map(function (k) { return CONFIG.wordSwaps[k]; }));
+    var regulatedMatchesAll = (CONFIG.regulatedClaims && CONFIG.regulatedClaims.enabled && CONFIG.regulatedClaims.terms.length)
+      ? genericPhraseMatches(rawText, CONFIG.regulatedClaims.terms) : [];
+
+    var buzzMatches = inScope(buzzMatchesAll);
+    var hedgeMatches = inScope(hedgeMatchesAll);
+    var superlativeMatches = inScope(superlativeMatchesAll);
+    var selfRefMatches = inScope(selfRefMatchesAll);
+    var passiveMatches = inScope(passiveMatchesAll);
+    var nominalMatches = inScope(nominalMatchesAll);
+    var acronymMatches = inScope(acronymMatchesAll);
+    var concreteMatches = inScope(concreteMatchesAll);
+    var quotes = quotesAll.filter(function (q) { return q.start < scoringEnd; });
+    var baselineMatches = inScope(baselineMatchesAll);
+    var preciseVerbMatches = inScope(preciseVerbMatchesAll);
+    var plainWordMatches = inScope(plainWordMatchesAll);
+    var regulatedMatches = inScope(regulatedMatchesAll);
+
+    // Per-sentence tallies (for sentence-length, worst-offenders, lede check).
     var sentenceData = sentences.map(function (s) {
-      return { sentence: s, wordCount: tokenizeWords(s.text).length, buzz: 0, hedge: 0, superlative: 0, nominal: 0, acronym: 0, passive: false };
+      var clippedEnd = Math.min(s.end, scoringEnd);
+      var clippedText = rawText.slice(s.start, clippedEnd);
+      return { sentence: s, clippedText: clippedText, wordCount: tokenizeWords(clippedText).length, buzz: 0, hedge: 0, superlative: 0, nominal: 0, acronym: 0, passive: false, precise: 0 };
     });
     function tally(matches, key, flagOnly) {
       matches.forEach(function (m) {
@@ -713,58 +1036,128 @@
     tally(hedgeMatches, "hedge");
     tally(superlativeMatches, "superlative");
     tally(nominalMatches, "nominal");
-    tally(acronymMatches, "acronym");
     tally(passiveMatches, "passive", true);
+    tally(preciseVerbMatches, "precise");
 
-    // --- Sentence length ---
+    var acronymInfo = acronymExpansionInfo(rawText, acronymMatches);
+    var neverExpandedSet = {};
+    acronymInfo.neverExpanded.forEach(function (a) { neverExpandedSet[a] = true; });
+    tally(acronymMatches.filter(function (m) { return neverExpandedSet[m.label]; }), "acronym");
+
+    // ---- A: sentence length, buzzwords (content-word denominator), readability ----
     var limit = T.sentenceLengthLimit;
     var overLimit = sentenceData.filter(function (d) { return d.wordCount > limit; });
     var avgLength = sentenceData.length ? sentenceData.reduce(function (s, d) { return s + d.wordCount; }, 0) / sentenceData.length : 0;
     var percentOver = sentenceData.length ? (overLimit.length / sentenceData.length) * 100 : 0;
     var lengthScore = clamp(100 - Math.max(0, avgLength - T.sentenceLengthComfortableAverage) * T.sentenceLengthPenaltyPerWordOverAverage - percentOver * T.sentenceLengthPenaltyPerPercentOverLimit, 0, 100);
 
-    // --- Buzzwords ---
-    var buzz = densityScore(buzzMatches.length, totalWords, 0, T.buzzwordPenaltyPerPercent);
+    var buzz = densityScore(buzzMatches.length, contentWords, 0, T.buzzwordPenaltyPerPercent);
+    var hedge = densityScore(hedgeMatches.length, contentWords, T.hedgeDensityTarget, T.hedgePenaltyPerPercent);
+    var superlative = densityScore(superlativeMatches.length, contentWords, T.superlativeDensityTarget, T.superlativePenaltyPerPercent);
+    var nominal = densityScore(nominalMatches.length, contentWords, T.nominalisationDensityTarget, T.nominalisationPenaltyPerPercent);
+    var selfRef = densityScore(selfRefMatches.length, totalWords, T.selfReferenceDensityTarget, T.selfReferencePenaltyPerPercent);
 
-    // --- Readability ---
     var syllables = 0;
-    tokenizeWords(text).forEach(function (w) { syllables += countSyllables(w); });
+    scoringWords.forEach(function (w) { syllables += countSyllables(w); });
     var grade = (totalWords === 0 || sentences.length === 0) ? 0 : 0.39 * (totalWords / sentences.length) + 11.8 * (syllables / totalWords) - 15.59;
     var readScore = clamp(100 - Math.max(0, grade - T.targetReadabilityGrade) * T.readabilityPenaltyPerGrade, 0, 100);
 
-    // --- Passive voice ---
     var passiveSentenceCount = sentenceData.filter(function (d) { return d.passive; }).length;
     var passivePercent = sentences.length ? (passiveSentenceCount / sentences.length) * 100 : 0;
     var passiveScore = clamp(100 - Math.max(0, passivePercent - T.passiveVoiceAcceptablePercent) * T.passiveVoicePenaltyPerPercent, 0, 100);
 
-    // --- Hedging, superlatives, nominalisation, self-reference, acronyms (all density-based) ---
-    var hedge = densityScore(hedgeMatches.length, totalWords, T.hedgeDensityTarget, T.hedgePenaltyPerPercent);
-    var superlative = densityScore(superlativeMatches.length, totalWords, T.superlativeDensityTarget, T.superlativePenaltyPerPercent);
-    var nominal = densityScore(nominalMatches.length, totalWords, T.nominalisationDensityTarget, T.nominalisationPenaltyPerPercent);
-    var selfRef = densityScore(selfRefMatches.length, totalWords, T.selfReferenceDensityTarget, T.selfReferencePenaltyPerPercent);
-    var acronym = densityScore(acronymMatches.length, totalWords, T.acronymDensityTarget, T.acronymPenaltyPerPercent);
-
-    // --- Concreteness ---
     var signalsPer100 = totalWords ? (concreteMatches.length / totalWords) * 100 : 0;
     var concretenessScore = concreteMatches.length === 0 ? 0 : clamp((signalsPer100 / T.concretenessTargetPer100Words) * 100, 0, 100);
 
-    // --- Empty quote detector ---
+    var acronymScore = clamp(100 - acronymInfo.neverExpanded.length * T.acronymNeverExpandedPenaltyEach, 0, 100);
+
     var quoteData = quotes.map(function (q) {
       var words = tokenizeWords(q.text).length;
       var qBuzz = genericPhraseMatches(q.text, CONFIG.buzzwords).length;
       var qConcrete = findConcreteSignals(q.text, CONFIG.monthNames).length;
+      var qReason = genericPhraseMatches(q.text, CONFIG.reasonIndicators).length > 0;
+      var qDecision = genericPhraseMatches(q.text, CONFIG.decisionIndicators).length > 0;
       var isEmpty = qConcrete === 0 && words >= T.emptyQuoteMinWords;
-      return { start: q.start, end: q.end, text: q.text, words: words, buzz: qBuzz, concrete: qConcrete, isEmpty: isEmpty };
+      var informative = qConcrete > 0 || qReason || qDecision;
+      return { start: q.start, end: q.end, text: q.text, words: words, buzz: qBuzz, concrete: qConcrete, isEmpty: isEmpty, informative: informative };
     });
     var emptyQuotes = quoteData.filter(function (q) { return q.isEmpty; });
+    var informativeQuotes = quoteData.filter(function (q) { return q.informative; });
     var emptyQuoteScore = quoteData.length === 0 ? 100 : clamp(100 * (1 - emptyQuotes.length / quoteData.length), 0, 100);
 
+    // ---- B: strengths ----
+    var activeVoiceSentences = sentenceData.filter(function (d) {
+      return d.precise > 0 && !d.passive && /^[A-Z][a-zA-Z]+(?:\s+[A-Z][a-zA-Z]+){0,3}/.test(d.clippedText.trim());
+    });
+    var strengthSignalCount = baselineMatches.length + activeVoiceSentences.length + preciseVerbMatches.length +
+      informativeQuotes.length + plainWordMatches.length;
+    var strengthsPer100 = contentWords ? (strengthSignalCount / contentWords) * 100 : 0;
+    var strengthsScore = clamp((strengthsPer100 / T.strengthsTargetPer100ContentWords) * 100, 0, 100);
+
+    // ---- C: rewrite suggestions ----
+    var passiveSplit = findPassiveWithAgent(passiveMatches, rawText, CONFIG.irregularVerbs);
+    var nominalRewrites = inScope(findNominalisationRewrites(rawText, CONFIG.nominalisationSuffixes, CONFIG.nominalisationVerbMap));
+    var wordSwapRewrites = inScope(findWordSwapRewrites(rawText, CONFIG.wordSwaps));
+
+    // ---- D: inverted pyramid ----
+    var firstConcrete = concreteMatches.length ? concreteMatches[0] : null;
+    var factDepthWords = firstConcrete ? tokenizeWords(rawText.slice(0, firstConcrete.start)).length : null;
+    var lede = sentences.length ? sentences[0] : null;
+    var ledeHasWho = lede ? (/\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,3}\b/.test(lede.text) || /\b[A-Z][a-zA-Z]*\s+(Inc|Corp|Ltd|LLC|PLC|Co)\b/.test(lede.text)) : false;
+    var ledeHasWhen = lede ? findSpecificDates(lede.text, CONFIG.monthNames).length > 0 : false;
+    var quoteBeforeNews = quotes.length > 0 && firstConcrete !== null && quotes[0].start < firstConcrete.start;
+    var nonBoilerplateParagraphs = paragraphs.filter(function (p) { return p.start < scoringEnd; });
+    var firstParaDensity = 0, lastParaDensity = 0, densityDeclineOk = true;
+    if (nonBoilerplateParagraphs.length >= 2) {
+      var firstPara = nonBoilerplateParagraphs[0];
+      var lastPara = nonBoilerplateParagraphs[nonBoilerplateParagraphs.length - 1];
+      var firstParaWords = tokenizeWords(firstPara.text).length;
+      var lastParaWords = tokenizeWords(lastPara.text).length;
+      var firstParaConcrete = concreteMatches.filter(function (m) { return m.start >= firstPara.start && m.start < firstPara.end; }).length;
+      var lastParaConcrete = concreteMatches.filter(function (m) { return m.start >= lastPara.start && m.start < lastPara.end; }).length;
+      firstParaDensity = firstParaWords ? firstParaConcrete / firstParaWords * 100 : 0;
+      lastParaDensity = lastParaWords ? lastParaConcrete / lastParaWords * 100 : 0;
+      densityDeclineOk = lastParaDensity <= firstParaDensity;
+    }
+    var pyramidScore = 100;
+    if (factDepthWords === null || factDepthWords > T.factDepthWarningWords) pyramidScore -= T.invertedPyramidFactDepthPenalty;
+    if (!(ledeHasWho && ledeHasWhen)) pyramidScore -= T.invertedPyramidLedePenalty;
+    if (quoteBeforeNews) pyramidScore -= T.invertedPyramidQuotePenalty;
+    if (!densityDeclineOk) pyramidScore -= T.invertedPyramidDensityPenalty;
+    pyramidScore = clamp(pyramidScore, 0, 100);
+
+    // ---- F: consistency ----
+    var consistencyIssues = runConsistencyChecks(rawText.slice(0, scoringEnd), scoringWords, CONFIG);
+    var consistencyScore = clamp(100 - consistencyIssues.length * T.consistencyPenaltyPerIssueType, 0, 100);
+
+    // ---- G: English variant ----
+    var variantMismatches = computeVariantMismatches(rawText.slice(0, scoringEnd), variant, CONFIG);
+    var variantScore = clamp(100 - variantMismatches.length * T.englishVariantPenaltyPerMismatch, 0, 100);
+
+    // ---- E: regulated claims ----
+    var regulatedEnabled = CONFIG.regulatedClaims && CONFIG.regulatedClaims.enabled && CONFIG.regulatedClaims.terms.length > 0;
+    var regulatedScore = regulatedEnabled ? clamp(100 - regulatedMatches.length * T.regulatedClaimPenaltyPerMatch, 0, 100) : 100;
+
+    // ---- Boilerplate (graded separately, not part of the main score) ----
+    var boilerplateInfo = null;
+    if (boilerplate) {
+      var bpText = rawText.slice(boilerplate.start, boilerplate.end);
+      var bpWords = tokenizeWords(bpText).length;
+      var bpBuzz = genericPhraseMatches(bpText, CONFIG.buzzwords).length;
+      boilerplateInfo = { words: bpWords, buzz: bpBuzz };
+    }
+
+    // ---- Overall score ----
     var scores = {
       buzzwordDensity: buzz.score, sentenceLength: lengthScore, readability: readScore,
       passiveVoice: passiveScore, emptyQuote: emptyQuoteScore, hedging: hedge.score,
       concreteness: concretenessScore, nominalisation: nominal.score,
-      selfReference: selfRef.score, superlatives: superlative.score, acronymLoad: acronym.score
+      selfReference: selfRef.score, superlatives: superlative.score, acronymLoad: acronymScore,
+      strengths: strengthsScore, invertedPyramid: pyramidScore, consistency: consistencyScore,
+      englishVariant: variantScore
     };
+    if (regulatedEnabled) scores.regulatedClaims = regulatedScore;
+
     var weights = CONFIG.weights;
     var weightedSum = 0, totalWeight = 0;
     Object.keys(scores).forEach(function (key) {
@@ -775,18 +1168,30 @@
     var overall = Math.round(totalWeight > 0 ? weightedSum / totalWeight : 0);
 
     var result = {
-      text: text, sentences: sentences, sentenceData: sentenceData, totalWords: totalWords, limit: limit,
+      text: rawText, sentences: sentences, sentenceData: sentenceData, paragraphs: paragraphs,
+      boilerplate: boilerplate, boilerplateInfo: boilerplateInfo, scoringEnd: scoringEnd,
+      totalWords: totalWords, contentWords: contentWords, limit: limit,
       overLimit: overLimit, avgLength: avgLength,
       buzzMatches: buzzMatches, buzz: buzz,
       grade: grade, readScore: readScore,
       passiveMatches: passiveMatches, passivePercent: passivePercent, passiveSentenceCount: passiveSentenceCount, passiveScore: passiveScore,
+      passiveSplit: passiveSplit,
       hedgeMatches: hedgeMatches, hedge: hedge,
       superlativeMatches: superlativeMatches, superlative: superlative,
-      nominalMatches: nominalMatches, nominal: nominal,
+      nominalMatches: nominalMatches, nominal: nominal, nominalRewrites: nominalRewrites,
       selfRefMatches: selfRefMatches, selfRef: selfRef,
-      acronymMatches: acronymMatches, acronym: acronym,
+      acronymMatches: acronymMatches, acronymInfo: acronymInfo, acronymScore: acronymScore,
       concreteMatches: concreteMatches, signalsPer100: signalsPer100, concretenessScore: concretenessScore,
-      quoteData: quoteData, emptyQuotes: emptyQuotes, emptyQuoteScore: emptyQuoteScore,
+      quoteData: quoteData, emptyQuotes: emptyQuotes, informativeQuotes: informativeQuotes, emptyQuoteScore: emptyQuoteScore,
+      baselineMatches: baselineMatches, preciseVerbMatches: preciseVerbMatches, plainWordMatches: plainWordMatches,
+      activeVoiceSentences: activeVoiceSentences, strengthSignalCount: strengthSignalCount, strengthsPer100: strengthsPer100, strengthsScore: strengthsScore,
+      wordSwapRewrites: wordSwapRewrites,
+      factDepthWords: factDepthWords, ledeHasWho: ledeHasWho, ledeHasWhen: ledeHasWhen,
+      quoteBeforeNews: quoteBeforeNews, densityDeclineOk: densityDeclineOk,
+      firstParaDensity: firstParaDensity, lastParaDensity: lastParaDensity, pyramidScore: pyramidScore,
+      consistencyIssues: consistencyIssues, consistencyScore: consistencyScore,
+      variant: variant, variantMismatches: variantMismatches, variantScore: variantScore,
+      regulatedEnabled: regulatedEnabled, regulatedMatches: regulatedMatches, regulatedScore: regulatedScore,
       lengthScore: lengthScore, overall: overall
     };
 
@@ -798,58 +1203,34 @@
   function setScore(id, score) { $(id).textContent = Math.round(score) + "/100"; }
 
   function renderResults(r) {
+    elHeadline.textContent = r.buzzMatches.length + " buzzword" + (r.buzzMatches.length === 1 ? "" : "s") + ". " + r.concreteMatches.length + " concrete fact" + (r.concreteMatches.length === 1 ? "" : "s") + ".";
+
     elOverallGrade.textContent = letterGrade(r.overall) + " (" + r.overall + "/100)";
     elOverallGrade.className = gradeClass(r.overall);
     elOverallVerdict.textContent = verdictForScore(r.overall);
 
-    setScore("score-buzzword", r.buzz.score);
-    $("body-buzzword").innerHTML =
-      "<p>" + r.buzzMatches.length + " buzzword match" + (r.buzzMatches.length === 1 ? "" : "es") + " out of " + r.totalWords + " words &mdash; a density of " + r.buzz.density.toFixed(1) + "%.</p>" +
-      "<p>Buzzwords are vague, overused corporate phrases (e.g. \"synergy\", \"best-in-class\", \"cutting-edge\") that sound impressive but say nothing specific. Swap them for concrete facts.</p>";
-
-    setScore("score-sentence-length", r.lengthScore);
-    $("body-sentence-length").innerHTML =
-      "<p>Average sentence length: " + r.avgLength.toFixed(1) + " words. " + r.overLimit.length + " of " + r.sentenceData.length + " sentence" + (r.sentenceData.length === 1 ? "" : "s") + " " + (r.overLimit.length === 1 ? "is" : "are") + " over the " + r.limit + "-word guideline.</p>" +
-      "<p>Long sentences are harder to skim. Readers of press releases scan &mdash; aim for sentences under " + r.limit + " words.</p>";
-
-    setScore("score-readability", r.readScore);
-    $("body-readability").innerHTML =
-      "<p>Flesch-Kincaid grade level: " + (isFinite(r.grade) ? r.grade.toFixed(1) : "n/a") + "</p><p>" + interpretGrade(r.grade) + "</p>";
-
-    setScore("score-passive", r.passiveScore);
-    $("body-passive").innerHTML =
-      "<p>" + r.passiveSentenceCount + " of " + r.sentenceData.length + " sentence" + (r.sentenceData.length === 1 ? "" : "s") + " (" + r.passivePercent.toFixed(1) + "%) use passive voice.</p>" +
-      "<p>" + (r.passivePercent <= 20 ? "That's within the normal range — some passive voice is fine and occasionally correct. No action needed." : "That's above the 20% guideline. Passive voice hides who's doing the acting (\"mistakes were made\" vs. \"we made mistakes\") — consider rewriting the most prominent ones as active voice.") + "</p>";
-
-    setScore("score-hedging", r.hedge.score);
-    $("body-hedging").innerHTML =
-      "<p>" + r.hedgeMatches.length + " hedge/weasel word" + (r.hedgeMatches.length === 1 ? "" : "s") + " out of " + r.totalWords + " words &mdash; a density of " + r.hedge.density.toFixed(1) + "%.</p>" +
-      "<p>Words like \"may\", \"could\", \"aims to\" or \"up to\" soften a claim so much it stops meaning anything concrete. A little is normal; a lot signals you're avoiding commitment.</p>";
-
-    setScore("score-superlatives", r.superlative.score);
-    $("body-superlatives").innerHTML =
-      "<p>" + r.superlativeMatches.length + " superlative or absolute claim" + (r.superlativeMatches.length === 1 ? "" : "s") + " out of " + r.totalWords + " words &mdash; a density of " + r.superlative.density.toFixed(1) + "%.</p>" +
-      "<p>Words like \"best\", \"only\", \"always\" or \"guaranteed\" are hard to prove and easy to challenge. Each one raises the bar for what you have to back up.</p>";
-
-    setScore("score-nominalisation", r.nominal.score);
-    $("body-nominalisation").innerHTML =
-      "<p>" + r.nominalMatches.length + " nominalisation" + (r.nominalMatches.length === 1 ? "" : "s") + " (e.g. \"the implementation of\" instead of \"implementing\") out of " + r.totalWords + " words.</p>" +
-      "<p>Turning verbs into nouns makes writing feel formal and distant. Using the verb directly is usually punchier.</p>";
-
-    setScore("score-self-reference", r.selfRef.score);
-    $("body-self-reference").innerHTML =
-      "<p>\"We\"/\"our\"/\"the company\" and similar terms appear " + r.selfRefMatches.length + " times &mdash; " + r.selfRef.density.toFixed(1) + "% of all words.</p>" +
-      "<p>Some self-reference is natural in a press release. A very high ratio can mean the release talks about the company more than it talks about what matters to the reader.</p>";
-
-    setScore("score-acronym", r.acronym.score);
-    $("body-acronym").innerHTML =
-      "<p>" + r.acronymMatches.length + " acronym" + (r.acronymMatches.length === 1 ? "" : "s") + " flagged (common ones like CEO or UK are excluded) &mdash; " + r.acronym.density.toFixed(1) + "% of all words.</p>" +
-      "<p>Every acronym a general reader doesn't already know is a small tax on their attention. Spell it out on first use.</p>";
+    if (r.boilerplateInfo) {
+      elBoilerplateNote.hidden = false;
+      elBoilerplateNote.innerHTML = "<strong>Boilerplate detected.</strong> The trailing \"About\"/contact block (" + r.boilerplateInfo.words + " words, " + r.boilerplateInfo.buzz + " buzzword" + (r.boilerplateInfo.buzz === 1 ? "" : "s") + ") is excluded from every score above and graded here separately, not folded into your main grade.";
+    } else {
+      elBoilerplateNote.hidden = true;
+    }
 
     setScore("score-concreteness", r.concretenessScore);
     $("body-concreteness").innerHTML =
       "<p>" + r.concreteMatches.length + " concrete detail" + (r.concreteMatches.length === 1 ? "" : "s") + " found (numbers, dates, percentages, amounts) &mdash; " + r.signalsPer100.toFixed(1) + " per 100 words.</p>" +
       "<p>" + (r.concreteMatches.length === 0 ? "Zero concrete details. This is the single biggest red flag — a release with no numbers, dates or specifics reads as pure spin." : "Concrete details give readers, and journalists, something to trust and quote.") + "</p>";
+
+    setScore("score-strengths", r.strengthsScore);
+    $("body-strengths").innerHTML =
+      "<p>" + r.strengthSignalCount + " strength signal" + (r.strengthSignalCount === 1 ? "" : "s") + " found &mdash; " + r.strengthsPer100.toFixed(1) + " per 100 content words.</p>" +
+      "<ul>" +
+      "<li>" + r.baselineMatches.length + " number" + (r.baselineMatches.length === 1 ? "" : "s") + " given with a baseline comparison (e.g. \"up from\")</li>" +
+      "<li>" + r.activeVoiceSentences.length + " sentence" + (r.activeVoiceSentences.length === 1 ? "" : "s") + " with a named actor and an active, precise verb</li>" +
+      "<li>" + r.preciseVerbMatches.length + " precise verb" + (r.preciseVerbMatches.length === 1 ? "" : "s") + " (cut, doubled, acquired, launched…)</li>" +
+      "<li>" + r.informativeQuotes.length + " of " + r.quoteData.length + " quote" + (r.quoteData.length === 1 ? "" : "s") + " give a reason, a number, or a decision</li>" +
+      "<li>" + r.plainWordMatches.length + " plain word choice" + (r.plainWordMatches.length === 1 ? "" : "s") + " used instead of a jargon alternative</li>" +
+      "</ul>";
 
     setScore("score-empty-quote", r.emptyQuoteScore);
     var eqBody = "";
@@ -858,12 +1239,116 @@
     } else {
       eqBody = "<p>" + r.emptyQuotes.length + " of " + r.quoteData.length + " quote" + (r.quoteData.length === 1 ? "" : "s") + " " + (r.emptyQuotes.length === 1 ? "is" : "are") + " empty &mdash; no numbers or concrete nouns, and high on buzzwords.</p>";
       if (r.emptyQuotes.length > 0) {
-        eqBody += "<p class=\"shareable\">\"This quote would work equally well in a press release about a completely different product.\"</p><ul>";
+        eqBody += "<p class=\"shareable\">\"This quote would work equally well in a press release about a completely different product.\"</p>";
+        eqBody += "<p class=\"rewrite-question\">A useful quote gives a reason, a number, or a next step. This gives none. Ask your spokesperson why you actually did this.</p><ul>";
         r.emptyQuotes.forEach(function (q) { eqBody += "<li>“" + escapeHtml(q.text.trim()) + "”</li>"; });
         eqBody += "</ul>";
       }
     }
     $("body-empty-quote").innerHTML = eqBody;
+
+    setScore("score-buzzword", r.buzz.score);
+    $("body-buzzword").innerHTML =
+      "<p>" + r.buzzMatches.length + " buzzword match" + (r.buzzMatches.length === 1 ? "" : "es") + " out of " + r.contentWords + " content words &mdash; a density of " + r.buzz.density.toFixed(1) + "%.</p>" +
+      "<p>" + sentenceCoveragePhrase(r.buzzMatches, r.sentences, "a buzzword") + describeClustering(r.buzzMatches, r.paragraphs, { clusteringMinMatches: 3, clusteringShareThreshold: 0.4 }, "buzzwords") + "</p>" +
+      "<p>Buzzwords are vague, overused corporate phrases (e.g. \"synergy\", \"best-in-class\", \"cutting-edge\") that sound impressive but say nothing specific. Density is measured against content words only (stopwords like \"the\"/\"of\"/\"and\" excluded), since they'd otherwise water down the percentage.</p>";
+
+    setScore("score-sentence-length", r.lengthScore);
+    $("body-sentence-length").innerHTML =
+      "<p>Average sentence length: " + r.avgLength.toFixed(1) + " words. " + r.overLimit.length + " of " + r.sentenceData.length + " sentence" + (r.sentenceData.length === 1 ? "" : "s") + " " + (r.overLimit.length === 1 ? "is" : "are") + " over the " + r.limit + "-word guideline.</p>" +
+      "<p>Long sentences are harder to skim. Readers of press releases scan &mdash; aim for sentences under " + r.limit + " words.</p>";
+
+    setScore("score-readability", r.readScore);
+    $("body-readability").innerHTML =
+      "<p>Flesch-Kincaid grade level: " + (isFinite(r.grade) ? r.grade.toFixed(1) : "n/a") + "</p><p>" + interpretGrade(r.grade) + "</p>" +
+      "<p class=\"source-note\">Source: Flesch (1948); Kincaid et al. (1975), developed for the US Navy.</p>";
+
+    setScore("score-passive", r.passiveScore);
+    $("body-passive").innerHTML =
+      "<p>" + r.passiveSentenceCount + " of " + r.sentenceData.length + " sentence" + (r.sentenceData.length === 1 ? "" : "s") + " (" + r.passivePercent.toFixed(1) + "%) use passive voice.</p>" +
+      "<p>" + (r.passivePercent <= 20 ? "That's within the normal range — some passive voice is fine and occasionally correct. No action needed." : "That's above the 20% guideline. Passive voice hides who's doing the acting — consider rewriting the most prominent ones as active voice.") + "</p>" +
+      "<p class=\"source-note\">The 20% threshold is a widely repeated writing convention, not a research finding — labelled as such rather than as science.</p>";
+
+    setScore("score-hedging", r.hedge.score);
+    $("body-hedging").innerHTML =
+      "<p>" + r.hedgeMatches.length + " hedge/weasel word" + (r.hedgeMatches.length === 1 ? "" : "s") + " out of " + r.contentWords + " content words &mdash; a density of " + r.hedge.density.toFixed(1) + "%.</p>" +
+      "<p>Words like \"may\", \"could\", \"aims to\" or \"up to\" soften a claim so much it stops meaning anything concrete. A little is normal; a lot signals you're avoiding commitment.</p>";
+
+    setScore("score-superlatives", r.superlative.score);
+    $("body-superlatives").innerHTML =
+      "<p>" + r.superlativeMatches.length + " superlative or absolute claim" + (r.superlativeMatches.length === 1 ? "" : "s") + " out of " + r.contentWords + " content words &mdash; a density of " + r.superlative.density.toFixed(1) + "%.</p>" +
+      "<p>Words like \"best\", \"only\", \"always\" or \"guaranteed\" are hard to prove and easy to challenge.</p>" +
+      "<p class=\"tier3-note\">This is a flag-only issue — fixing it is a factual or legal question (can you actually back this up?), not a wording question, so no automatic rewrite is offered.</p>";
+
+    setScore("score-nominalisation", r.nominal.score);
+    $("body-nominalisation").innerHTML =
+      "<p>" + r.nominalMatches.length + " nominalisation" + (r.nominalMatches.length === 1 ? "" : "s") + " (e.g. \"the implementation of\" instead of \"implementing\") out of " + r.contentWords + " content words.</p>" +
+      "<p>Turning verbs into nouns makes writing feel formal and distant — Helen Sword calls these \"zombie nouns\". Using the verb directly is usually punchier.</p>";
+
+    setScore("score-self-reference", r.selfRef.score);
+    $("body-self-reference").innerHTML =
+      "<p>\"We\"/\"our\"/\"the company\" and similar terms appear " + r.selfRefMatches.length + " times &mdash; " + r.selfRef.density.toFixed(1) + "% of all words.</p>" +
+      "<p>Some self-reference is natural in a press release. A very high ratio can mean the release talks about the company more than it talks about what matters to the reader.</p>";
+
+    setScore("score-acronym", r.acronymScore);
+    $("body-acronym").innerHTML =
+      "<p>" + r.acronymInfo.uniqueCount + " acronym" + (r.acronymInfo.uniqueCount === 1 ? "" : "s") + ", " + r.acronymInfo.neverExpanded.length + " never expanded" + (r.acronymInfo.neverExpanded.length ? " (" + r.acronymInfo.neverExpanded.join(", ") + ")" : "") + ".</p>" +
+      "<p>An acronym counts as \"expanded\" if the full term appears in parentheses next to it anywhere in the text. Every acronym a reader doesn't already know is a small tax on their attention.</p>";
+
+    setScore("score-inverted-pyramid", r.pyramidScore);
+    var ipBody = "<ul>";
+    ipBody += "<li>" + (r.factDepthWords === null ? "No concrete fact found anywhere in the text." : "Your first specific detail appears at word " + r.factDepthWords + ".") + "</li>";
+    ipBody += "<li>Opening sentence: " + (r.ledeHasWho ? "names a specific who. " : "doesn't clearly name a who. ") + (r.ledeHasWhen ? "Includes a when." : "Doesn't include a when.") + "</li>";
+    ipBody += "<li>" + (r.quoteBeforeNews ? "A quote appears before the news is stated — lead with what happened, then let people react to it." : "No quote appears before the news is stated.") + "</li>";
+    if (r.paragraphs.length >= 2) {
+      ipBody += "<li>Information density: first paragraph " + r.firstParaDensity.toFixed(1) + " concrete details/100 words, last paragraph " + r.lastParaDensity.toFixed(1) + ". " + (r.densityDeclineOk ? "Thins out toward the end, as it should." : "Your final paragraph is denser than your first — inverted pyramid structure usually thins toward the end.") + "</li>";
+    }
+    ipBody += "</ul><p class=\"source-note\">Inverted pyramid is a standard news-writing convention, not a numeric standard — the four checks above are a reasonable operationalisation of it, not a cited formula.</p>";
+    $("body-inverted-pyramid").innerHTML = ipBody;
+
+    setScore("score-consistency", r.consistencyScore);
+    var csBody = "";
+    if (r.consistencyIssues.length === 0) {
+      csBody = "<p>No consistency issues found (doubled words, spacing, mixed number/date formats, mixed quote styles, unclosed quotes, inconsistent capitalisation).</p>";
+    } else {
+      csBody = "<ul>";
+      r.consistencyIssues.forEach(function (issue) { csBody += "<li><strong>" + escapeHtml(issue.type) + "</strong> — " + escapeHtml(issue.detail) + "</li>"; });
+      csBody += "</ul>";
+    }
+    csBody += "<p class=\"source-note\">Not a spellchecker — your browser already checks spelling in the text box, and a bundled dictionary would misfire constantly on brand names and surnames. This only looks for mechanical slips and commonly confused words worth a second look" + (function () {
+      var confused = [];
+      CONFIG.confusionGroups.forEach(function (group) {
+        var present = group.filter(function (w) { return genericPhraseMatches(r.text.slice(0, r.scoringEnd), [w]).length > 0; });
+        if (present.length > 1) confused.push(present.join("/"));
+      });
+      return confused.length ? (": " + confused.join(", ")) : ".";
+    })() + "</p>";
+    $("body-consistency").innerHTML = csBody;
+
+    setScore("score-english-variant", r.variantScore);
+    var variantLabel = r.variant === "american" ? "American" : (r.variant === "british-oxford" ? "British (Oxford, -ize)" : "British (-ise)");
+    var evBody = "<p>Checking against: <strong>" + variantLabel + "</strong>.</p>";
+    if (r.variantMismatches.length === 0) {
+      evBody += "<p>No spelling, date-format, quote-punctuation, or title-abbreviation mismatches found for this variant.</p>";
+    } else {
+      evBody += "<p>" + r.variantMismatches.length + " mismatch" + (r.variantMismatches.length === 1 ? "" : "es") + " found:</p><ul>";
+      r.variantMismatches.slice(0, 10).forEach(function (mm) { evBody += "<li>“" + escapeHtml(mm.label) + "” &mdash; " + escapeHtml(mm.suggestion) + "</li>"; });
+      if (r.variantMismatches.length > 10) evBody += "<li>&hellip; and " + (r.variantMismatches.length - 10) + " more</li>";
+      evBody += "</ul>";
+    }
+    evBody += "<p class=\"source-note\">British Oxford spelling (–ize) is the convention used by OUP and the OED; it still keeps British –our/–re/–ll– spellings, so this is deliberately a three-way choice, not a two-way one.</p>";
+    $("body-english-variant").innerHTML = evBody;
+
+    setScore("score-regulated-claims", r.regulatedScore);
+    var rcBody = "";
+    if (!r.regulatedEnabled) {
+      rcBody = "<p>Off by default. Load a sector config (e.g. <code>?config=healthcare</code>, <code>?config=greenwashing</code>, <code>?config=ai</code>, or <code>?config=forward-looking</code> in the page URL) to check sector-specific regulated terms.</p>";
+    } else {
+      rcBody = "<p>Sector: <strong>" + escapeHtml(CONFIG.sectorName) + "</strong>. " + r.regulatedMatches.length + " regulated term" + (r.regulatedMatches.length === 1 ? "" : "s") + " found" + (r.regulatedMatches.length ? ": " + r.regulatedMatches.map(function (m) { return escapeHtml(m.label); }).join(", ") : "") + ".</p>";
+      rcBody += "<p class=\"tier3-note\">" + escapeHtml(CONFIG.disclaimer) + "</p>";
+      if (CONFIG.sourceUrl) rcBody += "<p class=\"source-note\">Reference: " + escapeHtml(CONFIG.sourceUrl) + "</p>";
+    }
+    $("body-regulated-claims").innerHTML = rcBody;
 
     // Worst offenders
     var ranked = r.sentenceData.map(function (d) {
@@ -888,23 +1373,60 @@
         if (item.d.hedge > 0) reasons.push(item.d.hedge + " hedge word" + (item.d.hedge === 1 ? "" : "s"));
         if (item.d.superlative > 0) reasons.push(item.d.superlative + " superlative" + (item.d.superlative === 1 ? "" : "s"));
         if (item.d.nominal > 0) reasons.push(item.d.nominal + " nominalisation" + (item.d.nominal === 1 ? "" : "s"));
-        if (item.d.acronym > 0) reasons.push(item.d.acronym + " acronym" + (item.d.acronym === 1 ? "" : "s"));
-        li.innerHTML = escapeHtml(item.d.sentence.text.trim()) + "<span class=\"reason\">" + escapeHtml(reasons.join(" · ")) + "</span>";
+        if (item.d.acronym > 0) reasons.push(item.d.acronym + " un-expanded acronym" + (item.d.acronym === 1 ? "" : "s"));
+        li.innerHTML = escapeHtml(item.d.clippedText.trim()) + "<span class=\"reason\">" + escapeHtml(reasons.join(" · ")) + "</span>";
         elWorstList.appendChild(li);
       });
     }
 
+    renderRewriteSuggestions(r);
     elAnnotated.innerHTML = buildAnnotatedHtml(r);
     lastReportText = buildReportText(r);
   }
 
-  // Build a single flat list of highlight ranges (containers + phrase-level), then
-  // render them as properly nested <mark> tags so overlapping ranges never produce
-  // invalid/crossing HTML.
+  function renderRewriteSuggestions(r) {
+    elRewriteList.innerHTML = "";
+    var items = [];
+
+    r.passiveSplit.withAgent.slice(0, 4).forEach(function (x) {
+      items.push({ tier: 1, html: "<span class=\"rewrite-tier\">Tier 1</span><br>" +
+        "<span class=\"rewrite-original\">" + escapeHtml(x.original) + "</span> <span class=\"rewrite-arrow\">&rarr;</span> <span class=\"rewrite-new\">" + escapeHtml(x.rewrite) + "</span>" });
+    });
+    r.nominalRewrites.slice(0, 4).forEach(function (x) {
+      items.push({ tier: 1, html: "<span class=\"rewrite-tier\">Tier 1</span><br>" +
+        "<span class=\"rewrite-original\">" + escapeHtml(x.original) + "</span> <span class=\"rewrite-arrow\">&rarr;</span> <span class=\"rewrite-new\">" + escapeHtml(x.rewrite) + "</span>" });
+    });
+    r.wordSwapRewrites.slice(0, 4).forEach(function (x) {
+      items.push({ tier: 1, html: "<span class=\"rewrite-tier\">Tier 1</span><br>" +
+        "<span class=\"rewrite-original\">" + escapeHtml(x.original) + "</span> <span class=\"rewrite-arrow\">&rarr;</span> <span class=\"rewrite-new\">" + escapeHtml(x.rewrite) + "</span>" });
+    });
+    r.passiveSplit.noAgent.slice(0, 3).forEach(function (x) {
+      items.push({ tier: 2, html: "<span class=\"rewrite-tier\">Tier 2</span><br>" +
+        "<span class=\"rewrite-original\">" + escapeHtml(x.label) + "</span><br><span class=\"rewrite-question\">Who did it? If you'd rather not say, make that a deliberate choice rather than an accident of grammar.</span>" });
+    });
+    r.emptyQuotes.slice(0, 3).forEach(function (q) {
+      items.push({ tier: 2, html: "<span class=\"rewrite-tier\">Tier 2</span><br>" +
+        "<span class=\"rewrite-original\">“" + escapeHtml(q.text.trim()) + "”</span><br><span class=\"rewrite-question\">A useful quote gives a reason, a number, or a next step. This gives none. Ask your spokesperson why you actually did this.</span>" });
+    });
+
+    if (items.length === 0) {
+      elRewriteList.innerHTML = "<li>No automatic rewrite suggestions for this text — that's a good sign.</li>";
+      return;
+    }
+    items.slice(0, 8).forEach(function (item) {
+      var li = document.createElement("li");
+      li.innerHTML = item.html;
+      elRewriteList.appendChild(li);
+    });
+  }
+
   function buildAnnotatedHtml(r) {
     var text = r.text;
     var ranges = [];
 
+    if (r.boilerplate) {
+      ranges.push({ start: r.boilerplate.start, end: r.boilerplate.end, priority: -1, cls: "boilerplate-text", tooltip: null, plain: true });
+    }
     r.sentenceData.forEach(function (d) {
       if (d.wordCount > r.limit) {
         ranges.push({ start: d.sentence.start, end: d.sentence.end, priority: 0, cls: "hl-long", tooltip: d.wordCount + " words &mdash; over the " + r.limit + "-word guideline. Consider splitting this sentence." });
@@ -912,6 +1434,9 @@
     });
     r.emptyQuotes.forEach(function (q) {
       ranges.push({ start: q.start, end: q.end, priority: 1, cls: "hl-quote", tooltip: "This quote would work equally well in a press release about a completely different product." });
+    });
+    r.regulatedMatches.forEach(function (m) {
+      ranges.push({ start: m.start, end: m.end, priority: 2, cls: "hl-regulated", tooltip: "Regulated claim: \"" + escapeHtml(m.label) + "\" &mdash; check with legal/compliance before publishing." });
     });
     r.buzzMatches.forEach(function (m) {
       ranges.push({ start: m.start, end: m.end, priority: 2, cls: "hl-buzz", tooltip: "Buzzword: \"" + escapeHtml(m.label) + "\" &mdash; vague corporate language. Try a concrete alternative." });
@@ -929,10 +1454,20 @@
       ranges.push({ start: m.start, end: m.end, priority: 2, cls: "hl-nominal", tooltip: "Nominalisation: \"" + escapeHtml(m.label) + "\" &mdash; a verb turned into a noun. The verb form is usually punchier." });
     });
     r.acronymMatches.forEach(function (m) {
-      ranges.push({ start: m.start, end: m.end, priority: 2, cls: "hl-acronym", tooltip: "Acronym: \"" + escapeHtml(m.label) + "\" &mdash; spell it out on first use for readers who don't already know it." });
+      var expanded = r.acronymInfo.neverExpanded.indexOf(m.label) === -1;
+      ranges.push({ start: m.start, end: m.end, priority: 2, cls: "hl-acronym", tooltip: "Acronym: \"" + escapeHtml(m.label) + "\"" + (expanded ? " — expanded elsewhere in the text." : " — never expanded. Spell it out on first use.") });
     });
     r.concreteMatches.forEach(function (m) {
       ranges.push({ start: m.start, end: m.end, priority: 2, cls: "hl-concrete", tooltip: "Concrete detail &mdash; numbers, dates and specifics give readers something to trust." });
+    });
+    r.baselineMatches.forEach(function (m) {
+      ranges.push({ start: m.start, end: m.end, priority: 2, cls: "hl-strength", tooltip: "Strength: a number with a baseline for comparison &mdash; more informative than a bare figure." });
+    });
+    r.preciseVerbMatches.forEach(function (m) {
+      ranges.push({ start: m.start, end: m.end, priority: 2, cls: "hl-strength", tooltip: "Strength: a precise, concrete verb." });
+    });
+    r.plainWordMatches.forEach(function (m) {
+      ranges.push({ start: m.start, end: m.end, priority: 2, cls: "hl-strength", tooltip: "Strength: a plain word chosen over a jargon alternative." });
     });
 
     if (ranges.length === 0) return escapeHtml(text);
@@ -950,12 +1485,24 @@
       var active = ranges.filter(function (rr) { return rr.start <= segStart && rr.end >= segEnd; });
       active.sort(function (a, b) { return a.priority - b.priority || a.start - b.start || b.end - a.end; });
       var segText = escapeHtml(text.slice(segStart, segEnd));
+
+      var isBoilerplateOnly = active.length && active[0].plain && active.every(function (a) { return a.plain; });
+      if (isBoilerplateOnly) {
+        html += "<span class=\"boilerplate-text\">" + segText + "</span>";
+        continue;
+      }
+
       var open = "", close = "";
-      active.forEach(function (rr) {
+      var wrapBoilerplate = active.some(function (a) { return a.plain; });
+      if (wrapBoilerplate) open += "<span class=\"boilerplate-text\">";
+      active.filter(function (a) { return !a.plain; }).forEach(function (rr) {
         open += "<mark class=\"hl " + rr.cls + "\" tabindex=\"0\">";
         close = "</mark>" + close;
       });
-      var tip = active.length ? "<span class=\"tip\">" + active[active.length - 1].tooltip + "</span>" : "";
+      if (wrapBoilerplate) close += "</span>";
+
+      var nonPlain = active.filter(function (a) { return !a.plain; });
+      var tip = nonPlain.length ? "<span class=\"tip\">" + nonPlain[nonPlain.length - 1].tooltip + "</span>" : "";
       html += open + segText + tip + close;
     }
     return html;
@@ -964,27 +1511,35 @@
   function buildReportText(r) {
     var lines = [];
     lines.push("Comms Clarity Scorer report");
+    lines.push(r.buzzMatches.length + " buzzwords. " + r.concreteMatches.length + " concrete facts.");
     lines.push("Overall: " + letterGrade(r.overall) + " (" + r.overall + "/100) — " + verdictForScore(r.overall));
     lines.push("");
-    lines.push("Concreteness: " + Math.round(r.concretenessScore) + "/100 — " + r.concreteMatches.length + " concrete details");
+    lines.push("Concreteness: " + Math.round(r.concretenessScore) + "/100");
+    lines.push("Strengths: " + Math.round(r.strengthsScore) + "/100");
     lines.push("Empty quote detector: " + Math.round(r.emptyQuoteScore) + "/100 — " + r.emptyQuotes.length + "/" + r.quoteData.length + " quotes empty");
-    lines.push("Buzzword density: " + Math.round(r.buzz.score) + "/100 — " + r.buzzMatches.length + " matches, " + r.buzz.density.toFixed(1) + "% density");
-    lines.push("Sentence length: " + Math.round(r.lengthScore) + "/100 — average " + r.avgLength.toFixed(1) + " words, " + r.overLimit.length + "/" + r.sentenceData.length + " over " + r.limit + " words");
-    lines.push("Readability: " + Math.round(r.readScore) + "/100 — Flesch-Kincaid grade " + (isFinite(r.grade) ? r.grade.toFixed(1) : "n/a"));
-    lines.push("Passive voice: " + Math.round(r.passiveScore) + "/100 — " + r.passivePercent.toFixed(1) + "% of sentences");
-    lines.push("Hedging: " + Math.round(r.hedge.score) + "/100 — " + r.hedge.density.toFixed(1) + "% density");
-    lines.push("Superlatives/absolutes: " + Math.round(r.superlative.score) + "/100 — " + r.superlative.density.toFixed(1) + "% density");
-    lines.push("Nominalisation: " + Math.round(r.nominal.score) + "/100 — " + r.nominalMatches.length + " instances");
-    lines.push("Self-reference ratio: " + Math.round(r.selfRef.score) + "/100 — " + r.selfRef.density.toFixed(1) + "% density");
-    lines.push("Acronym load: " + Math.round(r.acronym.score) + "/100 — " + r.acronymMatches.length + " flagged");
+    lines.push("Buzzword density: " + Math.round(r.buzz.score) + "/100 — " + r.buzzMatches.length + " matches");
+    lines.push("Sentence length: " + Math.round(r.lengthScore) + "/100 — average " + r.avgLength.toFixed(1) + " words");
+    lines.push("Readability: " + Math.round(r.readScore) + "/100 — grade " + (isFinite(r.grade) ? r.grade.toFixed(1) : "n/a"));
+    lines.push("Passive voice: " + Math.round(r.passiveScore) + "/100 — " + r.passivePercent.toFixed(1) + "%");
+    lines.push("Hedging: " + Math.round(r.hedge.score) + "/100");
+    lines.push("Superlatives/absolutes: " + Math.round(r.superlative.score) + "/100");
+    lines.push("Nominalisation: " + Math.round(r.nominal.score) + "/100");
+    lines.push("Self-reference ratio: " + Math.round(r.selfRef.score) + "/100");
+    lines.push("Acronym load: " + Math.round(r.acronymScore) + "/100 — " + r.acronymInfo.neverExpanded.length + " never expanded");
+    lines.push("Inverted pyramid: " + Math.round(r.pyramidScore) + "/100");
+    lines.push("Consistency: " + Math.round(r.consistencyScore) + "/100 — " + r.consistencyIssues.length + " issue type(s)");
+    lines.push("English variant (" + r.variant + "): " + Math.round(r.variantScore) + "/100 — " + r.variantMismatches.length + " mismatch(es)");
+    if (r.regulatedEnabled) lines.push("Regulated claims: " + Math.round(r.regulatedScore) + "/100 — " + r.regulatedMatches.length + " term(s)");
     lines.push("");
-    lines.push("Worst offenders:");
+    lines.push("Top fixes:");
     var ranked = r.sentenceData.map(function (d) {
       var overBy = Math.max(0, d.wordCount - r.limit);
       return { d: d, badness: overBy + d.buzz * 3 + d.hedge * 2 + d.superlative * 2 + d.nominal * 2 + d.acronym };
     }).filter(function (x) { return x.badness > 0; }).sort(function (a, b) { return b.badness - a.badness; }).slice(0, 5);
     if (ranked.length === 0) lines.push("- None — nice and tight.");
-    else ranked.forEach(function (item, i) { lines.push((i + 1) + ". " + item.d.sentence.text.trim()); });
+    else ranked.forEach(function (item, i) { lines.push((i + 1) + ". " + item.d.clippedText.trim()); });
+    lines.push("");
+    lines.push("comms-clarity-scorer — analysis runs entirely in the browser, nothing uploaded.");
     return lines.join("\n");
   }
 

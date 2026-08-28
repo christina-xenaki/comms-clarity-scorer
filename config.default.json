@@ -1,0 +1,783 @@
+{
+  "sectorName": "Default",
+  "disclaimer": "This tool is directional, not authoritative. It does not replace an editor. Regulated-claim flags are a prompt to consult your own legal, compliance, or medical affairs team, not a sign-off. It's tuned for English. A good score does not mean the release is accurate, newsworthy, or that it will earn coverage.",
+  "sourceUrl": "",
+  "defaultEnglishVariant": "british-oxford",
+  "stopwords": [
+    "a",
+    "an",
+    "the",
+    "and",
+    "or",
+    "but",
+    "if",
+    "then",
+    "than",
+    "so",
+    "because",
+    "as",
+    "of",
+    "in",
+    "on",
+    "at",
+    "to",
+    "for",
+    "with",
+    "without",
+    "from",
+    "by",
+    "about",
+    "into",
+    "through",
+    "during",
+    "before",
+    "after",
+    "above",
+    "below",
+    "up",
+    "down",
+    "out",
+    "off",
+    "over",
+    "under",
+    "again",
+    "further",
+    "once",
+    "here",
+    "there",
+    "when",
+    "where",
+    "why",
+    "how",
+    "all",
+    "any",
+    "both",
+    "each",
+    "few",
+    "more",
+    "most",
+    "other",
+    "some",
+    "such",
+    "no",
+    "nor",
+    "not",
+    "only",
+    "own",
+    "same",
+    "too",
+    "very",
+    "s",
+    "t",
+    "can",
+    "will",
+    "just",
+    "don",
+    "should",
+    "now",
+    "is",
+    "are",
+    "was",
+    "were",
+    "be",
+    "been",
+    "being",
+    "have",
+    "has",
+    "had",
+    "having",
+    "do",
+    "does",
+    "did",
+    "doing",
+    "would",
+    "could",
+    "ought",
+    "i",
+    "me",
+    "my",
+    "myself",
+    "we",
+    "our",
+    "ours",
+    "ourselves",
+    "you",
+    "your",
+    "yours",
+    "yourself",
+    "yourselves",
+    "he",
+    "him",
+    "his",
+    "himself",
+    "she",
+    "her",
+    "hers",
+    "herself",
+    "it",
+    "its",
+    "itself",
+    "they",
+    "them",
+    "their",
+    "theirs",
+    "themselves",
+    "what",
+    "which",
+    "who",
+    "whom",
+    "this",
+    "that",
+    "these",
+    "those",
+    "am",
+    "also",
+    "that's",
+    "it's"
+  ],
+  "buzzwords": [
+    "leverage",
+    "synergy",
+    "best-in-class",
+    "world-class",
+    "cutting-edge",
+    "innovative",
+    "solution",
+    "ecosystem",
+    "robust",
+    "seamless",
+    "empower",
+    "unlock",
+    "journey",
+    "passionate",
+    "delighted",
+    "thrilled",
+    "excited to announce",
+    "game-changing",
+    "paradigm",
+    "disruptive",
+    "holistic",
+    "strategic",
+    "committed to",
+    "mission-critical",
+    "next-generation",
+    "transformative",
+    "revolutionise",
+    "revolutionize",
+    "pioneering",
+    "landmark",
+    "unparalleled",
+    "industry-leading"
+  ],
+  "hedges": [
+    "may",
+    "might",
+    "could",
+    "potentially",
+    "aims to",
+    "seeks to",
+    "helps to",
+    "is designed to",
+    "up to",
+    "as much as",
+    "some of the",
+    "a number of"
+  ],
+  "superlativesAndAbsolutes": [
+    "best",
+    "greatest",
+    "biggest",
+    "smallest",
+    "first-ever",
+    "first ever",
+    "only",
+    "unique",
+    "unmatched",
+    "unrivalled",
+    "unrivaled",
+    "world's first",
+    "number one",
+    "never before",
+    "like no other",
+    "most advanced",
+    "fastest",
+    "largest",
+    "best-ever",
+    "undisputed",
+    "always",
+    "never",
+    "guarantee",
+    "guaranteed",
+    "every single",
+    "completely",
+    "totally",
+    "entirely",
+    "without exception",
+    "most trusted",
+    "most reliable"
+  ],
+  "selfReferenceTerms": [
+    "we",
+    "us",
+    "our",
+    "ours",
+    "ourselves",
+    "the company",
+    "the team"
+  ],
+  "irregularVerbs": {
+    "done": "do",
+    "made": "make",
+    "said": "say",
+    "gone": "go",
+    "known": "know",
+    "given": "give",
+    "taken": "take",
+    "seen": "see",
+    "shown": "show",
+    "held": "hold",
+    "sent": "send",
+    "built": "build",
+    "brought": "bring",
+    "bought": "buy",
+    "caught": "catch",
+    "chosen": "choose",
+    "driven": "drive",
+    "eaten": "eat",
+    "fallen": "fall",
+    "felt": "feel",
+    "found": "find",
+    "flown": "fly",
+    "forgotten": "forget",
+    "gotten": "get",
+    "hidden": "hide",
+    "kept": "keep",
+    "left": "leave",
+    "lost": "lose",
+    "meant": "mean",
+    "paid": "pay",
+    "put": "put",
+    "read": "read",
+    "run": "run",
+    "sold": "sell",
+    "spoken": "speak",
+    "spent": "spend",
+    "stood": "stand",
+    "stolen": "steal",
+    "swum": "swim",
+    "taught": "teach",
+    "thrown": "throw",
+    "understood": "understand",
+    "worn": "wear",
+    "won": "win",
+    "written": "write",
+    "begun": "begin",
+    "broken": "break",
+    "drawn": "draw",
+    "drunk": "drink",
+    "frozen": "freeze",
+    "grown": "grow",
+    "ridden": "ride",
+    "risen": "rise",
+    "sworn": "swear",
+    "torn": "tear",
+    "woken": "wake",
+    "born": "bear",
+    "bound": "bind",
+    "bred": "breed",
+    "dealt": "deal",
+    "dug": "dig",
+    "fed": "feed",
+    "fought": "fight",
+    "fled": "flee",
+    "hung": "hang",
+    "hurt": "hurt",
+    "laid": "lay",
+    "led": "lead",
+    "lent": "lend",
+    "lit": "light",
+    "met": "meet",
+    "rung": "ring",
+    "sat": "sit",
+    "set": "set",
+    "shaken": "shake",
+    "shot": "shoot",
+    "shut": "shut",
+    "slept": "sleep",
+    "slid": "slide",
+    "spread": "spread",
+    "struck": "strike",
+    "swept": "sweep",
+    "swung": "swing",
+    "thought": "think",
+    "upset": "upset",
+    "woven": "weave"
+  },
+  "nominalisationSuffixes": [
+    "tion",
+    "ment",
+    "ance",
+    "ence"
+  ],
+  "nominalisationVerbMap": {
+    "implementation": "implement",
+    "provision": "provide",
+    "utilisation": "use",
+    "utilization": "use",
+    "application": "apply",
+    "consideration": "consider",
+    "announcement": "announce",
+    "development": "develop",
+    "requirement": "require",
+    "investment": "invest",
+    "assessment": "assess",
+    "agreement": "agree",
+    "achievement": "achieve",
+    "management": "manage",
+    "involvement": "involve",
+    "commitment": "commit",
+    "movement": "move",
+    "statement": "state",
+    "treatment": "treat",
+    "improvement": "improve",
+    "arrangement": "arrange",
+    "completion": "complete",
+    "creation": "create",
+    "production": "produce",
+    "reduction": "reduce",
+    "introduction": "introduce",
+    "acquisition": "acquire",
+    "expansion": "expand",
+    "collaboration": "collaborate",
+    "combination": "combine",
+    "continuance": "continue",
+    "performance": "perform",
+    "acceptance": "accept",
+    "assistance": "assist",
+    "guidance": "guide",
+    "occurrence": "occur",
+    "existence": "exist",
+    "reference": "refer",
+    "preference": "prefer"
+  },
+  "monthNames": [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Sept",
+    "Oct",
+    "Nov",
+    "Dec"
+  ],
+  "acronymAllowlist": [
+    "CEO",
+    "CFO",
+    "COO",
+    "CTO",
+    "CMO",
+    "US",
+    "UK",
+    "EU",
+    "UN",
+    "USA",
+    "AI",
+    "IT",
+    "PR",
+    "HR",
+    "API",
+    "FAQ",
+    "OK",
+    "TV",
+    "PC",
+    "ID",
+    "VP",
+    "SVP",
+    "EVP"
+  ],
+  "wordSwaps": {
+    "leverage": "use",
+    "facilitate": "help",
+    "commence": "start",
+    "in order to": "to",
+    "at this point in time": "now",
+    "is designed to": "does",
+    "utilise": "use",
+    "utilize": "use",
+    "prior to": "before"
+  },
+  "baselineIndicators": [
+    "up from",
+    "down from",
+    "compared to",
+    "compared with",
+    "versus",
+    "vs.",
+    "an increase from",
+    "a decrease from",
+    "rising from",
+    "falling from"
+  ],
+  "preciseVerbs": [
+    "cut",
+    "doubled",
+    "delayed",
+    "acquired",
+    "halved",
+    "closed",
+    "launched",
+    "raised",
+    "hired",
+    "opened",
+    "shipped",
+    "signed",
+    "secured",
+    "expanded",
+    "reduced",
+    "increased",
+    "sold",
+    "merged",
+    "appointed",
+    "tripled",
+    "grew",
+    "fell",
+    "rose",
+    "dropped"
+  ],
+  "vagueTimeframes": [
+    "in the coming months",
+    "in the near future",
+    "soon",
+    "shortly",
+    "in due course",
+    "at a later date",
+    "going forward",
+    "moving forward"
+  ],
+  "reasonIndicators": [
+    "because",
+    "since",
+    "so that",
+    "as a result",
+    "which means",
+    "which is why"
+  ],
+  "decisionIndicators": [
+    "decided to",
+    "has chosen to",
+    "is moving to",
+    "will now",
+    "has opted to"
+  ],
+  "confusionGroups": [
+    [
+      "its",
+      "it's"
+    ],
+    [
+      "their",
+      "there",
+      "they're"
+    ],
+    [
+      "affect",
+      "effect"
+    ],
+    [
+      "principle",
+      "principal"
+    ],
+    [
+      "complement",
+      "compliment"
+    ],
+    [
+      "discreet",
+      "discrete"
+    ],
+    [
+      "practice",
+      "practise"
+    ]
+  ],
+  "boilerplateHeadingPatterns": [
+    "about "
+  ],
+  "contactIndicators": [
+    "media contact",
+    "press contact",
+    "contact:",
+    "for more information"
+  ],
+  "regulatedClaims": {
+    "enabled": false,
+    "terms": []
+  },
+  "variantWordPairs": {
+    "-our/-or": [
+      [
+        "colour",
+        "color"
+      ],
+      [
+        "favour",
+        "favor"
+      ],
+      [
+        "honour",
+        "honor"
+      ],
+      [
+        "labour",
+        "labor"
+      ],
+      [
+        "neighbour",
+        "neighbor"
+      ],
+      [
+        "behaviour",
+        "behavior"
+      ],
+      [
+        "rumour",
+        "rumor"
+      ],
+      [
+        "endeavour",
+        "endeavor"
+      ]
+    ],
+    "-re/-er": [
+      [
+        "centre",
+        "center"
+      ],
+      [
+        "metre",
+        "meter"
+      ],
+      [
+        "theatre",
+        "theater"
+      ],
+      [
+        "litre",
+        "liter"
+      ],
+      [
+        "fibre",
+        "fiber"
+      ]
+    ],
+    "-ll-/-l-": [
+      [
+        "travelled",
+        "traveled"
+      ],
+      [
+        "travelling",
+        "traveling"
+      ],
+      [
+        "cancelled",
+        "canceled"
+      ],
+      [
+        "cancelling",
+        "canceling"
+      ],
+      [
+        "modelling",
+        "modeling"
+      ],
+      [
+        "labelled",
+        "labeled"
+      ],
+      [
+        "fuelled",
+        "fueled"
+      ],
+      [
+        "counsellor",
+        "counselor"
+      ]
+    ],
+    "-ogue/-og": [
+      [
+        "catalogue",
+        "catalog"
+      ],
+      [
+        "dialogue",
+        "dialog"
+      ]
+    ],
+    "-ence/-ense": [
+      [
+        "defence",
+        "defense"
+      ],
+      [
+        "offence",
+        "offense"
+      ],
+      [
+        "licence",
+        "license"
+      ]
+    ],
+    "-ise/-ize": [
+      [
+        "organise",
+        "organize"
+      ],
+      [
+        "realise",
+        "realize"
+      ],
+      [
+        "recognise",
+        "recognize"
+      ],
+      [
+        "criticise",
+        "criticize"
+      ],
+      [
+        "apologise",
+        "apologize"
+      ],
+      [
+        "emphasise",
+        "emphasize"
+      ],
+      [
+        "prioritise",
+        "prioritize"
+      ],
+      [
+        "analyse",
+        "analyze"
+      ],
+      [
+        "specialise",
+        "specialize"
+      ],
+      [
+        "summarise",
+        "summarize"
+      ],
+      [
+        "capitalise",
+        "capitalize"
+      ],
+      [
+        "finalise",
+        "finalize"
+      ],
+      [
+        "minimise",
+        "minimize"
+      ],
+      [
+        "maximise",
+        "maximize"
+      ],
+      [
+        "customise",
+        "customize"
+      ]
+    ]
+  },
+  "alwaysIseWords": [
+    "advertise",
+    "surprise",
+    "compromise",
+    "exercise",
+    "supervise",
+    "revise",
+    "devise",
+    "comprise",
+    "disguise",
+    "despise",
+    "improvise",
+    "televise",
+    "franchise"
+  ],
+  "titleAbbreviations": [
+    "Dr",
+    "Mr",
+    "Mrs",
+    "Ms",
+    "St"
+  ],
+  "thresholds": {
+    "sentenceLengthLimit": 30,
+    "sentenceLengthComfortableAverage": 15,
+    "sentenceLengthPenaltyPerWordOverAverage": 2.5,
+    "sentenceLengthPenaltyPerPercentOverLimit": 1,
+    "targetReadabilityGrade": 8,
+    "readabilityPenaltyPerGrade": 8,
+    "buzzwordPenaltyPerPercent": 12,
+    "passiveVoiceAcceptablePercent": 20,
+    "passiveVoicePenaltyPerPercent": 2,
+    "hedgeDensityTarget": 0.5,
+    "hedgePenaltyPerPercent": 15,
+    "superlativeDensityTarget": 0.5,
+    "superlativePenaltyPerPercent": 15,
+    "nominalisationDensityTarget": 1,
+    "nominalisationPenaltyPerPercent": 10,
+    "selfReferenceDensityTarget": 3,
+    "selfReferencePenaltyPerPercent": 6,
+    "acronymNeverExpandedPenaltyEach": 12,
+    "concretenessTargetPer100Words": 3,
+    "emptyQuoteMinWords": 6,
+    "strengthsTargetPer100ContentWords": 4,
+    "factDepthWarningWords": 100,
+    "invertedPyramidFactDepthPenalty": 25,
+    "invertedPyramidLedePenalty": 25,
+    "invertedPyramidQuotePenalty": 25,
+    "invertedPyramidDensityPenalty": 25,
+    "consistencyPenaltyPerIssueType": 10,
+    "englishVariantPenaltyPerMismatch": 5,
+    "regulatedClaimPenaltyPerMatch": 15,
+    "clusteringMinMatches": 3,
+    "clusteringShareThreshold": 0.4
+  },
+  "weights": {
+    "buzzwordDensity": 1,
+    "sentenceLength": 1,
+    "readability": 1,
+    "passiveVoice": 1,
+    "emptyQuote": 1,
+    "hedging": 1,
+    "concreteness": 2,
+    "nominalisation": 1,
+    "selfReference": 1,
+    "superlatives": 1,
+    "acronymLoad": 1,
+    "strengths": 2,
+    "invertedPyramid": 1,
+    "consistency": 1,
+    "englishVariant": 1,
+    "regulatedClaims": 1
+  }
+}
