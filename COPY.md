@@ -82,9 +82,9 @@ Before anything is pasted:
 
 ## Share button
 
-**Not yet built.** No share button exists in the interface yet — only "Copy report" is implemented. Tracked in README's "Not yet built" list.
-
 Label: **Share score**
+
+Clicking it reveals two destination controls: **Share to WhatsApp** and **Share to Slack**. WhatsApp opens with the message pre-filled, since WhatsApp has a public link for that (`wa.me`). Slack has no equivalent public link for arbitrary text, so that button copies the message to the clipboard instead; its feedback text is **Copied! Paste into Slack.**, reverting to its label after a moment.
 
 Shared text template:
 
@@ -95,12 +95,37 @@ Never include the analysed text or any flagged sentence in a share link. Share l
 
 ---
 
+## Export buttons
+
+Two buttons sit next to "Copy report": one copies a short summary as rich text (for pasting into an email), the other copies the same summary as plain text (for pasting into Slack).
+
+Labels: **Copy for email** and **Copy for Slack**
+
+Structure, both formats:
+1. Grade and weather icon
+2. The headline metric (e.g. "11 buzzwords. 2 concrete facts.")
+3. The top five fixes, each with its rewrite where the tool has one
+4. The export footer, verbatim (see below)
+
+Copy feedback, both buttons: **Copied!**, reverting to the button's label after a moment (same pattern as "Copy report").
+
+---
+
 ## Export footer
 
-**Not yet implemented as specified.** The "Copy report" output (`js/render.js`'s `buildReportText`) currently ends with its own line ("comms-clarity-scorer — analysis runs entirely in the browser, nothing uploaded.") instead of this exact copy, and doesn't include a URL. Tracked in README's "Not yet built" list.
+Used verbatim, with [URL] resolved to the page's own address, by the "Copy for email" and "Copy for Slack" export buttons above. The older "Copy report" button (`js/render.js`'s `buildReportText`) is unchanged by this and still ends with its own different line ("comms-clarity-scorer — analysis runs entirely in the browser, nothing uploaded.") with no URL.
 
 > Scored with Comms Clarity Scorer — [URL]
 > Runs in your browser. Nothing is uploaded.
+
+---
+
+## Print stylesheet
+
+No navigation or buttons appear on a printed page — only the analysed text, grade, and check results. Printing can't guarantee background colour survives to paper, so the two highlight categories that rely on background tint alone on screen (long sentence, empty quote) get a print-only text label so the meaning still comes through in greyscale:
+
+- Long sentence — prefixed **[Long sentence]**
+- Empty quote — prefixed **[Empty quote]**
 
 ---
 

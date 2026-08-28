@@ -27,17 +27,40 @@ document.addEventListener("keydown", function (e) {
 
 elCopyBtn.addEventListener("click", function () {
   if (!lastReportText) return;
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(lastReportText).then(function () {
-      elCopyBtn.textContent = "Copied!";
-      setTimeout(function () { elCopyBtn.textContent = "Copy report"; }, 1500);
-    }, function () { fallbackCopy(lastReportText); });
-  } else {
-    fallbackCopy(lastReportText);
-  }
+  copyPlainText(lastReportText, elCopyBtn, "Copy report");
 });
 
-function fallbackCopy(text) {
+function flashButtonLabel(btn, idleLabel, tempLabel) {
+  btn.textContent = tempLabel;
+  setTimeout(function () { btn.textContent = idleLabel; }, 1500);
+}
+
+function copyPlainText(text, btn, idleLabel, tempLabel) {
+  tempLabel = tempLabel || "Copied!";
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(function () {
+      flashButtonLabel(btn, idleLabel, tempLabel);
+    }, function () { fallbackCopy(text, btn, idleLabel, tempLabel); });
+  } else {
+    fallbackCopy(text, btn, idleLabel, tempLabel);
+  }
+}
+
+function copyRichText(html, text, btn, idleLabel) {
+  if (navigator.clipboard && window.ClipboardItem && navigator.clipboard.write) {
+    var item = new ClipboardItem({
+      "text/html": new Blob([html], { type: "text/html" }),
+      "text/plain": new Blob([text], { type: "text/plain" })
+    });
+    navigator.clipboard.write([item]).then(function () {
+      flashButtonLabel(btn, idleLabel, "Copied!");
+    }, function () { copyPlainText(text, btn, idleLabel); });
+  } else {
+    copyPlainText(text, btn, idleLabel);
+  }
+}
+
+function fallbackCopy(text, btn, idleLabel, tempLabel) {
   var ta = document.createElement("textarea");
   ta.value = text;
   ta.style.position = "fixed";
@@ -47,6 +70,28 @@ function fallbackCopy(text) {
   ta.select();
   try { document.execCommand("copy"); } catch (e) {}
   document.body.removeChild(ta);
-  elCopyBtn.textContent = "Copied!";
-  setTimeout(function () { elCopyBtn.textContent = "Copy report"; }, 1500);
+  flashButtonLabel(btn, idleLabel, tempLabel || "Copied!");
 }
+
+elExportEmailBtn.addEventListener("click", function () {
+  if (!lastResult) return;
+  copyRichText(buildExportRichHtml(lastResult), buildExportPlainText(lastResult), elExportEmailBtn, "Copy for email");
+});
+
+elExportSlackBtn.addEventListener("click", function () {
+  if (!lastResult) return;
+  copyPlainText(buildExportPlainText(lastResult), elExportSlackBtn, "Copy for Slack");
+});
+
+elShareScoreBtn.addEventListener("click", function () {
+  if (!lastResult) return;
+  var expanded = elShareScoreBtn.getAttribute("aria-expanded") === "true";
+  elShareScoreBtn.setAttribute("aria-expanded", String(!expanded));
+  elShareOptions.hidden = expanded;
+  elShareWhatsappLink.href = "https://wa.me/?text=" + encodeURIComponent(buildShareText(lastResult));
+});
+
+elShareSlackBtn.addEventListener("click", function () {
+  if (!lastResult) return;
+  copyPlainText(buildShareText(lastResult), elShareSlackBtn, "Share to Slack", "Copied! Paste into Slack.");
+});
