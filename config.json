@@ -1,0 +1,46 @@
+{
+  "sectorName": "Default",
+  "buzzwords": [
+    "leverage",
+    "synergy",
+    "best-in-class",
+    "world-class",
+    "cutting-edge",
+    "innovative",
+    "solution",
+    "ecosystem",
+    "robust",
+    "seamless",
+    "empower",
+    "unlock",
+    "journey",
+    "passionate",
+    "delighted",
+    "thrilled",
+    "excited to announce",
+    "game-changing",
+    "paradigm",
+    "disruptive",
+    "holistic",
+    "strategic",
+    "committed to",
+    "mission-critical",
+    "next-generation",
+    "transformative",
+    "revolutionise",
+    "revolutionize",
+    "pioneering",
+    "landmark",
+    "unparalleled",
+    "industry-leading"
+  ],
+  "thresholds": {
+    "sentenceLengthLimit": 30,
+    "targetReadabilityGrade": 8
+  },
+  "weights": {
+    "buzzwordDensity": 1,
+    "sentenceLength": 1,
+    "readability": 1
+  }
+}

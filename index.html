@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Comms Clarity Scorer</title>
+<style>
+  :root {
+    --color-bg: #f7f7f5;
+    --color-surface: #ffffff;
+    --color-border: #e0ddd6;
+    --color-text: #1f1e1c;
+    --color-muted: #6b6862;
+    --color-accent: #1d5b4f;
+    --color-accent-contrast: #ffffff;
+    --color-buzz: #ffe08a;
+    --color-buzz-border: #b8860b;
+    --color-long: #ffd0c2;
+    --color-long-border: #c9542f;
+    --color-good: #1d5b4f;
+    --color-warn: #b8860b;
+    --color-bad: #b3392c;
+    --radius: 10px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+  }
+
+  body {
+    padding: 0 0 3rem 0;
+  }
+
+  header {
+    padding: 1.25rem 1rem 1rem 1rem;
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  header h1 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.4rem;
+  }
+
+  header p {
+    margin: 0;
+    color: var(--color-muted);
+    font-size: 0.95rem;
+  }
+
+  main {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 1rem;
+  }
+
+  section {
+    margin-bottom: 1.5rem;
+  }
+
+  label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  textarea {
+    width: 100%;
+    min-height: 220px;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+    color: var(--color-text);
+    resize: vertical;
+    font-family: inherit;
+  }
+
+  button {
+    display: block;
+    width: 100%;
+    min-height: 48px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    border: none;
+    border-radius: var(--radius);
+    background: var(--color-accent);
+    color: var(--color-accent-contrast);
+    cursor: pointer;
+    margin-top: 0.75rem;
+  }
+
+  button:active {
+    opacity: 0.85;
+  }
+
+  button.secondary {
+    background: var(--color-surface);
+    color: var(--color-accent);
+    border: 1px solid var(--color-accent);
+  }
+
+  .privacy-note {
+    font-size: 0.85rem;
+    color: var(--color-muted);
+    margin-top: 0.75rem;
+  }
+
+  .config-status {
+    font-size: 0.8rem;
+    color: var(--color-muted);
+    margin-top: 0.5rem;
+  }
+
+  .config-status.warn {
+    color: var(--color-warn);
+  }
+
+  #results[hidden] {
+    display: none;
+  }
+
+  .card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 1rem;
+  }
+
+  #overall-card {
+    text-align: center;
+  }
+
+  #overall-grade {
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1;
+    margin: 0.25rem 0;
+  }
+
+  #overall-verdict {
+    font-size: 1.05rem;
+    margin: 0.25rem 0 0 0;
+  }
+
+  .grade-good { color: var(--color-good); }
+  .grade-warn { color: var(--color-warn); }
+  .grade-bad { color: var(--color-bad); }
+
+  h2 {
+    font-size: 1.1rem;
+    margin: 0 0 0.75rem 0;
+  }
+
+  details.card {
+    padding: 0;
+    overflow: hidden;
+    margin-bottom: 0.75rem;
+  }
+
+  details.card summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    min-height: 44px;
+  }
+
+  details.card summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .summary-title {
+    font-weight: 600;
+  }
+
+  .summary-score {
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .card-body {
+    padding: 0 1rem 1rem 1rem;
+    border-top: 1px solid var(--color-border);
+    padding-top: 0.75rem;
+    font-size: 0.95rem;
+    color: var(--color-muted);
+  }
+
+  .card-body p {
+    margin: 0 0 0.5rem 0;
+  }
+
+  .card-body ul {
+    margin: 0.5rem 0 0 0;
+    padding-left: 1.25rem;
+  }
+
+  #worst-offenders ol {
+    margin: 0;
+    padding-left: 1.25rem;
+  }
+
+  #worst-offenders li {
+    margin-bottom: 0.75rem;
+  }
+
+  #worst-offenders .reason {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--color-muted);
+  }
+
+  #annotated-output {
+    white-space: pre-wrap;
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    font-size: 0.85rem;
+    color: var(--color-muted);
+    margin-bottom: 0.75rem;
+  }
+
+  .legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .swatch {
+    display: inline-block;
+    width: 0.85rem;
+    height: 0.85rem;
+    border-radius: 3px;
+  }
+
+  .swatch.buzz { background: var(--color-buzz); border: 1px solid var(--color-buzz-border); }
+  .swatch.long { background: var(--color-long); border: 1px solid var(--color-long-border); }
+
+  mark.hl {
+    position: relative;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    border-radius: 3px;
+  }
+
+  mark.hl-buzz {
+    background: var(--color-buzz);
+    border-bottom: 2px solid var(--color-buzz-border);
+    padding: 0 1px;
+  }
+
+  mark.hl-long {
+    background: var(--color-long);
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+
+  mark.hl .tip {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 100%;
+    margin-top: 4px;
+    z-index: 10;
+    background: var(--color-text);
+    color: #fff;
+    font-size: 0.8rem;
+    line-height: 1.4;
+    padding: 0.5rem 0.65rem;
+    border-radius: 6px;
+    width: max-content;
+    max-width: 80vw;
+    white-space: normal;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  }
+
+  mark.hl.open .tip {
+    display: block;
+  }
+
+  footer {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 1rem;
+    color: var(--color-muted);
+    font-size: 0.85rem;
+  }
+
+  @media (min-width: 700px) {
+    header h1 { font-size: 1.6rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Comms Clarity Scorer</h1>
+  <p>Paste a press release or pitch. Get a clarity score and exactly what's wrong with it.</p>
+</header>
+
+<main>
+  <section id="input-section">
+    <label for="input-text">Your text</label>
+    <textarea id="input-text" placeholder="Paste your press release or pitch here…"></textarea>
+    <button id="analyze-btn" type="button">Analyze</button>
+    <p class="privacy-note">Nothing you paste here leaves your browser. There's no server, no account and no upload &mdash; the analysis runs entirely on your device.</p>
+    <p id="config-status" class="config-status">Loading word lists…</p>
+  </section>
+
+  <section id="results" hidden>
+
+    <section id="overall-card" class="card">
+      <div class="summary-title">Overall grade</div>
+      <div id="overall-grade">&mdash;</div>
+      <p id="overall-verdict"></p>
+    </section>
+
+    <section id="sub-scores">
+      <h2>Checks</h2>
+
+      <details class="card" id="card-buzzword">
+        <summary>
+          <span class="summary-title">Buzzword density</span>
+          <span class="summary-score" id="score-buzzword">&mdash;</span>
+        </summary>
+        <div class="card-body" id="body-buzzword"></div>
+      </details>
+
+      <details class="card" id="card-sentence-length">
+        <summary>
+          <span class="summary-title">Sentence length</span>
+          <span class="summary-score" id="score-sentence-length">&mdash;</span>
+        </summary>
+        <div class="card-body" id="body-sentence-length"></div>
+      </details>
+
+      <details class="card" id="card-readability">
+        <summary>
+          <span class="summary-title">Readability</span>
+          <span class="summary-score" id="score-readability">&mdash;</span>
+        </summary>
+        <div class="card-body" id="body-readability"></div>
+      </details>
+    </section>
+
+    <section id="worst-offenders" class="card">
+      <h2>Worst offenders</h2>
+      <p style="margin-top:0;color:var(--color-muted);font-size:0.9rem;">The sentences to fix first, ranked worst to least-bad.</p>
+      <ol id="worst-offenders-list"></ol>
+    </section>
+
+    <section id="annotated-text-section">
+      <h2>Your text, annotated</h2>
+      <div class="legend">
+        <span><span class="swatch buzz"></span> Buzzword</span>
+        <span><span class="swatch long"></span> Long sentence</span>
+      </div>
+      <p style="margin-top:-0.5rem;color:var(--color-muted);font-size:0.85rem;">Tap a highlight for the explanation.</p>
+      <div id="annotated-output" class="card"></div>
+    </section>
+
+    <button id="copy-report-btn" type="button" class="secondary">Copy report</button>
+  </section>
+</main>
+
+<footer>
+  <p>First pass of the Comms Clarity Scorer. Currently checks: buzzword density, sentence length and readability. More checks (passive voice, empty-quote detection, hedging, concreteness, nominalisation, regulated-claim flags) are planned but not built yet.</p>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  var DEFAULT_CONFIG = {
+    sectorName: "Default (built-in fallback)",
+    buzzwords: [
+      "leverage", "synergy", "best-in-class", "world-class", "cutting-edge",
+      "innovative", "solution", "ecosystem", "robust", "seamless", "empower",
+      "unlock", "journey", "passionate", "delighted", "thrilled",
+      "excited to announce", "game-changing", "paradigm", "disruptive",
+      "holistic", "strategic", "committed to", "mission-critical",
+      "next-generation", "transformative", "revolutionise", "revolutionize",
+      "pioneering", "landmark", "unparalleled", "industry-leading"
+    ],
+    thresholds: { sentenceLengthLimit: 30, targetReadabilityGrade: 8 },
+    weights: { buzzwordDensity: 1, sentenceLength: 1, readability: 1 }
+  };
+
+  var CONFIG = null;
+
+  var elInputText = document.getElementById("input-text");
+  var elAnalyzeBtn = document.getElementById("analyze-btn");
+  var elConfigStatus = document.getElementById("config-status");
+  var elResults = document.getElementById("results");
+  var elOverallGrade = document.getElementById("overall-grade");
+  var elOverallVerdict = document.getElementById("overall-verdict");
+  var elScoreBuzz = document.getElementById("score-buzzword");
+  var elBodyBuzz = document.getElementById("body-buzzword");
+  var elScoreLen = document.getElementById("score-sentence-length");
+  var elBodyLen = document.getElementById("body-sentence-length");
+  var elScoreRead = document.getElementById("score-readability");
+  var elBodyRead = document.getElementById("body-readability");
+  var elWorstList = document.getElementById("worst-offenders-list");
+  var elAnnotated = document.getElementById("annotated-output");
+  var elCopyBtn = document.getElementById("copy-report-btn");
+
+  var lastReportText = "";
+
+  fetch("config.json")
+    .then(function (res) {
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      return res.json();
+    })
+    .then(function (json) {
+      CONFIG = mergeWithDefaults(json);
+      elConfigStatus.textContent = "Word list loaded: " + (CONFIG.sectorName || "config.json") + " (" + CONFIG.buzzwords.length + " buzzwords).";
+      elConfigStatus.classList.remove("warn");
+    })
+    .catch(function (err) {
+      CONFIG = DEFAULT_CONFIG;
+      elConfigStatus.textContent = "Couldn't load config.json (" + err.message + ") — using the built-in default word list instead.";
+      elConfigStatus.classList.add("warn");
+    });
+
+  function mergeWithDefaults(json) {
+    var cfg = {};
+    cfg.sectorName = json.sectorName || "config.json";
+    cfg.buzzwords = Array.isArray(json.buzzwords) && json.buzzwords.length ? json.buzzwords : DEFAULT_CONFIG.buzzwords;
+    cfg.thresholds = json.thresholds || {};
+    if (typeof cfg.thresholds.sentenceLengthLimit !== "number") cfg.thresholds.sentenceLengthLimit = DEFAULT_CONFIG.thresholds.sentenceLengthLimit;
+    if (typeof cfg.thresholds.targetReadabilityGrade !== "number") cfg.thresholds.targetReadabilityGrade = DEFAULT_CONFIG.thresholds.targetReadabilityGrade;
+    cfg.weights = json.weights || DEFAULT_CONFIG.weights;
+    return cfg;
+  }
+
+  function escapeHtml(str) {
+    return str
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
+  function escapeRegExp(str) {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  }
+
+  function tokenizeWords(str) {
+    var m = str.match(/[A-Za-z0-9']+(?:-[A-Za-z0-9']+)*/g);
+    return m || [];
+  }
+
+  function splitSentences(text) {
+    var sentences = [];
+    var re = /[^.!?]+[.!?]+(?:\s+|$)|[^.!?]+$/g;
+    var m;
+    while ((m = re.exec(text)) !== null) {
+      var raw = m[0];
+      if (raw.trim().length === 0) continue;
+      sentences.push({ text: raw, start: m.index, end: m.index + raw.length });
+    }
+    return sentences;
+  }
+
+  function countSyllables(word) {
+    word = word.toLowerCase().replace(/[^a-z]/g, "");
+    if (word.length === 0) return 0;
+    if (word.length <= 3) return 1;
+    word = word.replace(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/, "");
+    word = word.replace(/^y/, "");
+    var matches = word.match(/[aeiouy]{1,2}/g);
+    return matches ? Math.max(1, matches.length) : 1;
+  }
+
+  function clamp(n, min, max) {
+    return Math.max(min, Math.min(max, n));
+  }
+
+  function letterGrade(score) {
+    if (score >= 90) return "A";
+    if (score >= 80) return "B";
+    if (score >= 70) return "C";
+    if (score >= 60) return "D";
+    return "F";
+  }
+
+  function gradeClass(score) {
+    if (score >= 80) return "grade-good";
+    if (score >= 60) return "grade-warn";
+    return "grade-bad";
+  }
+
+  // --- Check 1: buzzword density ---
+  function analyzeBuzzwords(sentence) {
+    var matches = [];
+    CONFIG.buzzwords.forEach(function (phrase) {
+      var re = new RegExp("\\b" + escapeRegExp(phrase) + "\\b", "gi");
+      var m;
+      while ((m = re.exec(sentence.text)) !== null) {
+        matches.push({ start: m.index, end: m.index + m[0].length, phrase: phrase });
+        if (m[0].length === 0) re.lastIndex++;
+      }
+    });
+    matches.sort(function (a, b) { return a.start - b.start || (b.end - b.start) - (a.end - a.start); });
+    var filtered = [];
+    var lastEnd = -1;
+    matches.forEach(function (mObj) {
+      if (mObj.start >= lastEnd) {
+        filtered.push(mObj);
+        lastEnd = mObj.end;
+      }
+    });
+    return filtered;
+  }
+
+  // --- Check 3: readability (Flesch-Kincaid grade level) ---
+  function computeReadability(text, wordTokens, sentenceCount) {
+    var syllables = 0;
+    wordTokens.forEach(function (w) { syllables += countSyllables(w); });
+    var wordCount = wordTokens.length;
+    if (wordCount === 0 || sentenceCount === 0) return { grade: 0, syllables: syllables };
+    var grade = 0.39 * (wordCount / sentenceCount) + 11.8 * (syllables / wordCount) - 15.59;
+    return { grade: grade, syllables: syllables };
+  }
+
+  function interpretGrade(grade) {
+    if (grade <= 6) return "Very easy to read — clear to most readers, including younger teens.";
+    if (grade <= 8) return "Plain and clear — about the level of a well-written newspaper article.";
+    if (grade <= 10) return "A bit dense — high-school reading level. Fine for trade press, harder for a general audience.";
+    if (grade <= 13) return "Dense — some college-level phrasing. Consider shortening sentences and simplifying words.";
+    return "Very dense — reads like an academic paper, not a press release. Simplify substantially.";
+  }
+
+  function analyze() {
+    var text = elInputText.value;
+    if (!text || !text.trim()) {
+      alert("Paste some text first.");
+      return;
+    }
+    if (!CONFIG) CONFIG = DEFAULT_CONFIG;
+
+    var sentences = splitSentences(text);
+    var totalWords = tokenizeWords(text).length;
+
+    // Per-sentence data
+    var sentenceData = sentences.map(function (s) {
+      var wordCount = tokenizeWords(s.text).length;
+      var buzz = analyzeBuzzwords(s);
+      return { sentence: s, wordCount: wordCount, buzz: buzz };
+    });
+
+    var limit = CONFIG.thresholds.sentenceLengthLimit;
+    var overLimit = sentenceData.filter(function (d) { return d.wordCount > limit; });
+    var avgLength = sentenceData.length
+      ? sentenceData.reduce(function (sum, d) { return sum + d.wordCount; }, 0) / sentenceData.length
+      : 0;
+    var percentOver = sentenceData.length ? (overLimit.length / sentenceData.length) * 100 : 0;
+    var lengthScore = clamp(100 - Math.max(0, avgLength - 15) * 2.5 - percentOver, 0, 100);
+
+    var totalBuzzMatches = sentenceData.reduce(function (sum, d) { return sum + d.buzz.length; }, 0);
+    var buzzDensity = totalWords ? (totalBuzzMatches / totalWords) * 100 : 0;
+    var buzzScore = clamp(100 - buzzDensity * 12, 0, 100);
+
+    var readability = computeReadability(text, tokenizeWords(text), sentences.length);
+    var targetGrade = CONFIG.thresholds.targetReadabilityGrade;
+    var readScore = clamp(100 - Math.max(0, readability.grade - targetGrade) * 8, 0, 100);
+
+    var weights = CONFIG.weights || DEFAULT_CONFIG.weights;
+    var wBuzz = typeof weights.buzzwordDensity === "number" ? weights.buzzwordDensity : 1;
+    var wLen = typeof weights.sentenceLength === "number" ? weights.sentenceLength : 1;
+    var wRead = typeof weights.readability === "number" ? weights.readability : 1;
+    var totalWeight = wBuzz + wLen + wRead;
+    var overall = totalWeight > 0
+      ? (buzzScore * wBuzz + lengthScore * wLen + readScore * wRead) / totalWeight
+      : (buzzScore + lengthScore + readScore) / 3;
+    overall = Math.round(overall);
+
+    renderResults({
+      text: text,
+      sentenceData: sentenceData,
+      totalWords: totalWords,
+      limit: limit,
+      overLimit: overLimit,
+      avgLength: avgLength,
+      buzzDensity: buzzDensity,
+      totalBuzzMatches: totalBuzzMatches,
+      buzzScore: buzzScore,
+      lengthScore: lengthScore,
+      readability: readability,
+      readScore: readScore,
+      overall: overall
+    });
+
+    elResults.hidden = false;
+    elResults.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function verdictForScore(score) {
+    if (score >= 90) return "Clean and clear. Ship it.";
+    if (score >= 80) return "Solid, with a few things worth tightening.";
+    if (score >= 70) return "Readable, but corporate mush is creeping in.";
+    if (score >= 60) return "Needs work — several issues are dragging this down.";
+    return "Heavy rewrite recommended before this goes out.";
+  }
+
+  function renderResults(r) {
+    elOverallGrade.textContent = letterGrade(r.overall) + " (" + r.overall + "/100)";
+    elOverallGrade.className = gradeClass(r.overall);
+    elOverallVerdict.textContent = verdictForScore(r.overall);
+
+    // Buzzword card
+    elScoreBuzz.textContent = Math.round(r.buzzScore) + "/100";
+    elBodyBuzz.innerHTML =
+      "<p>" + r.totalBuzzMatches + " buzzword match" + (r.totalBuzzMatches === 1 ? "" : "es") +
+      " out of " + r.totalWords + " words &mdash; a density of " + r.buzzDensity.toFixed(1) + "%.</p>" +
+      "<p>Buzzwords are vague, overused corporate phrases (e.g. \"synergy\", \"best-in-class\", \"cutting-edge\") that sound impressive but say nothing specific. Swap them for concrete facts.</p>";
+
+    // Sentence length card
+    elScoreLen.textContent = Math.round(r.lengthScore) + "/100";
+    elBodyLen.innerHTML =
+      "<p>Average sentence length: " + r.avgLength.toFixed(1) + " words. " +
+      r.overLimit.length + " of " + r.sentenceData.length + " sentence" + (r.sentenceData.length === 1 ? "" : "s") +
+      " " + (r.overLimit.length === 1 ? "is" : "are") + " over the " + r.limit + "-word guideline.</p>" +
+      "<p>Long sentences are harder to skim. Readers of press releases scan &mdash; aim for sentences under " + r.limit + " words.</p>";
+
+    // Readability card
+    elScoreRead.textContent = Math.round(r.readScore) + "/100";
+    var gradeDisplay = isFinite(r.readability.grade) ? r.readability.grade.toFixed(1) : "n/a";
+    elBodyRead.innerHTML =
+      "<p>Flesch-Kincaid grade level: " + gradeDisplay + "</p>" +
+      "<p>" + interpretGrade(r.readability.grade) + "</p>";
+
+    // Worst offenders: rank sentences by (words over limit) + (buzzwords in sentence * 3)
+    var ranked = r.sentenceData
+      .map(function (d) {
+        var overBy = Math.max(0, d.wordCount - r.limit);
+        var badness = overBy + d.buzz.length * 3;
+        return { d: d, badness: badness, overBy: overBy };
+      })
+      .filter(function (x) { return x.badness > 0; })
+      .sort(function (a, b) { return b.badness - a.badness; })
+      .slice(0, 5);
+
+    elWorstList.innerHTML = "";
+    if (ranked.length === 0) {
+      var li = document.createElement("li");
+      li.textContent = "No standout offenders — nice and tight.";
+      elWorstList.appendChild(li);
+    } else {
+      ranked.forEach(function (item) {
+        var li = document.createElement("li");
+        var reasons = [];
+        if (item.overBy > 0) reasons.push(item.d.wordCount + " words (" + item.overBy + " over the " + r.limit + "-word limit)");
+        if (item.d.buzz.length > 0) reasons.push(item.d.buzz.length + " buzzword" + (item.d.buzz.length === 1 ? "" : "s"));
+        li.innerHTML = escapeHtml(item.d.sentence.text.trim()) +
+          "<span class=\"reason\">" + escapeHtml(reasons.join(" · ")) + "</span>";
+        elWorstList.appendChild(li);
+      });
+    }
+
+    // Annotated text
+    var html = r.sentenceData.map(function (d) {
+      var sentenceHtml = buildSentenceHtml(d);
+      if (d.wordCount > r.limit) {
+        return "<mark class=\"hl hl-long\" tabindex=\"0\">" + sentenceHtml +
+          "<span class=\"tip\">" + d.wordCount + " words &mdash; over the " + r.limit + "-word guideline. Consider splitting this sentence.</span></mark>";
+      }
+      return sentenceHtml;
+    }).join("");
+    elAnnotated.innerHTML = html || escapeHtml(r.text);
+
+    // Build plain-text report for copying
+    lastReportText = buildReportText(r);
+  }
+
+  function buildSentenceHtml(d) {
+    var text = d.sentence.text;
+    var pieces = [];
+    var cursor = 0;
+    d.buzz.forEach(function (mObj) {
+      if (mObj.start > cursor) pieces.push(escapeHtml(text.slice(cursor, mObj.start)));
+      pieces.push(
+        "<mark class=\"hl hl-buzz\" tabindex=\"0\">" + escapeHtml(text.slice(mObj.start, mObj.end)) +
+        "<span class=\"tip\">Buzzword: \"" + escapeHtml(mObj.phrase) + "\" &mdash; vague corporate language. Try a concrete alternative.</span></mark>"
+      );
+      cursor = mObj.end;
+    });
+    if (cursor < text.length) pieces.push(escapeHtml(text.slice(cursor)));
+    return pieces.join("");
+  }
+
+  function buildReportText(r) {
+    var lines = [];
+    lines.push("Comms Clarity Scorer report");
+    lines.push("Overall: " + letterGrade(r.overall) + " (" + r.overall + "/100) — " + verdictForScore(r.overall));
+    lines.push("");
+    lines.push("Buzzword density: " + Math.round(r.buzzScore) + "/100 — " + r.totalBuzzMatches + " matches, " + r.buzzDensity.toFixed(1) + "% density");
+    lines.push("Sentence length: " + Math.round(r.lengthScore) + "/100 — average " + r.avgLength.toFixed(1) + " words, " + r.overLimit.length + "/" + r.sentenceData.length + " sentences over " + r.limit + " words");
+    lines.push("Readability: " + Math.round(r.readScore) + "/100 — Flesch-Kincaid grade " + (isFinite(r.readability.grade) ? r.readability.grade.toFixed(1) : "n/a"));
+    lines.push("");
+    lines.push("Worst offenders:");
+    var ranked = r.sentenceData
+      .map(function (d) {
+        var overBy = Math.max(0, d.wordCount - r.limit);
+        return { d: d, badness: overBy + d.buzz.length * 3 };
+      })
+      .filter(function (x) { return x.badness > 0; })
+      .sort(function (a, b) { return b.badness - a.badness; })
+      .slice(0, 5);
+    if (ranked.length === 0) {
+      lines.push("- None — nice and tight.");
+    } else {
+      ranked.forEach(function (item, i) {
+        lines.push((i + 1) + ". " + item.d.sentence.text.trim());
+      });
+    }
+    return lines.join("\n");
+  }
+
+  elAnalyzeBtn.addEventListener("click", analyze);
+
+  document.addEventListener("click", function (e) {
+    var hl = e.target.closest(".hl");
+    document.querySelectorAll(".hl.open").forEach(function (el) {
+      if (el !== hl) el.classList.remove("open");
+    });
+    if (hl) {
+      hl.classList.toggle("open");
+      e.stopPropagation();
+    }
+  });
+
+  elCopyBtn.addEventListener("click", function () {
+    if (!lastReportText) return;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(lastReportText).then(function () {
+        elCopyBtn.textContent = "Copied!";
+        setTimeout(function () { elCopyBtn.textContent = "Copy report"; }, 1500);
+      }, function () {
+        fallbackCopy(lastReportText);
+      });
+    } else {
+      fallbackCopy(lastReportText);
+    }
+  });
+
+  function fallbackCopy(text) {
+    var ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed";
+    ta.style.left = "-9999px";
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    try { document.execCommand("copy"); } catch (e) {}
+    document.body.removeChild(ta);
+    elCopyBtn.textContent = "Copied!";
+    setTimeout(function () { elCopyBtn.textContent = "Copy report"; }, 1500);
+  }
+})();
+</script>
+</body>
+</html>
