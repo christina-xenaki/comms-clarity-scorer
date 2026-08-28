@@ -6,7 +6,7 @@ Paste a press release or pitch, get a clarity score and a list of exactly what's
 
 ## Status
 
-This follows **SPEC-v2-quality-scorer.md**, which supersedes the original spec. Sixteen checks are working, plus a three-tier rewrite system, a headline metric, structural-zone detection, and boilerplate handling:
+This follows **[SPEC.md](SPEC.md)**. Sixteen checks are working, plus a three-tier rewrite system, a headline metric, structural-zone detection, and boilerplate handling:
 
 - **Concreteness** (double-weighted) — does the text contain any numbers, dates or specifics at all
 - **Strengths** (double-weighted) — the flip side of every other check: credits baseline comparisons, active voice with a named actor, precise verbs, informative quotes, and plain word choices over jargon
@@ -52,8 +52,7 @@ This round was interface-only — no scoring logic, threshold, word list or calc
 - **`COPY.md`** — The canonical source for interface text: exact wording for the privacy note, disclaimer, and the "Why this check exists" rationale strings for nine of the checks, plus tone rules for any copy written to match it.
 - **`.nojekyll`** — An empty marker file for GitHub Pages. It tells GitHub "don't run this site through Jekyll (GitHub's default site-builder)" — without it, GitHub Pages can sometimes ignore files that start with an underscore or otherwise mangle a plain static site. It has no effect on how the tool works; it only affects how GitHub hosts it.
 - **`LICENSE`** — The MIT licence, a standard permissive open-source licence saying anyone can use, copy, or modify this code, with no warranty.
-- **`SPEC-tool-1-quality-scorer.md`** — The original design document. Superseded by SPEC-v2, kept for history.
-- **`SPEC-v2-quality-scorer.md`** — The current design document this tool is being built from.
+- **`SPEC.md`** — The design document this tool is being built from.
 - **`README.md`** — This file.
 
 ## How to use it

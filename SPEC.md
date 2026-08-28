@@ -1,7 +1,5 @@
 # Spec v2 — Comms Clarity Scorer
 
-Supersedes SPEC-tool-1-quality-scorer.md. Read this one.
-
 **Principle throughout:** every list, threshold, and message lives in `config/config.json`. The code contains no sector-specific content and no hardcoded word lists.
 
 ---

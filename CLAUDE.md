@@ -16,7 +16,7 @@ Comms Clarity Scorer is a browser-based tool that scores a pasted press release 
 
 ## Documentation must move with the code
 
-Update documentation **in the same commit** as any change that affects it. `README.md`, `SCORING.md` and `SPEC-v2-quality-scorer.md` must never describe behaviour the code no longer has. If you change a check's logic, a threshold, a config schema, or the interface, update the doc(s) that describe it before considering the change done — don't leave that for a follow-up.
+Update documentation **in the same commit** as any change that affects it. `README.md`, `SCORING.md` and `SPEC.md` must never describe behaviour the code no longer has. If you change a check's logic, a threshold, a config schema, or the interface, update the doc(s) that describe it before considering the change done — don't leave that for a follow-up.
 
 ## Scoring changes vs. interface changes
 
