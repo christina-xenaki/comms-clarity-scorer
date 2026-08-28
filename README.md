@@ -26,7 +26,9 @@ Every check's explanation is split into three visually distinct parts: a **Findi
 
 Exactly how each check is calculated — the formula, the threshold, and where the numbers came from (including which ones are genuinely sourced, like Flesch-Kincaid, versus which are the developer's own starting heuristics) — is documented in **[SCORING.md](SCORING.md)**. That file also spells out each check's known blind spots, honestly.
 
-Not yet built: an in-page settings panel for editing word lists without touching `config/config.json` directly. (The sector switcher itself is built now — see the Sector selector at the top of the page.)
+Not yet built:
+- An in-page settings panel for editing word lists without touching `config/config.json` directly. (The sector switcher itself is built now — see the Sector selector at the top of the page.)
+- Several strings specified in **[COPY.md](COPY.md)** aren't wired into the interface yet: the "Share score" button and its shared-text template (only "Copy report" exists today); the exact empty-state copy (the textarea's placeholder text is used instead); the full disclaimer behind a "What this tool can and can't tell you" link and its short teaser under the grade (the footer shows its own short, paraphrased disclaimer inline instead); and the exact "Export footer" wording in the copyable report (the report ends with its own similar-but-different line instead). COPY.md itself flags each of these as not yet implemented.
 
 ### Interface and accessibility
 
