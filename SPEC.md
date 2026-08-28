@@ -1,13 +1,13 @@
-# Spec v2 — Comms Clarity Scorer
+# Specification — Comms Clarity Scorer
 
 **Principle throughout:** every list, threshold, and message lives in `config/config.json`. The code contains no sector-specific content and no hardcoded word lists.
 
 ---
 
-## A. Scoring model — CHANGED
+## A. Scoring model
 
 ### The denominator problem
-Rates as a percentage of total words are misleading, because function words (the, of, and, to) are 40–50% of any text. Replace with:
+Rates as a percentage of total words are misleading, because function words (the, of, and, to) are 40–50% of any text. Use instead:
 
 - **Content words** as the denominator for buzzwords, hedges, nominalisations, superlatives. Exclude a stopword list.
 - **Per sentence** counts where more intuitive: "7 of your 14 sentences contain a buzzword."
@@ -23,9 +23,9 @@ This is the thesis of the tool in one line. No percentage needed.
 
 ---
 
-## B. Reward good writing — NEW
+## B. Reward good writing
 
-Green highlights, not just red. Detect and credit:
+Green highlights alongside red ones. Detect and credit:
 
 1. **Numbers with a baseline** — "up from 12% last year" scores higher than a bare "34%"
 2. **Named actor + active verb + object** — the structural opposite of passive
@@ -38,7 +38,7 @@ Sub-score: "Strengths". Contributes positively to the overall grade.
 
 ---
 
-## C. Concrete rewrites — NEW, HIGH PRIORITY
+## C. Concrete rewrites
 
 Three tiers. The tier must be visible to the user so the tool never pretends to more certainty than it has.
 
@@ -56,7 +56,7 @@ Three tiers. The tier must be visible to the user so the tool never pretends to 
 
 ---
 
-## D. Inverted pyramid checks — NEW
+## D. Inverted pyramid checks
 
 1. **Fact depth** — word position of the first concrete fact. Report it: "Your first specific detail appears at word 187."
 2. **Lede completeness** — does sentence one carry who, what, and when?
@@ -65,7 +65,7 @@ Three tiers. The tier must be visible to the user so the tool never pretends to 
 
 ---
 
-## E. Regulated claims — EXPANDED, config-driven
+## E. Regulated claims — config-driven
 
 Ship four configs. Off by default, enabled per config.
 
@@ -80,7 +80,7 @@ Each config carries a `sectorName`, a `disclaimer` string, and optionally a `sou
 
 ---
 
-## F. Consistency and error checks — NEW
+## F. Consistency and error checks
 Not full spellcheck. Bundling a dictionary produces noise on brand names, drug names, and surnames, and the browser already spellchecks the input box.
 
 - Confusions: its/it's, their/there/they're, affect/effect, principle/principal, complement/compliment, discreet/discrete, practice/practise
@@ -92,9 +92,9 @@ Not full spellcheck. Bundling a dictionary produces noise on brand names, drug n
 
 ---
 
-## G. English variant toggle — NEW
+## G. English variant toggle
 
-Three settings, not two:
+Three settings:
 - **British (-ise)**
 - **British Oxford (-ize)** — correct British English, used by OUP and the OED. A two-way toggle would wrongly flag "organize".
 - **American**
@@ -117,7 +117,7 @@ Affects: spelling (-ise/-ize, -our/-or, -re/-er, -ll-/-l-), date format, punctua
 
 ---
 
-## I. Layout — CHANGED
+## I. Layout
 
 Desktop-optimised, mobile-intact. Two columns on wide screens: text on the left, scores on the right. On a phone it must not break — single column, nothing overlapping or overflowing — but the phone is not the primary target.
 
@@ -137,7 +137,7 @@ Deliberately not faces. People run this over a colleague's or CEO's copy; being 
 
 ---
 
-## K. Sourcing — NEW, shown in the UI
+## K. Sourcing — shown in the UI
 
 Every threshold shows where it came from, via the hover/tap explainer.
 
@@ -176,7 +176,7 @@ Use this on the page and in the README, verbatim:
 - Structure: grade and weather icon → the "11 buzzwords, 2 facts" headline → top five fixes with their concrete rewrites
 - Tool name and URL in the footer. The recipient is a target user.
 - Print stylesheet — gives PDF export free, since browsers print to PDF
-- *v2 idea: shareable PNG scorecard for LinkedIn*
+- *Future idea: shareable PNG scorecard for LinkedIn*
 
 ---
 
