@@ -188,11 +188,12 @@ Header, above the document list:
 
 "Comms Clarity Scorer" links back to `index.html`.
 
-Document list labels:
+Document list labels (the sidebar):
 - **README.md** — Overview
 - **SPEC.md** — Specification
 - **SCORING.md** — Scoring methodology
-- **COPY.md** — Interface copy
+
+COPY.md is not listed in the sidebar — it's interface copy, not documentation for a reader browsing the docs. It's still reachable (and rendered exactly like the other three) when another doc links to it, e.g. README's "quoted verbatim from COPY.md."
 
 Loading state, while a document fetches:
 
