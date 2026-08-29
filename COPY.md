@@ -174,3 +174,30 @@ Link the named sources in the rationale text. **Find and verify each current URL
 - Regulated claims — link each config to its actual regulator: the CMA Green Claims Code for environmental claims, the ABPI Code for healthcare
 
 All external links open in a new tab, with an accessible label stating where they go.
+
+---
+
+## Docs viewer
+
+`docs.html` renders README.md, SPEC.md, SCORING.md and COPY.md as readable pages, instead of linking to raw markdown.
+
+Header, above the document list:
+
+> Comms Clarity Scorer
+> Documentation
+
+"Comms Clarity Scorer" links back to `index.html`.
+
+Document list labels:
+- **README.md** — Overview
+- **SPEC.md** — Specification
+- **SCORING.md** — Scoring methodology
+- **COPY.md** — Interface copy
+
+Loading state, while a document fetches:
+
+> Loading [file]…
+
+Error state, if a document fails to load:
+
+> Could not load [file]. Try refreshing the page.
