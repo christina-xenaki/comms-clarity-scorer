@@ -22,7 +22,3 @@ Update documentation **in the same commit** as any change that affects it. `READ
 
 - Treat **scoring logic changes** (anything that can change a check's output — thresholds, word lists, formulas, detection logic) and **interface changes** (layout, copy, accessibility, presentation) as separate sessions of work. Don't mix the two in one change.
 - After **any** change, verify that the scores produced for the same input are unchanged, unless the change was deliberately a scoring change. Run the tool against a known piece of text before and after the change and compare the grade, headline count, and per-check results — an interface-only change (or any other non-scoring change) must not move a single score.
-
-## Workflow
-
-Commit directly to `main`.
