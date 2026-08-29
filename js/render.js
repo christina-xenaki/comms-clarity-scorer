@@ -454,8 +454,19 @@ function buildReportText(r) {
   lines.push("");
   lines.push("Top fixes:");
   var ranked = rankWorstOffenders(r);
-  if (ranked.length === 0) lines.push("- None — nice and tight.");
-  else ranked.forEach(function (item, i) { lines.push((i + 1) + ". " + item.d.clippedText.trim()); });
+  if (ranked.length === 0) {
+    lines.push("- None — nice and tight.");
+  } else {
+    ranked.forEach(function (item, i) {
+      lines.push((i + 1) + ". " + item.d.clippedText.trim());
+      var rewrite = findRewriteForSentence(r, item.d.sentence);
+      if (rewrite && rewrite.kind === "rewrite") {
+        lines.push("   Suggested rewrite: " + rewrite.original + " -> " + rewrite.rewrite);
+      } else if (rewrite && rewrite.kind === "question") {
+        lines.push("   Worth asking yourself: " + rewrite.question);
+      }
+    });
+  }
   lines.push("");
   lines.push("comms-clarity-scorer — analysis runs entirely in the browser, nothing uploaded.");
   return lines.join("\n");
