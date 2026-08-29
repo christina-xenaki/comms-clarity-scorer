@@ -31,8 +31,9 @@ elCopyBtn.addEventListener("click", function () {
 });
 
 function flashButtonLabel(btn, idleLabel, tempLabel) {
-  btn.textContent = tempLabel;
-  setTimeout(function () { btn.textContent = idleLabel; }, 1500);
+  var label = btn.querySelector(".btn-label") || btn;
+  label.textContent = tempLabel;
+  setTimeout(function () { label.textContent = idleLabel; }, 1500);
 }
 
 function copyPlainText(text, btn, idleLabel, tempLabel) {
