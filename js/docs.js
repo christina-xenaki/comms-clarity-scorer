@@ -2,7 +2,9 @@ var DOCS = [
   { slug: 'readme', file: 'README.md', label: 'Overview' },
   { slug: 'spec', file: 'SPEC.md', label: 'Specification' },
   { slug: 'scoring', file: 'SCORING.md', label: 'Scoring methodology' },
-  { slug: 'copy', file: 'COPY.md', label: 'Interface copy' }
+  // Not listed in the sidebar (see COPY.md's "Docs viewer" section) — still
+  // reachable and rendered the same way when linked to from another doc.
+  { slug: 'copy', file: 'COPY.md', label: 'Interface copy', hidden: true }
 ];
 
 function docsCurrentSlug() {
@@ -15,7 +17,7 @@ function docsCurrentSlug() {
 function docsRenderNav(activeSlug) {
   var nav = document.getElementById('docs-nav-list');
   nav.innerHTML = '';
-  DOCS.forEach(function (doc) {
+  DOCS.filter(function (doc) { return !doc.hidden; }).forEach(function (doc) {
     var li = document.createElement('li');
     var a = document.createElement('a');
     a.href = 'docs.html?doc=' + doc.slug;
