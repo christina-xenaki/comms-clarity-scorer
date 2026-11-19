@@ -1,15 +1,15 @@
-#annotated-output { white-space: pre-wrap; font-size: 1rem; line-height: 1.7; }
+#annotated-output { font-family: var(--font-serif); white-space: pre-wrap; font-size: var(--fs-base); line-height: var(--lh-input); }
 .boilerplate-text { opacity: 0.55; }
 
-.legend { display: flex; flex-wrap: wrap; gap: 0.75rem; font-size: 0.8rem; color: var(--color-muted); margin-bottom: 0.75rem; }
-.legend span { display: inline-flex; align-items: center; gap: 0.35rem; }
+.legend { display: flex; flex-wrap: wrap; gap: var(--space-3); font-size: var(--fs-meta); color: var(--muted); margin-bottom: var(--space-3); }
+.legend span { display: inline-flex; align-items: center; gap: var(--space-1); }
 .swatch {
   display: inline-block;
-  padding: 0 0.3rem;
+  padding: 0 var(--space-1);
   border-radius: 3px;
-  font-size: 0.75rem;
+  font-size: var(--fs-eyebrow);
   font-weight: 700;
-  color: var(--color-text);
+  color: var(--ink);
   line-height: 1.4;
 }
 
@@ -26,16 +26,16 @@
 mark.hl { cursor: pointer; }
 
 mark.hl:focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 2px;
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-offset);
 }
 
 /* Container-level marks (whole sentence / whole quote): background tint only —
    already distinguished from word-level marks by their much larger extent, so no
    underline pattern is layered on top of running, wrapped text. */
-.hl-long { background: var(--c-long-bg); text-decoration-line: none; }
+.hl-long { background: var(--interim-long-bg); text-decoration-line: none; }
 mark.hl-long { box-decoration-break: clone; -webkit-box-decoration-break: clone; }
-.hl-quote { background: var(--c-quote-bg); text-decoration-line: none; }
+.hl-quote { background: var(--interim-quote-bg); text-decoration-line: none; }
 mark.hl-quote { box-decoration-break: clone; -webkit-box-decoration-break: clone; }
 
 /* Word/phrase-level marks: background tint + a non-solid underline style, grouped by
@@ -47,15 +47,15 @@ mark.hl-quote { box-decoration-break: clone; -webkit-box-decoration-break: clone
 .hl-passive, .hl-acronym { text-decoration-style: dashed; }
 .hl-concrete, .hl-strength { text-decoration-style: double; text-decoration-thickness: 3px; }
 
-.hl-buzz { background: var(--c-buzz-bg); text-decoration-color: var(--c-buzz-border); }
-.hl-hedge { background: var(--c-hedge-bg); text-decoration-color: var(--c-hedge-border); }
-.hl-superlative { background: var(--c-superlative-bg); text-decoration-color: var(--c-superlative-border); }
-.hl-passive { background: var(--c-passive-bg); text-decoration-color: var(--c-passive-border); }
-.hl-nominal { background: var(--c-nominal-bg); text-decoration-color: var(--c-nominal-border); }
-.hl-acronym { background: var(--c-acronym-bg); text-decoration-color: var(--c-acronym-border); }
-.hl-concrete { background: var(--c-concrete-bg); text-decoration-color: var(--c-concrete-border); }
-.hl-strength { background: var(--c-strength-bg); text-decoration-color: var(--c-strength-border); }
-.hl-regulated { background: var(--c-regulated-bg); text-decoration-color: var(--c-regulated-border); }
+.hl-buzz { background: var(--interim-buzz-bg); text-decoration-color: var(--interim-buzz-border); }
+.hl-hedge { background: var(--interim-hedge-bg); text-decoration-color: var(--interim-hedge-border); }
+.hl-superlative { background: var(--interim-superlative-bg); text-decoration-color: var(--interim-superlative-border); }
+.hl-passive { background: var(--interim-passive-bg); text-decoration-color: var(--interim-passive-border); }
+.hl-nominal { background: var(--interim-nominal-bg); text-decoration-color: var(--interim-nominal-border); }
+.hl-acronym { background: var(--interim-acronym-bg); text-decoration-color: var(--interim-acronym-border); }
+.hl-concrete { background: var(--interim-concrete-bg); text-decoration-color: var(--interim-concrete-border); }
+.hl-strength { background: var(--interim-strength-bg); text-decoration-color: var(--interim-strength-border); }
+.hl-regulated { background: var(--interim-regulated-bg); text-decoration-color: var(--interim-regulated-border); }
 mark.hl-buzz, mark.hl-hedge, mark.hl-superlative, mark.hl-passive, mark.hl-nominal,
 mark.hl-acronym, mark.hl-concrete, mark.hl-strength, mark.hl-regulated { padding: 0 1px; }
 
@@ -79,19 +79,19 @@ mark.hl.open .tip {
   width: max-content;
   height: auto;
   margin: 0;
-  padding: 0.5rem 0.65rem;
+  padding: var(--space-2) var(--space-3);
   clip: auto;
   overflow: visible;
   white-space: normal;
   left: 0;
   top: 100%;
-  margin-top: 4px;
+  margin-top: var(--space-1);
   z-index: 10;
-  background: var(--color-text);
-  color: #fff;
-  font-size: 0.8rem;
-  line-height: 1.4;
-  border-radius: 6px;
+  background: var(--ink);
+  color: var(--surface);
+  font-size: var(--fs-meta);
+  line-height: var(--lh-ui);
+  border-radius: var(--radius-control);
   max-width: 80vw;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  box-shadow: var(--shadow-menu);
 }
