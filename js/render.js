@@ -270,6 +270,43 @@ function findRewriteForSentence(r, sentence) {
   return found;
 }
 
+// Passive-voice question (COPY.md "Fix questions"). findRewriteForSentence stays
+// as it is, so this works out the same match separately: it returns a question
+// for a passive with no agent before it looks at empty quotes, so a "question"
+// result with such a passive inside the sentence is always the passive one.
+function passivePhraseForFix(r, sentence, found) {
+  if (!found || found.kind !== "question") return null;
+  var match = null;
+  r.passiveSplit.noAgent.some(function (x) {
+    if (x.start >= sentence.start && x.end <= sentence.end) { match = x; }
+    return match;
+  });
+  return match;
+}
+
+// Split into the "Passive voice" lead-in and the rest, so the screen can set the
+// lead-in in weight 600 while the exports join them as plain text.
+function passiveQuestionParts(phrase) {
+  var tail = " If you'd rather not say, make that a deliberate choice rather than an accident of grammar.";
+  return phrase ?
+    { lead: "Passive voice", rest: ": “" + phrase + "” doesn't say who did it." + tail } :
+    { lead: "Passive voice", rest: " doesn't say who did it." + tail };
+}
+function passiveQuestionText(phrase) {
+  var p = passiveQuestionParts(phrase);
+  return p.lead + p.rest;
+}
+function passiveQuestionHtml(phrase) {
+  var p = passiveQuestionParts(phrase);
+  return "<span class=\"fix-lead\">" + escapeHtml(p.lead) + "</span>" + escapeHtml(p.rest);
+}
+
+// The "Worth asking yourself" text for a top fix, as plain text.
+function fixQuestionText(r, sentence, found) {
+  var passive = passivePhraseForFix(r, sentence, found);
+  return passive ? passiveQuestionText(passive.label) : found.question;
+}
+
 // ---------- Results components (UI-SPEC §2, §4, §6) ----------
 
 // Weather icons, one per grade (§6). Sun strokes use --sun and cloud and rain
@@ -423,6 +460,7 @@ function renderFixCards(r, ranked) {
     if (item.d.nominal > 0) reasons.push(item.d.nominal + " nominalisation" + (item.d.nominal === 1 ? "" : "s"));
     if (item.d.acronym > 0) reasons.push(item.d.acronym + " un-expanded acronym" + (item.d.acronym === 1 ? "" : "s"));
     var found = findRewriteForSentence(r, item.d.sentence);
+    var passive = passivePhraseForFix(r, item.d.sentence, found);
     var li2 = document.createElement("li");
     li2.className = "fix-card";
     li2.id = "fix-" + n;
@@ -432,7 +470,8 @@ function renderFixCards(r, ranked) {
       "<span class=\"fix-detail\">" + escapeHtml(reasons.join(" · ")) + "</span></div>" +
       "<p class=\"fix-sentence\">" + escapeHtml(shortenMiddle(item.d.clippedText)) + "</p>" +
       (found && found.kind === "rewrite" ? tryLine(found.original, found.rewrite) : "") +
-      (found && found.kind === "question" ? "<p class=\"fix-question\">" + escapeHtml(found.question) + "</p>" : "");
+      (found && found.kind === "question" ?
+        "<p class=\"fix-question\">" + (passive ? passiveQuestionHtml(passive.label) : escapeHtml(found.question)) + "</p>" : "");
     elWorstList.appendChild(li2);
   });
 }
@@ -449,7 +488,7 @@ function renderRewriteSuggestions(r) {
   r.wordSwapRewrites.slice(0, 4).forEach(function (x) { items.push(rewriteItem(x)); });
   r.passiveSplit.noAgent.slice(0, 3).forEach(function (x) {
     items.push({ html: tierPill("question") +
-      "<p class=\"fix-sentence\">" + escapeHtml(x.label) + "</p><p class=\"fix-question\">Who did it? If you'd rather not say, make that a deliberate choice rather than an accident of grammar.</p>" });
+      "<p class=\"fix-sentence\">" + escapeHtml(x.label) + "</p><p class=\"fix-question\">" + passiveQuestionHtml(x.label) + "</p>" });
   });
   r.emptyQuotes.slice(0, 3).forEach(function (q) {
     items.push({ html: tierPill("question") +
@@ -612,7 +651,7 @@ function buildReportText(r) {
       if (rewrite && rewrite.kind === "rewrite") {
         lines.push("   Suggested rewrite: " + rewrite.original + " -> " + rewrite.rewrite);
       } else if (rewrite && rewrite.kind === "question") {
-        lines.push("   Worth asking yourself: " + rewrite.question);
+        lines.push("   Worth asking yourself: " + fixQuestionText(r, item.d.sentence, rewrite));
       }
     });
   }

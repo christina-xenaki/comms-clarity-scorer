@@ -6,7 +6,12 @@ function toolUrl() {
 
 function topFixesForExport(r) {
   return rankWorstOffenders(r).map(function (item) {
-    return { text: item.d.clippedText.trim(), rewrite: findRewriteForSentence(r, item.d.sentence) };
+    var rewrite = findRewriteForSentence(r, item.d.sentence);
+    return {
+      text: item.d.clippedText.trim(),
+      rewrite: rewrite,
+      question: rewrite && rewrite.kind === "question" ? fixQuestionText(r, item.d.sentence, rewrite) : null
+    };
   });
 }
 
@@ -38,7 +43,7 @@ function buildExportPlainText(r) {
       if (fix.rewrite && fix.rewrite.kind === "rewrite") {
         lines.push("   Suggested rewrite: " + fix.rewrite.original + " -> " + fix.rewrite.rewrite);
       } else if (fix.rewrite && fix.rewrite.kind === "question") {
-        lines.push("   Worth asking yourself: " + fix.rewrite.question);
+        lines.push("   Worth asking yourself: " + fix.question);
       }
     });
   }
@@ -63,7 +68,7 @@ function buildExportRichHtml(r) {
       if (fix.rewrite && fix.rewrite.kind === "rewrite") {
         html += "<br><em>Suggested rewrite:</em> " + escapeHtml(fix.rewrite.original) + " → " + escapeHtml(fix.rewrite.rewrite);
       } else if (fix.rewrite && fix.rewrite.kind === "question") {
-        html += "<br><em>Worth asking yourself:</em> " + escapeHtml(fix.rewrite.question);
+        html += "<br><em>Worth asking yourself:</em> " + escapeHtml(fix.question);
       }
       html += "</li>";
     });

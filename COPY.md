@@ -279,6 +279,22 @@ Each check card's summary row, and the printed checks list, shows the check's nu
 
 ---
 
+## Fix questions
+
+"Worth asking yourself" text for a passive with no agent, on fix cards, in Rewrite suggestions and in all three copy exports. {phrase} is the passive phrase the check matched. On screen, "Passive voice" is set in weight 600 as a lead-in. The exports keep it as plain text.
+
+When the matched phrase is available:
+
+> Passive voice: “{phrase}” doesn't say who did it. If you'd rather not say, make that a deliberate choice rather than an accident of grammar.
+
+Otherwise:
+
+> Passive voice doesn't say who did it. If you'd rather not say, make that a deliberate choice rather than an accident of grammar.
+
+These replace "Who did it? If you'd rather not say, make that a deliberate choice rather than an accident of grammar." That old text is still returned internally by `findRewriteForSentence` in `js/render.js`, which this change leaves alone (UI-SPEC §0), but it is no longer shown or exported.
+
+---
+
 ## Copy backlog
 
 Existing strings written inline in the JS, touched during the redesign. They stay inline for now and move here in a later copy session (UI-SPEC §0).
