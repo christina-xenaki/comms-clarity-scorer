@@ -36,12 +36,17 @@ function excludeAfter(matches, cutoff) {
   return matches.filter(function (m) { return m.start < cutoff; });
 }
 
-function findPassiveMatches(text, irregularMap) {
+// exclusions: participles that work as adjectives after "be" ("are thrilled",
+// "is headquartered"). From the config's passiveAdjectiveExclusions list.
+function findPassiveMatches(text, irregularMap, exclusions) {
   var re = /\b(is|are|was|were|be|been|being|am)\b(\s+\w+ly)?\s+(\w+)/gi;
+  var excluded = {};
+  (exclusions || []).forEach(function (w) { excluded[w.toLowerCase()] = true; });
   var matches = [];
   var m;
   while ((m = re.exec(text)) !== null) {
     var candidate = m[3].toLowerCase();
+    if (excluded[candidate]) continue;
     if (/ed$/.test(candidate) || irregularMap[candidate]) {
       matches.push({ start: m.index, end: m.index + m[0].length, label: m[0].trim() });
     }

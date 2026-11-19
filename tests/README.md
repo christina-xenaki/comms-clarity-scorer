@@ -2,7 +2,8 @@
 
 Developer tools only. The page never loads anything in this folder.
 
-- `fixtures/` holds three fictional press releases. The companies, people and figures are made up. Never add a real press release here.
+- `fixtures/` holds four fictional press releases. The companies, people and figures are made up. Never add a real press release here.
+- `fixtures/office-move.txt` locks in the passive voice exclusion list. "We are delighted to announce…" and "The company is headquartered in Leeds." must not be flagged; "The plan was approved last week." and "The device is designed to cut energy use." must be.
 - `baseline.js` scores each fixture with the page's own scoring code, run in Node. It records the grade, score, headline metric, every per-check score, every finding, the top five fixes with their rewrites, and the exact copy, export and share text.
 - `baseline.json` is the stored result.
 
