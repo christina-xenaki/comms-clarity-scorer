@@ -29,12 +29,12 @@
     display: block !important;
   }
   .why-panel[hidden] { display: block !important; }
-  .why-panel { border-left-color: #000; opacity: 1; }
+  .why-panel { border-left-color: var(--ink); }
 
-  body { padding: 0 !important; background: #fff !important; color: #000 !important; }
+  body { padding: 0 !important; background: var(--surface) !important; color: var(--ink) !important; }
   .layout { display: block !important; max-width: 100% !important; padding: 0 !important; }
   .col-scores { position: static !important; }
-  section { margin-bottom: 1rem; }
+  section { margin-bottom: var(--space-4); }
 
   a[href]::after { content: " (" attr(href) ")"; font-size: 0.75em; font-weight: normal; }
 

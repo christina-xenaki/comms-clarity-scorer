@@ -1,16 +1,16 @@
 @media (min-width: 900px) {
-  header h1 { font-size: 1.6rem; }
+  header h1 { font-size: var(--fs-headline); }
 
   .layout {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 400px;
-    gap: 1.5rem;
+    gap: var(--space-6);
     align-items: start;
   }
 
   .col-scores {
     position: sticky;
-    top: 1rem;
+    top: var(--space-4);
   }
 
   textarea { min-height: 340px; }

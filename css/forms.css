@@ -1,27 +1,27 @@
-label { display: block; font-weight: 600; margin-bottom: 0.5rem; }
+label { display: block; font-weight: 600; margin-bottom: var(--space-2); }
 
 textarea {
   width: 100%;
   min-height: 220px;
-  padding: 0.75rem;
-  font-size: 1rem;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-  background: var(--color-surface);
-  color: var(--color-text);
+  padding: var(--space-3);
+  font-size: var(--fs-base);
+  border: var(--border-thin) solid var(--control-border);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  color: var(--ink);
   resize: vertical;
-  font-family: inherit;
+  font-family: var(--font-serif);
 }
 
-.variant-row { margin-top: 0.75rem; }
-.variant-row label { display: inline; font-weight: 600; margin-right: 0.5rem; }
+.variant-row { margin-top: var(--space-3); }
+.variant-row label { display: inline; font-weight: 600; margin-right: var(--space-2); }
 select {
-  font-size: 0.95rem;
-  padding: 0.5rem 0.6rem;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-  background: var(--color-surface);
-  color: var(--color-text);
+  font-size: var(--fs-body);
+  padding: var(--space-2) var(--space-2);
+  border: var(--border-thin) solid var(--control-border);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  color: var(--ink);
   font-family: inherit;
 }
 
@@ -29,17 +29,17 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.55rem;
+  gap: var(--space-2);
   width: 100%;
-  min-height: 48px;
-  font-size: 1.05rem;
+  min-height: var(--target-primary);
+  font-size: var(--fs-input);
   font-weight: 600;
   border: none;
-  border-radius: var(--radius);
-  background: var(--color-accent);
-  color: var(--color-accent-contrast);
+  border-radius: var(--radius-control);
+  background: var(--accent);
+  color: var(--on-accent);
   cursor: pointer;
-  margin-top: 0.75rem;
+  margin-top: var(--space-3);
 }
 
 .btn-icon { width: 1.15em; height: 1.15em; flex: none; }
@@ -47,14 +47,14 @@ button {
 button:active { opacity: 0.85; }
 
 button.secondary {
-  background: var(--color-surface);
-  color: var(--color-accent);
-  border: 1px solid var(--color-accent);
+  background: var(--surface);
+  color: var(--accent);
+  border: var(--border-thin) solid var(--accent);
 }
 
-.export-actions, .share-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.75rem; }
+.export-actions, .share-actions { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-3); }
 .export-actions button, .share-actions button { flex: 1 1 auto; width: auto; margin-top: 0; }
-.share-score-options { display: flex; flex-wrap: wrap; gap: 0.5rem; width: 100%; margin-top: 0.5rem; }
+.share-score-options { display: flex; flex-wrap: wrap; gap: var(--space-2); width: 100%; margin-top: var(--space-2); }
 .share-score-options button { flex: 1 1 auto; width: auto; margin-top: 0; }
 
 a.secondary-link {
@@ -62,21 +62,23 @@ a.secondary-link {
   flex: 1 1 auto;
   align-items: center;
   justify-content: center;
-  gap: 0.55rem;
-  min-height: 48px;
-  padding: 0 1rem;
-  font-size: 1.05rem;
+  gap: var(--space-2);
+  min-height: var(--target-primary);
+  padding: 0 var(--space-4);
+  font-size: var(--fs-input);
   font-weight: 600;
-  border: 1px solid var(--color-accent);
-  border-radius: var(--radius);
-  background: var(--color-surface);
-  color: var(--color-accent);
+  border: var(--border-thin) solid var(--accent);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  color: var(--accent);
   text-decoration: none;
   cursor: pointer;
 }
 a.secondary-link:active { opacity: 0.85; }
 
-.privacy-note { font-size: 0.85rem; color: var(--color-muted); margin-top: 0.75rem; }
+.privacy-note { font-size: var(--fs-ui); color: var(--muted); margin-top: var(--space-3); }
 
-.config-status { font-size: 0.8rem; color: var(--color-muted); margin-top: 0.5rem; }
-.config-status.warn { color: var(--color-warn); }
+.config-status { font-size: var(--fs-meta); color: var(--muted); margin-top: var(--space-2); }
+/* The message text says what went wrong; weight and ink make it stand out
+   without a colour of its own (the old amber was below 4.5:1 on paper). */
+.config-status.warn { color: var(--ink); font-weight: 600; }
