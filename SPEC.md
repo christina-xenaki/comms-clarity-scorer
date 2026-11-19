@@ -30,7 +30,7 @@ Green highlights alongside red ones. Detect and credit:
 1. **Numbers with a baseline** — "up from 12% last year" scores higher than a bare "34%"
 2. **Named actor + active verb + object** — the structural opposite of passive
 3. **Precise verbs** — cut, doubled, delayed, acquired, halved, closed (configurable list)
-4. **Informative quotes** — contain a reason, a number, or a decision
+4. **Informative quotes** — contain a reason, a number, or a next step (a decision counts as a next step). The empty-quote check uses the same test
 5. **Plain word choices** where a jargon alternative existed
 
 Sub-score: "Strengths". Contributes positively to the overall grade.

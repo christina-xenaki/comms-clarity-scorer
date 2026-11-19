@@ -44,7 +44,7 @@ function renderResults(r) {
       rationale: "This check only applies once the text includes an attributed quote."
     });
   } else {
-    var eqFinding = r.emptyQuotes.length + " of " + r.quoteData.length + " quote" + (r.quoteData.length === 1 ? "" : "s") + " " + (r.emptyQuotes.length === 1 ? "is" : "are") + " empty &mdash; no numbers or concrete nouns, and high on buzzwords.";
+    var eqFinding = r.emptyQuotes.length + " of " + r.quoteData.length + " quote" + (r.quoteData.length === 1 ? "" : "s") + " " + (r.emptyQuotes.length === 1 ? "is" : "are") + " empty." + (r.emptyQuotes.length > 0 ? " No reason, number or next step in this quote." : "");
     var eqAction = "";
     if (r.emptyQuotes.length > 0) {
       eqAction = "<p class=\"shareable\">\"This quote would work equally well in a press release about a completely different product.\"</p>" +
@@ -58,7 +58,7 @@ function renderResults(r) {
       key: "empty-quote",
       finding: eqFinding,
       action: eqAction,
-      rationale: "A quote is flagged empty when it contains zero concrete signals (numbers/dates) and is at least 6 words long."
+      rationale: "A quote is flagged empty when it is at least 6 words long and gives no reason (such as \"because\" or \"which means\"), no number or date, and no next step (such as \"plans to\" or \"will launch\")."
     });
   }
 

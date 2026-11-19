@@ -112,10 +112,13 @@ function analyze() {
     var words = tokenizeWords(q.text).length;
     var qBuzz = genericPhraseMatches(q.text, CONFIG.buzzwords).length;
     var qConcrete = findConcreteSignals(q.text, CONFIG.monthNames).length;
+    // One shared test for the empty-quote check and the Strengths check: does the
+    // quote give a reason, a number or a next step? Decision words count as a next step.
     var qReason = genericPhraseMatches(q.text, CONFIG.reasonIndicators).length > 0;
-    var qDecision = genericPhraseMatches(q.text, CONFIG.decisionIndicators).length > 0;
-    var isEmpty = qConcrete === 0 && words >= T.emptyQuoteMinWords;
-    var informative = qConcrete > 0 || qReason || qDecision;
+    var qNumber = qConcrete > 0 || genericPhraseMatches(q.text, CONFIG.spelledNumbers).length > 0;
+    var qNextStep = genericPhraseMatches(q.text, CONFIG.decisionIndicators.concat(CONFIG.nextStepIndicators)).length > 0;
+    var informative = qReason || qNumber || qNextStep;
+    var isEmpty = !informative && words >= T.emptyQuoteMinWords;
     return { start: q.start, end: q.end, text: q.text, words: words, buzz: qBuzz, concrete: qConcrete, isEmpty: isEmpty, informative: informative };
   });
   var emptyQuotes = quoteData.filter(function (q) { return q.isEmpty; });

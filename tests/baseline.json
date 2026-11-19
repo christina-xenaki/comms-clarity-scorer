@@ -2948,12 +2948,12 @@
       "variant": "british",
       "grade": "B",
       "gradeLabel": "Mostly clear",
-      "score": 81,
+      "score": 87,
       "headline": "1 buzzword. 5 concrete facts.",
       "checks": {
         "concreteness": 100,
         "strengths": 100,
-        "emptyQuote": 0,
+        "emptyQuote": 100,
         "buzzwordDensity": 81.25,
         "sentenceLength": 97.08333333333333,
         "readability": 100,
@@ -2979,10 +2979,7 @@
           "sentence": "\"We are delighted to announce the move, because it puts our designers and engineers in the same building,\" said Priya Lennox, Managing Director of Harrowgate Lighting.\n\n",
           "badness": 3,
           "overBy": 0,
-          "rewrite": {
-            "kind": "question",
-            "question": "A useful quote gives a reason, a number, or a next step. This gives none. Ask your spokesperson why you actually did this."
-          }
+          "rewrite": null
         },
         {
           "sentence": "The device is designed to cut energy use.\n",
@@ -2996,9 +2993,9 @@
         }
       ],
       "outputs": {
-        "copyReport": "Comms Clarity Scorer report\n1 buzzwords. 5 concrete facts.\nOverall: B (81/100) — Solid, with a few things worth tightening.\n\nConcreteness: 100/100\nStrengths: 100/100\nEmpty quote detector: 0/100 — 1/1 quotes empty\nBuzzword density: 81/100 — 1 matches\nSentence length: 97/100 — average 16.2 words\nReadability: 100/100 — grade 6.8\nPassive voice: 73/100 — 33.3%\nHedging: 61/100\nSuperlatives/absolutes: 100/100\nNominalisation: 100/100\nSelf-reference: 55/100 — 2 company-facing, 0 audience-facing, 0 third-party sentences\nAcronym load: 88/100 — 1 never expanded\nInverted pyramid: 50/100\nConsistency: 80/100 — 2 issue type(s)\nEnglish variant (british): 95/100 — 1 mismatch(es)\n\nTop fixes:\n1. Harrowgate Lighting moves its head office to Leeds\n\nLEEDS, 12 May 2026 – Harrowgate Lighting today moved its head office from Sheffield to Leeds, bringing 40 staff under one roof.\n2. \"We are delighted to announce the move, because it puts our designers and engineers in the same building,\" said Priya Lennox, Managing Director of Harrowgate Lighting.\n   Worth asking yourself: Empty quote: A useful quote gives a reason, a number, or a next step. This gives none. Ask your spokesperson why you actually did this.\n3. The device is designed to cut energy use.\n   Suggested rewrite: is designed to -> does\n\ncomms-clarity-scorer — analysis runs entirely in the browser, nothing uploaded.",
-        "exportPlain": "🌤 Grade B — Mostly clear (81/100)\n1 buzzword. 5 concrete facts.\n\nTop five fixes:\n1. Harrowgate Lighting moves its head office to Leeds\n\nLEEDS, 12 May 2026 – Harrowgate Lighting today moved its head office from Sheffield to Leeds, bringing 40 staff under one roof.\n2. \"We are delighted to announce the move, because it puts our designers and engineers in the same building,\" said Priya Lennox, Managing Director of Harrowgate Lighting.\n   Worth asking yourself: Empty quote: A useful quote gives a reason, a number, or a next step. This gives none. Ask your spokesperson why you actually did this.\n3. The device is designed to cut energy use.\n   Suggested rewrite: is designed to -> does\n\nScored with Comms Clarity Scorer — https://example.invalid/\nRuns in your browser. Nothing is uploaded.",
-        "exportRichHtml": "<p><strong>🌤 Grade B — Mostly clear (81/100)</strong></p><p>1 buzzword. 5 concrete facts.</p><p><strong>Top five fixes</strong></p><ol><li>Harrowgate Lighting moves its head office to Leeds\n\nLEEDS, 12 May 2026 – Harrowgate Lighting today moved its head office from Sheffield to Leeds, bringing 40 staff under one roof.</li><li>&quot;We are delighted to announce the move, because it puts our designers and engineers in the same building,&quot; said Priya Lennox, Managing Director of Harrowgate Lighting.<br><em>Worth asking yourself:</em> Empty quote: A useful quote gives a reason, a number, or a next step. This gives none. Ask your spokesperson why you actually did this.</li><li>The device is designed to cut energy use.<br><em>Suggested rewrite:</em> is designed to → does</li></ol><p>Scored with Comms Clarity Scorer — <a href=\"https://example.invalid/\">https://example.invalid/</a><br>Runs in your browser. Nothing is uploaded.</p>",
+        "copyReport": "Comms Clarity Scorer report\n1 buzzwords. 5 concrete facts.\nOverall: B (87/100) — Solid, with a few things worth tightening.\n\nConcreteness: 100/100\nStrengths: 100/100\nEmpty quote detector: 100/100 — 0/1 quotes empty\nBuzzword density: 81/100 — 1 matches\nSentence length: 97/100 — average 16.2 words\nReadability: 100/100 — grade 6.8\nPassive voice: 73/100 — 33.3%\nHedging: 61/100\nSuperlatives/absolutes: 100/100\nNominalisation: 100/100\nSelf-reference: 55/100 — 2 company-facing, 0 audience-facing, 0 third-party sentences\nAcronym load: 88/100 — 1 never expanded\nInverted pyramid: 50/100\nConsistency: 80/100 — 2 issue type(s)\nEnglish variant (british): 95/100 — 1 mismatch(es)\n\nTop fixes:\n1. Harrowgate Lighting moves its head office to Leeds\n\nLEEDS, 12 May 2026 – Harrowgate Lighting today moved its head office from Sheffield to Leeds, bringing 40 staff under one roof.\n2. \"We are delighted to announce the move, because it puts our designers and engineers in the same building,\" said Priya Lennox, Managing Director of Harrowgate Lighting.\n3. The device is designed to cut energy use.\n   Suggested rewrite: is designed to -> does\n\ncomms-clarity-scorer — analysis runs entirely in the browser, nothing uploaded.",
+        "exportPlain": "🌤 Grade B — Mostly clear (87/100)\n1 buzzword. 5 concrete facts.\n\nTop five fixes:\n1. Harrowgate Lighting moves its head office to Leeds\n\nLEEDS, 12 May 2026 – Harrowgate Lighting today moved its head office from Sheffield to Leeds, bringing 40 staff under one roof.\n2. \"We are delighted to announce the move, because it puts our designers and engineers in the same building,\" said Priya Lennox, Managing Director of Harrowgate Lighting.\n3. The device is designed to cut energy use.\n   Suggested rewrite: is designed to -> does\n\nScored with Comms Clarity Scorer — https://example.invalid/\nRuns in your browser. Nothing is uploaded.",
+        "exportRichHtml": "<p><strong>🌤 Grade B — Mostly clear (87/100)</strong></p><p>1 buzzword. 5 concrete facts.</p><p><strong>Top five fixes</strong></p><ol><li>Harrowgate Lighting moves its head office to Leeds\n\nLEEDS, 12 May 2026 – Harrowgate Lighting today moved its head office from Sheffield to Leeds, bringing 40 staff under one roof.</li><li>&quot;We are delighted to announce the move, because it puts our designers and engineers in the same building,&quot; said Priya Lennox, Managing Director of Harrowgate Lighting.</li><li>The device is designed to cut energy use.<br><em>Suggested rewrite:</em> is designed to → does</li></ol><p>Scored with Comms Clarity Scorer — <a href=\"https://example.invalid/\">https://example.invalid/</a><br>Runs in your browser. Nothing is uploaded.</p>",
         "share": "Clarity score: B Mostly clear. 1 buzzword, 5 concrete facts.\nScored with https://example.invalid/"
       },
       "findings": {
@@ -3303,22 +3300,11 @@
             "words": 18,
             "buzz": 1,
             "concrete": 0,
-            "isEmpty": true,
+            "isEmpty": false,
             "informative": true
           }
         ],
-        "emptyQuotes": [
-          {
-            "start": 181,
-            "end": 287,
-            "text": "We are delighted to announce the move, because it puts our designers and engineers in the same building,",
-            "words": 18,
-            "buzz": 1,
-            "concrete": 0,
-            "isEmpty": true,
-            "informative": true
-          }
-        ],
+        "emptyQuotes": [],
         "informativeQuotes": [
           {
             "start": 181,
@@ -3327,11 +3313,11 @@
             "words": 18,
             "buzz": 1,
             "concrete": 0,
-            "isEmpty": true,
+            "isEmpty": false,
             "informative": true
           }
         ],
-        "emptyQuoteScore": 0,
+        "emptyQuoteScore": 100,
         "baselineMatches": [],
         "preciseVerbMatches": [
           {
@@ -3418,7 +3404,522 @@
         "selfRefCompanySharePercent": 100,
         "selfRefScore": 55,
         "lengthScore": 97.08333333333333,
-        "overall": 81
+        "overall": 87
+      }
+    },
+    {
+      "fixture": "grocer-depot.txt",
+      "sector": "general",
+      "variant": "british",
+      "grade": "B",
+      "gradeLabel": "Mostly clear",
+      "score": 87,
+      "headline": "3 buzzwords. 2 concrete facts.",
+      "checks": {
+        "concreteness": 62.30529595015576,
+        "strengths": 100,
+        "emptyQuote": 80,
+        "buzzwordDensity": 52,
+        "sentenceLength": 92.91666666666667,
+        "readability": 78.687476635514,
+        "passiveVoice": 100,
+        "hedging": 100,
+        "superlatives": 100,
+        "nominalisation": 100,
+        "selfReference": 100,
+        "acronymLoad": 100,
+        "invertedPyramid": 75,
+        "consistency": 80,
+        "englishVariant": 95,
+        "regulatedClaims": null
+      },
+      "topFixes": [
+        {
+          "sentence": "\"We're thrilled to bring this innovative solution to our valued customers,\" said Elin Carrow.\n\n",
+          "badness": 9,
+          "overBy": 0,
+          "rewrite": {
+            "kind": "question",
+            "question": "A useful quote gives a reason, a number, or a next step. This gives none. Ask your spokesperson why you actually did this."
+          }
+        }
+      ],
+      "outputs": {
+        "copyReport": "Comms Clarity Scorer report\n3 buzzwords. 2 concrete facts.\nOverall: B (87/100) — Solid, with a few things worth tightening.\n\nConcreteness: 62/100\nStrengths: 100/100\nEmpty quote detector: 80/100 — 1/5 quotes empty\nBuzzword density: 52/100 — 3 matches\nSentence length: 93/100 — average 17.8 words\nReadability: 79/100 — grade 10.7\nPassive voice: 100/100 — 0.0%\nHedging: 100/100\nSuperlatives/absolutes: 100/100\nNominalisation: 100/100\nSelf-reference: 100/100 — 0 company-facing, 0 audience-facing, 0 third-party sentences\nAcronym load: 100/100 — 0 never expanded\nInverted pyramid: 75/100\nConsistency: 80/100 — 2 issue type(s)\nEnglish variant (british): 95/100 — 1 mismatch(es)\n\nTop fixes:\n1. \"We're thrilled to bring this innovative solution to our valued customers,\" said Elin Carrow.\n   Worth asking yourself: Empty quote: A useful quote gives a reason, a number, or a next step. This gives none. Ask your spokesperson why you actually did this.\n\ncomms-clarity-scorer — analysis runs entirely in the browser, nothing uploaded.",
+        "exportPlain": "🌤 Grade B — Mostly clear (87/100)\n3 buzzwords. 2 concrete facts.\n\nTop five fixes:\n1. \"We're thrilled to bring this innovative solution to our valued customers,\" said Elin Carrow.\n   Worth asking yourself: Empty quote: A useful quote gives a reason, a number, or a next step. This gives none. Ask your spokesperson why you actually did this.\n\nScored with Comms Clarity Scorer — https://example.invalid/\nRuns in your browser. Nothing is uploaded.",
+        "exportRichHtml": "<p><strong>🌤 Grade B — Mostly clear (87/100)</strong></p><p>3 buzzwords. 2 concrete facts.</p><p><strong>Top five fixes</strong></p><ol><li>&quot;We&#39;re thrilled to bring this innovative solution to our valued customers,&quot; said Elin Carrow.<br><em>Worth asking yourself:</em> Empty quote: A useful quote gives a reason, a number, or a next step. This gives none. Ask your spokesperson why you actually did this.</li></ol><p>Scored with Comms Clarity Scorer — <a href=\"https://example.invalid/\">https://example.invalid/</a><br>Runs in your browser. Nothing is uploaded.</p>",
+        "share": "Clarity score: B Mostly clear. 3 buzzwords, 2 concrete facts.\nScored with https://example.invalid/"
+      },
+      "findings": {
+        "sentences": [
+          {
+            "text": "Marlpit Grocers opens a delivery depot in Norwich\n\nNORWICH, 2 February 2026 – Marlpit Grocers today opened a delivery depot in Norwich, its first outside Ipswich.\n\n",
+            "start": 0,
+            "end": 164
+          },
+          {
+            "text": "\"We chose Norwich because most of our customers already live within an hour of the city,\" said Elin Carrow, founder of Marlpit Grocers.\n\n",
+            "start": 164,
+            "end": 301
+          },
+          {
+            "text": "\"Our vans now reach 140 villages that had no grocery delivery before,\" said Tomas Reid, operations lead.\n\n",
+            "start": 301,
+            "end": 407
+          },
+          {
+            "text": "\"We will launch a Saturday delivery service for every village on our routes,\" said Elin Carrow.\n\n",
+            "start": 407,
+            "end": 504
+          },
+          {
+            "text": "\"We'll have the new office open within eight weeks,\" said Tomas Reid.\n\n",
+            "start": 504,
+            "end": 575
+          },
+          {
+            "text": "\"We're thrilled to bring this innovative solution to our valued customers,\" said Elin Carrow.\n\n",
+            "start": 575,
+            "end": 670
+          }
+        ],
+        "sentenceData": [
+          {
+            "sentence": {
+              "text": "Marlpit Grocers opens a delivery depot in Norwich\n\nNORWICH, 2 February 2026 – Marlpit Grocers today opened a delivery depot in Norwich, its first outside Ipswich.\n\n",
+              "start": 0,
+              "end": 164
+            },
+            "clippedText": "Marlpit Grocers opens a delivery depot in Norwich\n\nNORWICH, 2 February 2026 – Marlpit Grocers today opened a delivery depot in Norwich, its first outside Ipswich.\n\n",
+            "wordCount": 25,
+            "buzz": 0,
+            "hedge": 0,
+            "superlative": 0,
+            "nominal": 0,
+            "acronym": 0,
+            "passive": false,
+            "precise": 1
+          },
+          {
+            "sentence": {
+              "text": "\"We chose Norwich because most of our customers already live within an hour of the city,\" said Elin Carrow, founder of Marlpit Grocers.\n\n",
+              "start": 164,
+              "end": 301
+            },
+            "clippedText": "\"We chose Norwich because most of our customers already live within an hour of the city,\" said Elin Carrow, founder of Marlpit Grocers.\n\n",
+            "wordCount": 23,
+            "buzz": 0,
+            "hedge": 0,
+            "superlative": 0,
+            "nominal": 0,
+            "acronym": 0,
+            "passive": false,
+            "precise": 0
+          },
+          {
+            "sentence": {
+              "text": "\"Our vans now reach 140 villages that had no grocery delivery before,\" said Tomas Reid, operations lead.\n\n",
+              "start": 301,
+              "end": 407
+            },
+            "clippedText": "\"Our vans now reach 140 villages that had no grocery delivery before,\" said Tomas Reid, operations lead.\n\n",
+            "wordCount": 17,
+            "buzz": 0,
+            "hedge": 0,
+            "superlative": 0,
+            "nominal": 0,
+            "acronym": 0,
+            "passive": false,
+            "precise": 0
+          },
+          {
+            "sentence": {
+              "text": "\"We will launch a Saturday delivery service for every village on our routes,\" said Elin Carrow.\n\n",
+              "start": 407,
+              "end": 504
+            },
+            "clippedText": "\"We will launch a Saturday delivery service for every village on our routes,\" said Elin Carrow.\n\n",
+            "wordCount": 16,
+            "buzz": 0,
+            "hedge": 0,
+            "superlative": 0,
+            "nominal": 0,
+            "acronym": 0,
+            "passive": false,
+            "precise": 0
+          },
+          {
+            "sentence": {
+              "text": "\"We'll have the new office open within eight weeks,\" said Tomas Reid.\n\n",
+              "start": 504,
+              "end": 575
+            },
+            "clippedText": "\"We'll have the new office open within eight weeks,\" said Tomas Reid.\n\n",
+            "wordCount": 12,
+            "buzz": 0,
+            "hedge": 0,
+            "superlative": 0,
+            "nominal": 0,
+            "acronym": 0,
+            "passive": false,
+            "precise": 0
+          },
+          {
+            "sentence": {
+              "text": "\"We're thrilled to bring this innovative solution to our valued customers,\" said Elin Carrow.\n\n",
+              "start": 575,
+              "end": 670
+            },
+            "clippedText": "\"We're thrilled to bring this innovative solution to our valued customers,\" said Elin Carrow.\n\n",
+            "wordCount": 14,
+            "buzz": 3,
+            "hedge": 0,
+            "superlative": 0,
+            "nominal": 0,
+            "acronym": 0,
+            "passive": false,
+            "precise": 0
+          }
+        ],
+        "paragraphs": [
+          {
+            "start": 0,
+            "end": 49,
+            "text": "Marlpit Grocers opens a delivery depot in Norwich"
+          },
+          {
+            "start": 51,
+            "end": 162,
+            "text": "NORWICH, 2 February 2026 – Marlpit Grocers today opened a delivery depot in Norwich, its first outside Ipswich."
+          },
+          {
+            "start": 164,
+            "end": 299,
+            "text": "\"We chose Norwich because most of our customers already live within an hour of the city,\" said Elin Carrow, founder of Marlpit Grocers."
+          },
+          {
+            "start": 301,
+            "end": 405,
+            "text": "\"Our vans now reach 140 villages that had no grocery delivery before,\" said Tomas Reid, operations lead."
+          },
+          {
+            "start": 407,
+            "end": 502,
+            "text": "\"We will launch a Saturday delivery service for every village on our routes,\" said Elin Carrow."
+          },
+          {
+            "start": 504,
+            "end": 573,
+            "text": "\"We'll have the new office open within eight weeks,\" said Tomas Reid."
+          },
+          {
+            "start": 575,
+            "end": 668,
+            "text": "\"We're thrilled to bring this innovative solution to our valued customers,\" said Elin Carrow."
+          },
+          {
+            "start": 670,
+            "end": 767,
+            "text": "About Marlpit Grocers\nMarlpit Grocers is a fictional company. It is used here only as test text.\n"
+          }
+        ],
+        "zones": {
+          "headline": {
+            "start": 0,
+            "end": 49
+          },
+          "lede": {
+            "text": "\"We chose Norwich because most of our customers already live within an hour of the city,\" said Elin Carrow, founder of Marlpit Grocers.\n\n",
+            "start": 164,
+            "end": 301
+          },
+          "boilerplate": {
+            "start": 670,
+            "end": 767
+          },
+          "bodyStart": 49
+        },
+        "boilerplate": {
+          "start": 670,
+          "end": 767
+        },
+        "boilerplateInfo": {
+          "words": 17,
+          "buzz": 0
+        },
+        "scoringEnd": 670,
+        "totalWords": 107,
+        "contentWords": 75,
+        "limit": 30,
+        "overLimit": [],
+        "avgLength": 17.833333333333332,
+        "buzzMatches": [
+          {
+            "start": 582,
+            "end": 590,
+            "label": "thrilled"
+          },
+          {
+            "start": 605,
+            "end": 615,
+            "label": "innovative"
+          },
+          {
+            "start": 616,
+            "end": 624,
+            "label": "solution"
+          }
+        ],
+        "buzz": {
+          "density": 4,
+          "score": 52
+        },
+        "grade": 10.66406542056075,
+        "readScore": 78.687476635514,
+        "passiveMatches": [],
+        "passivePercent": 0,
+        "passiveSentenceCount": 0,
+        "passiveScore": 100,
+        "passiveSplit": {
+          "withAgent": [],
+          "noAgent": []
+        },
+        "hedgeMatches": [],
+        "hedge": {
+          "density": 0,
+          "score": 100
+        },
+        "superlativeMatches": [],
+        "superlative": {
+          "density": 0,
+          "score": 100
+        },
+        "nominalMatches": [],
+        "nominal": {
+          "density": 0,
+          "score": 100
+        },
+        "nominalRewrites": [],
+        "acronymMatches": [],
+        "acronymFirstUse": [],
+        "acronymInfo": {
+          "uniqueCount": 0,
+          "neverExpanded": []
+        },
+        "acronymScore": 100,
+        "concreteMatches": [
+          {
+            "start": 60,
+            "end": 75,
+            "label": "2 February 2026"
+          },
+          {
+            "start": 321,
+            "end": 324,
+            "label": "140"
+          }
+        ],
+        "signalsPer100": 1.8691588785046727,
+        "concretenessScore": 62.30529595015576,
+        "quoteData": [
+          {
+            "start": 164,
+            "end": 253,
+            "text": "We chose Norwich because most of our customers already live within an hour of the city,",
+            "words": 16,
+            "buzz": 0,
+            "concrete": 0,
+            "isEmpty": false,
+            "informative": true
+          },
+          {
+            "start": 301,
+            "end": 371,
+            "text": "Our vans now reach 140 villages that had no grocery delivery before,",
+            "words": 12,
+            "buzz": 0,
+            "concrete": 1,
+            "isEmpty": false,
+            "informative": true
+          },
+          {
+            "start": 407,
+            "end": 484,
+            "text": "We will launch a Saturday delivery service for every village on our routes,",
+            "words": 13,
+            "buzz": 0,
+            "concrete": 0,
+            "isEmpty": false,
+            "informative": true
+          },
+          {
+            "start": 504,
+            "end": 556,
+            "text": "We'll have the new office open within eight weeks,",
+            "words": 9,
+            "buzz": 0,
+            "concrete": 0,
+            "isEmpty": false,
+            "informative": true
+          },
+          {
+            "start": 575,
+            "end": 650,
+            "text": "We're thrilled to bring this innovative solution to our valued customers,",
+            "words": 11,
+            "buzz": 3,
+            "concrete": 0,
+            "isEmpty": true,
+            "informative": false
+          }
+        ],
+        "emptyQuotes": [
+          {
+            "start": 575,
+            "end": 650,
+            "text": "We're thrilled to bring this innovative solution to our valued customers,",
+            "words": 11,
+            "buzz": 3,
+            "concrete": 0,
+            "isEmpty": true,
+            "informative": false
+          }
+        ],
+        "informativeQuotes": [
+          {
+            "start": 164,
+            "end": 253,
+            "text": "We chose Norwich because most of our customers already live within an hour of the city,",
+            "words": 16,
+            "buzz": 0,
+            "concrete": 0,
+            "isEmpty": false,
+            "informative": true
+          },
+          {
+            "start": 301,
+            "end": 371,
+            "text": "Our vans now reach 140 villages that had no grocery delivery before,",
+            "words": 12,
+            "buzz": 0,
+            "concrete": 1,
+            "isEmpty": false,
+            "informative": true
+          },
+          {
+            "start": 407,
+            "end": 484,
+            "text": "We will launch a Saturday delivery service for every village on our routes,",
+            "words": 13,
+            "buzz": 0,
+            "concrete": 0,
+            "isEmpty": false,
+            "informative": true
+          },
+          {
+            "start": 504,
+            "end": 556,
+            "text": "We'll have the new office open within eight weeks,",
+            "words": 9,
+            "buzz": 0,
+            "concrete": 0,
+            "isEmpty": false,
+            "informative": true
+          }
+        ],
+        "emptyQuoteScore": 80,
+        "baselineMatches": [],
+        "preciseVerbMatches": [
+          {
+            "start": 100,
+            "end": 106,
+            "label": "opened"
+          }
+        ],
+        "plainWordMatches": [
+          {
+            "start": 311,
+            "end": 314,
+            "label": "now"
+          },
+          {
+            "start": 363,
+            "end": 369,
+            "label": "before"
+          },
+          {
+            "start": 591,
+            "end": 593,
+            "label": "to"
+          },
+          {
+            "start": 625,
+            "end": 627,
+            "label": "to"
+          }
+        ],
+        "activeVoiceSentences": [
+          {
+            "sentence": {
+              "text": "Marlpit Grocers opens a delivery depot in Norwich\n\nNORWICH, 2 February 2026 – Marlpit Grocers today opened a delivery depot in Norwich, its first outside Ipswich.\n\n",
+              "start": 0,
+              "end": 164
+            },
+            "clippedText": "Marlpit Grocers opens a delivery depot in Norwich\n\nNORWICH, 2 February 2026 – Marlpit Grocers today opened a delivery depot in Norwich, its first outside Ipswich.\n\n",
+            "wordCount": 25,
+            "buzz": 0,
+            "hedge": 0,
+            "superlative": 0,
+            "nominal": 0,
+            "acronym": 0,
+            "passive": false,
+            "precise": 1
+          }
+        ],
+        "strengthSignalCount": 10,
+        "strengthsPer100": 13.333333333333334,
+        "strengthsScore": 100,
+        "wordSwapRewrites": [],
+        "factDepthWords": 9,
+        "ledeHasWho": true,
+        "ledeHasWhen": false,
+        "quoteBeforeNews": false,
+        "densityDeclineOk": true,
+        "firstParaDensity": 0,
+        "lastParaDensity": 0,
+        "pyramidScore": 75,
+        "consistencyIssues": [
+          {
+            "type": "Doubled words",
+            "detail": "Norwich\n\nNORWICH"
+          },
+          {
+            "type": "Inconsistent capitalisation",
+            "detail": "norwich (Norwich / NORWICH)"
+          }
+        ],
+        "consistencyScore": 80,
+        "variant": "british",
+        "variantMismatches": [
+          {
+            "label": "5 quote(s) with punctuation inside",
+            "suggestion": "British style: put periods/commas outside the closing quote unless they're part of what's quoted"
+          }
+        ],
+        "variantScore": 95,
+        "regulatedEnabled": false,
+        "regulatedMatches": [],
+        "regulatedScore": 100,
+        "selfRefCompany": 0,
+        "selfRefAudience": 0,
+        "selfRefThirdParty": 0,
+        "selfRefUnclassified": 1,
+        "selfRefExcludedQuotes": 5,
+        "selfRefClassified": 0,
+        "selfRefCompanySharePercent": 0,
+        "selfRefScore": 100,
+        "lengthScore": 92.91666666666667,
+        "overall": 87
       }
     }
   ]
