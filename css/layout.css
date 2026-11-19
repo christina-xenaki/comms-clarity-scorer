@@ -83,20 +83,15 @@ section { margin-bottom: var(--space-6); }
 body[data-state="input"] .page { max-width: calc(760px + 2 * var(--gutter)); }
 body[data-state="input"] .toolbar-levels,
 body[data-state="input"] .toolbar-results,
-body[data-state="input"] #results-panel { display: none !important; }
+body[data-state="input"] #results-panel,
+body[data-state="input"] #forecast { display: none !important; }
 body[data-state="results"] #input-section,
 body[data-state="results"] .what-it-checks { display: none !important; }
 
-/* #results-panel is a plain wrapper; display: contents lets the privacy note,
-   which sits after it in the DOM, be ordered between the forecast and the
-   columns without duplicating it. */
+/* The DOM order matches the screen order: toolbar, input or forecast card,
+   privacy note, then the rest of the results. #results-panel is a plain
+   wrapper; display: contents lets print.css reorder its children. */
 #results-panel:not([hidden]) { display: contents; }
-.toolbar { order: 0; }
-#input-section, .forecast-card { order: 1; }
-.privacy-note { order: 2; }
-.results-columns { order: 4; }
-#sub-scores { order: 5; }
-#rewrite-suggestions { order: 6; }
 
 /* ---- Input state ---- */
 .intro { margin: 0 0 var(--space-5); font-size: var(--fs-text); color: var(--muted); }
@@ -201,6 +196,8 @@ body[data-state="results"] .what-it-checks { display: none !important; }
 .footer-main { flex: 1 1 420px; max-width: 720px; }
 .footer-main p { margin: 0 0 var(--space-3); }
 .site-footer a { color: var(--accent); }
+/* A 24px-tall hit area for footer links, without changing the line spacing. */
+.footer-main a { display: inline-block; padding: 4px 0; margin: -4px 0; }
 .site-footer .config-status { flex: 0 1 320px; margin: 0; }
 .what-it-checks summary {
   display: inline-flex;

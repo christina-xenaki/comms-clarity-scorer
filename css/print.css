@@ -116,7 +116,7 @@
     border-radius: 0;
   }
   a.fix-marker::before { content: "["; }
-  a.fix-marker::after { content: "]"; }
+  a.fix-marker::after { content: "]"; position: static; inset: auto; }
   /* Long sentences and empty quotes share Structure's dashed line, so they
      keep a text label on paper. */
   mark.hl-long[data-first-frag]::before { content: "[Long sentence] "; font-weight: 700; }
@@ -125,12 +125,14 @@
   /* ---- Side cards ---- */
   .side-card { border: none; padding: 0; break-inside: avoid; }
 
-  /* ---- Checks: name and score only ---- */
+  /* ---- Checks: name, score and number of findings only ---- */
   #sub-scores h2 { font-size: 13pt; margin-bottom: 2mm; }
   .checks-grid { display: grid !important; grid-template-columns: 1fr 1fr; column-gap: 10mm; row-gap: 0; }
   .checks-grid > details.card { border: none; border-bottom: 1px solid var(--line); border-radius: 0; margin: 0; break-inside: avoid; }
-  details.card summary { min-height: 0; padding: 1.5mm 0; }
-  .summary-title, .summary-score { font-size: 10pt; }
+  details.card summary { min-height: 0; padding: 1.5mm 0; gap: 2mm; }
+  .checks-grid > details.card { overflow: visible; }
+  .summary-title, .summary-score, .summary-findings { font-size: 10pt; }
+  .summary-findings { min-width: 0; }
 
   /* ---- Footer: privacy line, export footer and disclaimer, 9pt ---- */
   .privacy-note {

@@ -56,7 +56,7 @@
   --muted: #565C5A;          /* secondary text, rationale, meta */
   --line: #E4E1DA;           /* card borders (decorative only) */
   --line-soft: #EEECE6;      /* dividers, segmented-control track, rationale pill */
-  --control-border: #7D8380; /* text box, selects, secondary buttons, selected segment */
+  --control-border: #737976; /* text box, selects, secondary buttons, selected segment */
   --accent: #1d5b4f;         /* actions only: primary buttons, links, focus ring, logo.
                                 The repo's existing green, kept per §1: 7.9:1 with white. */
   --accent-hover: #164840;   /* primary button hover */
@@ -73,6 +73,14 @@
   --grade-c: #ECEFF2;
   --grade-d: #E7E8EA;
   --grade-e: #E1E2E5;
+
+  /* ---- Forced-colours mode: system colours, used only inside
+     @media (forced-colors: active) ---- */
+  --fc-text: CanvasText;
+  --fc-canvas: Canvas;
+  --fc-button: ButtonText;
+  --fc-link: LinkText;
+  --fc-selected: Highlight;
 
   /* ---- Type ---- */
   --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;

@@ -11,7 +11,9 @@ function renderResults(r) {
   elOverallGradeText.textContent = gradeLetter;
   elOverallGradeScore.textContent = r.overall + "/100";
   elOverallGradeLabel.textContent = overallGradeInfo.label;
-  elOverallGrade.setAttribute("aria-label", overallGradeInfo.ariaLabel + ". Score " + r.overall + " out of 100.");
+  // Screen readers get the grade in full from visually hidden text; the
+  // icon, letter, score and label beside it are aria-hidden (UI-SPEC v1.4).
+  elOverallGradeSr.textContent = overallGradeInfo.ariaLabel + ". Score " + r.overall + " out of 100.";
   elForecast.setAttribute("data-grade", gradeLetter.toLowerCase());
   elOverallVerdict.textContent = verdictForScore(r.overall);
 
@@ -150,7 +152,8 @@ function renderResults(r) {
   if (r.factDepthWords === null || r.factDepthWords > 100) ipActions.push("Move a specific fact earlier — ideally into the first sentence or two.");
   if (!(r.ledeHasWho && r.ledeHasWhen)) ipActions.push("Add a clear who and when to your opening sentence.");
   if (r.quoteBeforeNews) ipActions.push("Lead with what happened, then let people react to it — move the quote later.");
-  if (!r.densityDeclineOk) ipActions.push("Move detail earlier — your final paragraph is denser than your first, and inverted-pyramid structure should thin toward the end.");
+  if (!r.densityDeclineOk) ipActions.push("Move detail earlier — your final paragraph is denser than your first, and inverted-pyramid structure should thin towards the end.");
+  setFindings("inverted-pyramid", ipActions.length);
   $("body-inverted-pyramid").innerHTML = segBody({
     finding: ipFinding,
     action: ipActions.length ? ipActions.join(" ") : "No action needed.",
@@ -201,13 +204,13 @@ function renderResults(r) {
   var rcRationale = "These words draw scrutiny in this sector. The flag is a prompt to check with the people who own that risk in your organisation. It is not a compliance decision.";
   if (!r.regulatedEnabled) {
     $("body-regulated-claims").innerHTML = segBody({
-      finding: "Off by default. This check is never counted toward the overall clarity grade above, even when a sector is selected.",
+      finding: "Off by default. This check is never counted towards the overall clarity grade above, even when a sector is selected.",
       action: "Use the Sector selector at the top of the page (Healthcare, Environmental claims, AI, or Forward-looking statements) to check sector-specific regulated terms.",
       rationale: rcRationale,
       key: "regulated-claims"
     });
   } else {
-    var rcFinding = "Sector: <strong>" + escapeHtml(CONFIG.sectorName) + "</strong>. " + r.regulatedMatches.length + " regulated term" + (r.regulatedMatches.length === 1 ? "" : "s") + " found" + (r.regulatedMatches.length ? ": " + r.regulatedMatches.map(function (m) { return escapeHtml(m.label); }).join(", ") : "") + ". This score is tracked separately and does not count toward your overall clarity grade above." +
+    var rcFinding = "Sector: <strong>" + escapeHtml(CONFIG.sectorName) + "</strong>. " + r.regulatedMatches.length + " regulated term" + (r.regulatedMatches.length === 1 ? "" : "s") + " found" + (r.regulatedMatches.length ? ": " + r.regulatedMatches.map(function (m) { return escapeHtml(m.label); }).join(", ") : "") + ". This score is tracked separately and does not count towards your overall clarity grade above." +
       (CONFIG.sourceUrl ? " Regulator for this sector: " + srcLink(CONFIG.sourceUrl, "regulator for " + CONFIG.sectorName, CONFIG.sourceUrl.replace(/^https?:\/\//, "").replace(/\/$/, "")) + "." : "");
     $("body-regulated-claims").innerHTML = segBody({
       finding: rcFinding,
@@ -216,6 +219,8 @@ function renderResults(r) {
       key: "regulated-claims"
     });
   }
+
+  renderFindingsCounts(r);
 
   // Top five fixes (UI-SPEC §2 fix cards)
   renderFixCards(r, rankWorstOffenders(r));
@@ -329,6 +334,37 @@ function renderBoilerplateCard(r) {
   elBoilerplateBuzzwords.hidden = found.length === 0;
 }
 
+// Findings count in each check's summary row (UI-SPEC v1.4, §2).
+// Wording from COPY.md: "No findings", "1 finding", "{n} findings".
+function findingsLabel(n) {
+  if (n === 0) return "No findings";
+  if (n === 1) return "1 finding";
+  return n + " findings";
+}
+function setFindings(key, n) { $("findings-" + key).textContent = findingsLabel(n); }
+
+// Itemised checks count the items they flag or credit (the same items they
+// highlight or list). Readability and self-reference flag no single items,
+// so they count the action they raise, using the same condition as their
+// Action text; inverted pyramid is set beside its own actions above.
+function renderFindingsCounts(r) {
+  setFindings("concreteness", r.concreteMatches.length);
+  setFindings("strengths", r.strengthSignalCount);
+  setFindings("empty-quote", r.emptyQuotes.length);
+  setFindings("buzzword", r.buzzMatches.length);
+  setFindings("sentence-length", r.overLimit.length);
+  setFindings("readability", interpretGrade(r.grade).action === "No action needed." ? 0 : 1);
+  setFindings("passive", r.passiveMatches.length);
+  setFindings("hedging", r.hedgeMatches.length);
+  setFindings("superlatives", r.superlativeMatches.length);
+  setFindings("nominalisation", r.nominalMatches.length);
+  setFindings("self-reference", r.selfRefCompanySharePercent > CONFIG.thresholds.selfReferenceCompanyShareTarget ? 1 : 0);
+  setFindings("acronym", r.acronymInfo.neverExpanded.length);
+  setFindings("consistency", r.consistencyIssues.length);
+  setFindings("english-variant", r.variantMismatches.length);
+  setFindings("regulated-claims", r.regulatedEnabled ? r.regulatedMatches.length : 0);
+}
+
 // Highlight families (§4): which existing category classes belong to each chip.
 var HIGHLIGHT_FAMILIES = {
   strong: ["hl-strength", "hl-concrete"],
@@ -363,8 +399,8 @@ function tierPill(kind) {
 // rewrite suggestions the phrase is already shown above, so only the rewrite.
 function tryLine(original, rewrite) {
   var from = original === null ? "" :
-    "<span class=\"rewrite-original\">" + escapeHtml(original) + "</span> <span class=\"rewrite-arrow\" aria-hidden=\"true\">&rarr;</span> ";
-  return "<p class=\"fix-try\"><span class=\"eyebrow\">Try</span> " + from + "<span class=\"rewrite-new\">" + escapeHtml(rewrite) + "</span></p>";
+    "<del class=\"rewrite-original\">" + escapeHtml(original) + "</del> <span class=\"rewrite-arrow\" aria-hidden=\"true\">&rarr;</span> ";
+  return "<p class=\"fix-try\"><span class=\"eyebrow\">Try</span> " + from + "<ins class=\"rewrite-new\">" + escapeHtml(rewrite) + "</ins></p>";
 }
 
 function renderFixCards(r, ranked) {

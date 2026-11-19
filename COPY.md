@@ -269,9 +269,26 @@ Side column cards: **What's working** (the Strengths check's findings) and **Boi
 
 ---
 
+## Check summaries (UI-SPEC v1.4)
+
+Each check card's summary row, and the printed checks list, shows the check's number of findings:
+
+- **No findings**
+- **1 finding**
+- **{n} findings**
+
+---
+
 ## Copy backlog
 
 Existing strings written inline in the JS, touched during the redesign. They stay inline for now and move here in a later copy session (UI-SPEC §0).
 
 - "Paste some text first." In `js/analyze.js` (alert) and now also `js/events.js`, which shows it inline under the text box.
 - "Copied!" The old copy feedback on the export buttons. Replaced by "Copied for email", "Copied for Slack" and "Copied full report" (UI-SPEC §5); no longer used in the code.
+- "towards" (was "toward", changed for British English in UI-5):
+  - `js/config.js`: "Regulated-claim flags: on (tracked separately, not counted towards the overall grade)."
+  - `js/render.js`: "Move detail earlier — your final paragraph is denser than your first, and inverted-pyramid structure should thin towards the end." (inverted pyramid action)
+  - `js/render.js`: "Off by default. This check is never counted towards the overall clarity grade above, even when a sector is selected." (regulated claims finding)
+  - `js/render.js`: "…This score is tracked separately and does not count towards your overall clarity grade above." (regulated claims finding when a sector is on)
+  - `index.html`: the "What it checks" list in the footer, "…never counted towards the overall grade"
+- Boilerplate card figures, `js/render.js` (`renderBoilerplateCard`): "{n} words, {n} buzzword(s)". This replaced the old "Boilerplate detected. The trailing "About"/"Notes to editors"/contact block ({n} words, {n} buzzwords) is excluded from every score above and graded here separately, not folded into your main grade." in UI-3.

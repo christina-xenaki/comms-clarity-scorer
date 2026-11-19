@@ -121,7 +121,10 @@ a.fix-marker {
   line-height: 1;
   text-decoration: none;
   vertical-align: super;
+  position: relative;
 }
+/* A 24×24px hit area around the 18px circle, without changing its look. */
+a.fix-marker::after { content: ""; position: absolute; inset: -3px; }
 
 /* ---- Explanation tip ----
    The explanation stays in the accessibility tree at all times (so
@@ -145,7 +148,9 @@ mark.hl.open .tip {
   top: 100%;
   z-index: 10;
   width: max-content;
-  max-width: min(320px, 80vw);
+  /* Kept inside the viewport: events.js shifts it left near the right edge. */
+  max-width: min(320px, calc(100vw - 32px));
+  transform: translateX(var(--tip-shift, 0px));
   height: auto;
   margin: var(--space-2) 0 0;
   padding: 10px var(--space-3);
@@ -161,4 +166,14 @@ mark.hl.open .tip {
   text-decoration: none;
   border-radius: var(--radius-control);
   box-shadow: var(--shadow-menu);
+}
+
+/* Forced-colours mode (UI-SPEC v1.4, §4): fills disappear, so the chip's
+   on/off state is carried by its border style (solid on, dashed off), and
+   underline styles keep telling the families apart. */
+@media (forced-colors: active) {
+  .chip { border: 2px solid var(--fc-button); }
+  .chip[aria-pressed="false"] { border-style: dashed; }
+  .chip-sample { text-decoration-color: var(--fc-text); }
+  a.fix-marker { border: 1px solid var(--fc-link); }
 }

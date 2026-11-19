@@ -38,6 +38,7 @@ var elScoreNewBtn = $("score-new-btn");
 var elForecast = $("forecast");
 var elRewriteCount = $("rewrite-count");
 var elOverallGradeScore = $("overall-grade-score");
+var elOverallGradeSr = $("overall-grade-sr");
 var elOverallGradeLabel = $("overall-grade-label");
 var elAnnotatedWordCount = $("annotated-word-count");
 var elFixCount = $("fix-count");
@@ -77,7 +78,10 @@ function setViewLevel(level) {
 elViewLevelButtons.forEach(function (btn) {
   btn.addEventListener("click", function () { setViewLevel(btn.getAttribute("data-level")); });
 });
-setViewLevel(window.matchMedia("(max-width: 599px)").matches ? "glance" : "working");
+// Default level (UI-SPEC v1.4, §2): Full at 768px and wider, Working from
+// 600 to 767px, Glance under 600px.
+setViewLevel(window.matchMedia("(min-width: 768px)").matches ? "full" :
+  (window.matchMedia("(min-width: 600px)").matches ? "working" : "glance"));
 
 // Input or Results (UI-SPEC §2). The page starts in Input.
 function setPageState(state) {

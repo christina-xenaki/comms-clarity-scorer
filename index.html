@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -39,7 +39,6 @@
     <symbol id="icon-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.9A8 8 0 1 1 21 12z"></path>
     </symbol>
-  </defs>
     <symbol id="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <circle cx="12" cy="12" r="4"></circle>
       <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
@@ -165,41 +164,45 @@
     </div>
   </section>
 
+  <section id="forecast" class="forecast-card" aria-labelledby="overall-grade-heading" tabindex="-1">
+    <div class="forecast-regions">
+      <div class="forecast-left">
+        <p id="overall-grade-sr" class="visually-hidden"></p>
+        <span id="overall-grade-icon" class="weather-icon" aria-hidden="true"></span>
+        <div id="overall-grade" class="forecast-grade" aria-hidden="true"><span id="overall-grade-text" class="grade-letter">&mdash;</span> <span id="overall-grade-score" class="grade-score"></span></div>
+        <p id="overall-grade-label" class="grade-condition" aria-hidden="true"></p>
+      </div>
+      <div class="forecast-middle">
+        <h2 id="overall-grade-heading" class="eyebrow">Your forecast</h2>
+        <p id="headline-metric" class="headline-metric"></p>
+        <p id="overall-verdict" class="forecast-summary"></p>
+      </div>
+      <div class="forecast-right">
+        <button id="share-score-btn" type="button" class="secondary" aria-expanded="false" aria-controls="share-score-options">
+          <svg class="btn-icon" aria-hidden="true" focusable="false"><use href="#icon-share"></use></svg>
+          <span class="btn-label">Share score</span>
+        </button>
+      </div>
+    </div>
+    <div id="share-score-options" class="share-panel" role="region" aria-labelledby="share-panel-heading" tabindex="-1" hidden>
+      <h3 id="share-panel-heading" class="eyebrow">What gets shared</h3>
+      <p id="share-preview" class="share-preview"></p>
+      <p class="share-note"><svg class="share-note-icon" aria-hidden="true" focusable="false"><use href="#icon-lock"></use></svg>Only the grade and headline. Never your text.</p>
+      <div class="share-actions">
+        <a id="share-whatsapp-link" class="secondary-link" href="https://wa.me/" target="_blank" rel="noopener noreferrer" aria-label="Share to WhatsApp (opens in a new tab)">
+          <span class="btn-label">Share to WhatsApp</span>
+        </a>
+        <button id="share-slack-btn" type="button" class="secondary">
+          <span class="btn-label">Share to Slack</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <p class="privacy-note"><svg class="privacy-icon" aria-hidden="true" focusable="false"><use href="#icon-lock"></use></svg><span><strong>The analysis runs in your browser, on your device.</strong> Your text is never uploaded anywhere, so you can safely paste a draft that hasn't been published yet.</span></p>
+
   <div id="results-panel" class="results-state" hidden>
 
-    <section id="forecast" class="forecast-card" aria-labelledby="overall-grade-heading" tabindex="-1">
-      <div class="forecast-regions">
-        <div class="forecast-left">
-          <span id="overall-grade-icon" class="weather-icon"></span>
-          <div id="overall-grade" class="forecast-grade"><span id="overall-grade-text" class="grade-letter">&mdash;</span> <span id="overall-grade-score" class="grade-score"></span></div>
-          <p id="overall-grade-label" class="grade-condition"></p>
-        </div>
-        <div class="forecast-middle">
-          <h2 id="overall-grade-heading" class="eyebrow">Your forecast</h2>
-          <p id="headline-metric" class="headline-metric"></p>
-          <p id="overall-verdict" class="forecast-summary"></p>
-        </div>
-        <div class="forecast-right">
-          <button id="share-score-btn" type="button" class="secondary" aria-expanded="false" aria-controls="share-score-options">
-            <svg class="btn-icon" aria-hidden="true" focusable="false"><use href="#icon-share"></use></svg>
-            <span class="btn-label">Share score</span>
-          </button>
-        </div>
-      </div>
-      <div id="share-score-options" class="share-panel" role="region" aria-labelledby="share-panel-heading" tabindex="-1" hidden>
-        <h3 id="share-panel-heading" class="eyebrow">What gets shared</h3>
-        <p id="share-preview" class="share-preview"></p>
-        <p class="share-note"><svg class="share-note-icon" aria-hidden="true" focusable="false"><use href="#icon-lock"></use></svg>Only the grade and headline. Never your text.</p>
-        <div class="share-actions">
-          <a id="share-whatsapp-link" class="secondary-link" href="https://wa.me/" target="_blank" rel="noopener noreferrer" aria-label="Share to WhatsApp (opens in a new tab)">
-            <span class="btn-label">Share to WhatsApp</span>
-          </a>
-          <button id="share-slack-btn" type="button" class="secondary">
-            <span class="btn-label">Share to Slack</span>
-          </button>
-        </div>
-      </div>
-    </section>
 
     <div class="results-columns">
       <section id="annotated-text-section" class="document-card" aria-labelledby="annotated-heading" hidden>
@@ -245,82 +248,82 @@
       <h2>Checks</h2>
       <div class="checks-grid">
         <details class="card" id="card-concreteness">
-          <summary><h3 class="summary-title">Concreteness</h3><span class="summary-score" id="score-concreteness">&mdash;</span><svg class="summary-chevron" aria-hidden="true" focusable="false"><use href="#icon-chevron-right"></use></svg></summary>
+          <summary><h3 class="summary-title">Concreteness</h3><span class="summary-score" id="score-concreteness">&mdash;</span><span class="summary-findings" id="findings-concreteness"></span><svg class="summary-chevron" aria-hidden="true" focusable="false"><use href="#icon-chevron-right"></use></svg></summary>
           <div class="card-body" id="body-concreteness"></div>
         </details>
 
         <details class="card" id="card-strengths">
-          <summary><h3 class="summary-title">Strengths</h3><span class="summary-score" id="score-strengths">&mdash;</span><svg class="summary-chevron" aria-hidden="true" focusable="false"><use href="#icon-chevron-right"></use></svg></summary>
+          <summary><h3 class="summary-title">Strengths</h3><span class="summary-score" id="score-strengths">&mdash;</span><span class="summary-findings" id="findings-strengths"></span><svg class="summary-chevron" aria-hidden="true" focusable="false"><use href="#icon-chevron-right"></use></svg></summary>
           <div class="card-body" id="body-strengths"></div>
         </details>
 
         <details class="card" id="card-empty-quote">
-          <summary><h3 class="summary-title">Empty quote detector</h3><span class="summary-score" id="score-empty-quote">&mdash;</span><svg class="summary-chevron" aria-hidden="true" focusable="false"><use href="#icon-chevron-right"></use></svg></summary>
+          <summary><h3 class="summary-title">Empty quote detector</h3><span class="summary-score" id="score-empty-quote">&mdash;</span><span class="summary-findings" id="findings-empty-quote"></span><svg class="summary-chevron" aria-hidden="true" focusable="false"><use href="#icon-chevron-right"></use></svg></summary>
           <div class="card-body" id="body-empty-quote"></div>
         </details>
 
         <details class="card" id="card-buzzword">
-          <summary><h3 class="summary-title">Buzzword density</h3><span class="summary-score" id="score-buzzword">&mdash;</span><svg class="summary-chevron" aria-hidden="true" focusable="false"><use href="#icon-chevron-right"></use></svg></summary>
+          <summary><h3 class="summary-title">Buzzword density</h3><span class="summary-score" id="score-buzzword">&mdash;</span><span class="summary-findings" id="findings-buzzword"></span><svg class="summary-chevron" aria-hidden="true" focusable="false"><use href="#icon-chevron-right"></use></svg></summary>
           <div class="card-body" id="body-buzzword"></div>
         </details>
 
         <details class="card" id="card-sentence-length">
-          <summary><h3 class="summary-title">Sentence length</h3><span class="summary-score" id="score-sentence-length">&mdash;</span><svg class="summary-chevron" aria-hidden="true" focusable="false"><use href="#icon-chevron-right"></use></svg></summary>
+          <summary><h3 class="summary-title">Sentence length</h3><span class="summary-score" id="score-sentence-length">&mdash;</span><span class="summary-findings" id="findings-sentence-length"></span><svg class="summary-chevron" aria-hidden="true" focusable="false"><use href="#icon-chevron-right"></use></svg></summary>
           <div class="card-body" id="body-sentence-length"></div>
         </details>
 
         <details class="card" id="card-readability">
-          <summary><h3 class="summary-title">Readability</h3><span class="summary-score" id="score-readability">&mdash;</span><svg class="summary-chevron" aria-hidden="true" focusable="false"><use href="#icon-chevron-right"></use></svg></summary>
+          <summary><h3 class="summary-title">Readability</h3><span class="summary-score" id="score-readability">&mdash;</span><span class="summary-findings" id="findings-readability"></span><svg class="summary-chevron" aria-hidden="true" focusable="false"><use href="#icon-chevron-right"></use></svg></summary>
           <div class="card-body" id="body-readability"></div>
         </details>
 
         <details class="card" id="card-passive">
-          <summary><h3 class="summary-title">Passive voice</h3><span class="summary-score" id="score-passive">&mdash;</span><svg class="summary-chevron" aria-hidden="true" focusable="false"><use href="#icon-chevron-right"></use></svg></summary>
+          <summary><h3 class="summary-title">Passive voice</h3><span class="summary-score" id="score-passive">&mdash;</span><span class="summary-findings" id="findings-passive"></span><svg class="summary-chevron" aria-hidden="true" focusable="false"><use href="#icon-chevron-right"></use></svg></summary>
           <div class="card-body" id="body-passive"></div>
         </details>
 
         <details class="card" id="card-hedging">
-          <summary><h3 class="summary-title">Hedging &amp; weasel words</h3><span class="summary-score" id="score-hedging">&mdash;</span><svg class="summary-chevron" aria-hidden="true" focusable="false"><use href="#icon-chevron-right"></use></svg></summary>
+          <summary><h3 class="summary-title">Hedging &amp; weasel words</h3><span class="summary-score" id="score-hedging">&mdash;</span><span class="summary-findings" id="findings-hedging"></span><svg class="summary-chevron" aria-hidden="true" focusable="false"><use href="#icon-chevron-right"></use></svg></summary>
           <div class="card-body" id="body-hedging"></div>
         </details>
 
         <details class="card" id="card-superlatives">
-          <summary><h3 class="summary-title">Superlatives &amp; absolute claims</h3><span class="summary-score" id="score-superlatives">&mdash;</span><svg class="summary-chevron" aria-hidden="true" focusable="false"><use href="#icon-chevron-right"></use></svg></summary>
+          <summary><h3 class="summary-title">Superlatives &amp; absolute claims</h3><span class="summary-score" id="score-superlatives">&mdash;</span><span class="summary-findings" id="findings-superlatives"></span><svg class="summary-chevron" aria-hidden="true" focusable="false"><use href="#icon-chevron-right"></use></svg></summary>
           <div class="card-body" id="body-superlatives"></div>
         </details>
 
         <details class="card" id="card-nominalisation">
-          <summary><h3 class="summary-title">Nominalisation</h3><span class="summary-score" id="score-nominalisation">&mdash;</span><svg class="summary-chevron" aria-hidden="true" focusable="false"><use href="#icon-chevron-right"></use></svg></summary>
+          <summary><h3 class="summary-title">Nominalisation</h3><span class="summary-score" id="score-nominalisation">&mdash;</span><span class="summary-findings" id="findings-nominalisation"></span><svg class="summary-chevron" aria-hidden="true" focusable="false"><use href="#icon-chevron-right"></use></svg></summary>
           <div class="card-body" id="body-nominalisation"></div>
         </details>
 
         <details class="card" id="card-self-reference">
-          <summary><h3 class="summary-title">Self-reference</h3><span class="summary-score" id="score-self-reference">&mdash;</span><svg class="summary-chevron" aria-hidden="true" focusable="false"><use href="#icon-chevron-right"></use></svg></summary>
+          <summary><h3 class="summary-title">Self-reference</h3><span class="summary-score" id="score-self-reference">&mdash;</span><span class="summary-findings" id="findings-self-reference"></span><svg class="summary-chevron" aria-hidden="true" focusable="false"><use href="#icon-chevron-right"></use></svg></summary>
           <div class="card-body" id="body-self-reference"></div>
         </details>
 
         <details class="card" id="card-acronym">
-          <summary><h3 class="summary-title">Acronym load</h3><span class="summary-score" id="score-acronym">&mdash;</span><svg class="summary-chevron" aria-hidden="true" focusable="false"><use href="#icon-chevron-right"></use></svg></summary>
+          <summary><h3 class="summary-title">Acronym load</h3><span class="summary-score" id="score-acronym">&mdash;</span><span class="summary-findings" id="findings-acronym"></span><svg class="summary-chevron" aria-hidden="true" focusable="false"><use href="#icon-chevron-right"></use></svg></summary>
           <div class="card-body" id="body-acronym"></div>
         </details>
 
         <details class="card" id="card-inverted-pyramid">
-          <summary><h3 class="summary-title">Inverted pyramid</h3><span class="summary-score" id="score-inverted-pyramid">&mdash;</span><svg class="summary-chevron" aria-hidden="true" focusable="false"><use href="#icon-chevron-right"></use></svg></summary>
+          <summary><h3 class="summary-title">Inverted pyramid</h3><span class="summary-score" id="score-inverted-pyramid">&mdash;</span><span class="summary-findings" id="findings-inverted-pyramid"></span><svg class="summary-chevron" aria-hidden="true" focusable="false"><use href="#icon-chevron-right"></use></svg></summary>
           <div class="card-body" id="body-inverted-pyramid"></div>
         </details>
 
         <details class="card" id="card-consistency">
-          <summary><h3 class="summary-title">Consistency &amp; typos</h3><span class="summary-score" id="score-consistency">&mdash;</span><svg class="summary-chevron" aria-hidden="true" focusable="false"><use href="#icon-chevron-right"></use></svg></summary>
+          <summary><h3 class="summary-title">Consistency &amp; typos</h3><span class="summary-score" id="score-consistency">&mdash;</span><span class="summary-findings" id="findings-consistency"></span><svg class="summary-chevron" aria-hidden="true" focusable="false"><use href="#icon-chevron-right"></use></svg></summary>
           <div class="card-body" id="body-consistency"></div>
         </details>
 
         <details class="card" id="card-english-variant">
-          <summary><h3 class="summary-title">English variant</h3><span class="summary-score" id="score-english-variant">&mdash;</span><svg class="summary-chevron" aria-hidden="true" focusable="false"><use href="#icon-chevron-right"></use></svg></summary>
+          <summary><h3 class="summary-title">English variant</h3><span class="summary-score" id="score-english-variant">&mdash;</span><span class="summary-findings" id="findings-english-variant"></span><svg class="summary-chevron" aria-hidden="true" focusable="false"><use href="#icon-chevron-right"></use></svg></summary>
           <div class="card-body" id="body-english-variant"></div>
         </details>
 
         <details class="card" id="card-regulated-claims">
-          <summary><h3 class="summary-title">Regulated claims</h3><span class="summary-score" id="score-regulated-claims">&mdash;</span><svg class="summary-chevron" aria-hidden="true" focusable="false"><use href="#icon-chevron-right"></use></svg></summary>
+          <summary><h3 class="summary-title">Regulated claims</h3><span class="summary-score" id="score-regulated-claims">&mdash;</span><span class="summary-findings" id="findings-regulated-claims"></span><svg class="summary-chevron" aria-hidden="true" focusable="false"><use href="#icon-chevron-right"></use></svg></summary>
           <div class="card-body" id="body-regulated-claims"></div>
         </details>
       </div>
@@ -337,7 +340,6 @@
     </section>
   </div>
 
-  <p class="privacy-note"><svg class="privacy-icon" aria-hidden="true" focusable="false"><use href="#icon-lock"></use></svg><span><strong>The analysis runs in your browser, on your device.</strong> Your text is never uploaded anywhere, so you can safely paste a draft that hasn't been published yet.</span></p>
 </main>
 
 <footer class="site-footer">
@@ -348,7 +350,7 @@
       <p><a href="docs.html?doc=scoring">How scoring works</a></p>
       <details class="what-it-checks">
         <summary>What it checks</summary>
-        <p>Checks: concreteness, strengths, empty-quote detection, buzzword density, sentence length, readability, passive voice, hedging, superlatives &amp; absolute claims, nominalisation, self-reference, acronym load, inverted pyramid structure, consistency &amp; typos, English variant, and regulated claims (off by default, and never counted toward the overall grade). See <a href="docs.html?doc=scoring" aria-label="SCORING.md methodology document">SCORING.md</a> for exactly how each is calculated, including known limitations.</p>
+        <p>Checks: concreteness, strengths, empty-quote detection, buzzword density, sentence length, readability, passive voice, hedging, superlatives &amp; absolute claims, nominalisation, self-reference, acronym load, inverted pyramid structure, consistency &amp; typos, English variant, and regulated claims (off by default, and never counted towards the overall grade). See <a href="docs.html?doc=scoring" aria-label="SCORING.md methodology document">SCORING.md</a> for exactly how each is calculated, including known limitations.</p>
       </details>
     </div>
     <p id="config-status" class="config-status">Loading word lists…</p>
