@@ -10,7 +10,7 @@ function topFixesForExport(r) {
     return {
       text: item.d.clippedText.trim(),
       rewrite: rewrite,
-      question: rewrite && rewrite.kind === "question" ? fixQuestionText(r, item.d.sentence, rewrite) : null
+      question: rewrite && rewrite.kind === "question" ? questionText(fixQuestionParts(r, item.d.sentence, rewrite)) : null
     };
   });
 }

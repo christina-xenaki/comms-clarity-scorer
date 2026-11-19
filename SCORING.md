@@ -246,7 +246,7 @@ The **Rewrite suggestions** panel lists concrete fixes, but is explicit about ho
 
 **"Worth asking yourself" — a guided question, no automatic fix:**
 - **Passive with no agent** ("Mistakes were made.") → *"Passive voice: “{phrase}” doesn't say who did it. If you'd rather not say, make that a deliberate choice rather than an accident of grammar."*, where {phrase} is the passive phrase the check matched (e.g. "were made"). If the phrase isn't available, the text drops it: *"Passive voice doesn't say who did it. If you'd rather not say, make that a deliberate choice rather than an accident of grammar."* (verbatim from COPY.md)
-- **Empty quotes** → *"A useful quote gives a reason, a number, or a next step. This gives none. Ask your spokesperson why you actually did this."* (verbatim from the spec)
+- **Empty quotes** → *"Empty quote: A useful quote gives a reason, a number, or a next step. This gives none. Ask your spokesperson why you actually did this."* (verbatim from COPY.md)
 
 Neither the passive-agent question nor the empty-quote question tries to guess an answer, because the tool genuinely doesn't know who did it or what the spokesperson meant — asking is more honest than inventing a plausible-sounding fix.
 

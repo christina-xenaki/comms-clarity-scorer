@@ -270,41 +270,42 @@ function findRewriteForSentence(r, sentence) {
   return found;
 }
 
-// Passive-voice question (COPY.md "Fix questions"). findRewriteForSentence stays
-// as it is, so this works out the same match separately: it returns a question
-// for a passive with no agent before it looks at empty quotes, so a "question"
-// result with such a passive inside the sentence is always the passive one.
-function passivePhraseForFix(r, sentence, found) {
-  if (!found || found.kind !== "question") return null;
-  var match = null;
-  r.passiveSplit.noAgent.some(function (x) {
-    if (x.start >= sentence.start && x.end <= sentence.end) { match = x; }
-    return match;
-  });
-  return match;
-}
+// "Worth asking yourself" questions (COPY.md "Fix questions"). Each is split into
+// a lead-in naming the check and the rest, so the screen can set the lead-in in
+// weight 600 while the exports join the two as plain text.
+//
+// findRewriteForSentence stays as it is and returns only its old question text,
+// so this works out which question it chose: it looks for a passive with no
+// agent before it looks at empty quotes, so a "question" result with such a
+// passive inside the sentence is the passive one, and any other is the empty
+// quote one. See the Copy backlog in COPY.md.
+var EMPTY_QUOTE_QUESTION = "A useful quote gives a reason, a number, or a next step. This gives none. Ask your spokesperson why you actually did this.";
 
-// Split into the "Passive voice" lead-in and the rest, so the screen can set the
-// lead-in in weight 600 while the exports join them as plain text.
 function passiveQuestionParts(phrase) {
   var tail = " If you'd rather not say, make that a deliberate choice rather than an accident of grammar.";
   return phrase ?
     { lead: "Passive voice", rest: ": “" + phrase + "” doesn't say who did it." + tail } :
     { lead: "Passive voice", rest: " doesn't say who did it." + tail };
 }
-function passiveQuestionText(phrase) {
-  var p = passiveQuestionParts(phrase);
-  return p.lead + p.rest;
+function emptyQuoteQuestionParts() {
+  return { lead: "Empty quote", rest: ": " + EMPTY_QUOTE_QUESTION };
 }
-function passiveQuestionHtml(phrase) {
-  var p = passiveQuestionParts(phrase);
-  return "<span class=\"fix-lead\">" + escapeHtml(p.lead) + "</span>" + escapeHtml(p.rest);
+function questionText(parts) {
+  return parts.lead + parts.rest;
+}
+function questionHtml(parts) {
+  return "<span class=\"fix-lead\">" + escapeHtml(parts.lead) + "</span>" + escapeHtml(parts.rest);
 }
 
-// The "Worth asking yourself" text for a top fix, as plain text.
-function fixQuestionText(r, sentence, found) {
-  var passive = passivePhraseForFix(r, sentence, found);
-  return passive ? passiveQuestionText(passive.label) : found.question;
+// The question parts for a top fix, or null when findRewriteForSentence gave none.
+function fixQuestionParts(r, sentence, found) {
+  if (!found || found.kind !== "question") return null;
+  var passive = null;
+  r.passiveSplit.noAgent.some(function (x) {
+    if (x.start >= sentence.start && x.end <= sentence.end) { passive = x; }
+    return passive;
+  });
+  return passive ? passiveQuestionParts(passive.label) : emptyQuoteQuestionParts();
 }
 
 // ---------- Results components (UI-SPEC §2, §4, §6) ----------
@@ -460,7 +461,7 @@ function renderFixCards(r, ranked) {
     if (item.d.nominal > 0) reasons.push(item.d.nominal + " nominalisation" + (item.d.nominal === 1 ? "" : "s"));
     if (item.d.acronym > 0) reasons.push(item.d.acronym + " un-expanded acronym" + (item.d.acronym === 1 ? "" : "s"));
     var found = findRewriteForSentence(r, item.d.sentence);
-    var passive = passivePhraseForFix(r, item.d.sentence, found);
+    var question = fixQuestionParts(r, item.d.sentence, found);
     var li2 = document.createElement("li");
     li2.className = "fix-card";
     li2.id = "fix-" + n;
@@ -470,8 +471,7 @@ function renderFixCards(r, ranked) {
       "<span class=\"fix-detail\">" + escapeHtml(reasons.join(" · ")) + "</span></div>" +
       "<p class=\"fix-sentence\">" + escapeHtml(shortenMiddle(item.d.clippedText)) + "</p>" +
       (found && found.kind === "rewrite" ? tryLine(found.original, found.rewrite) : "") +
-      (found && found.kind === "question" ?
-        "<p class=\"fix-question\">" + (passive ? passiveQuestionHtml(passive.label) : escapeHtml(found.question)) + "</p>" : "");
+      (question ? "<p class=\"fix-question\">" + questionHtml(question) + "</p>" : "");
     elWorstList.appendChild(li2);
   });
 }
@@ -488,11 +488,11 @@ function renderRewriteSuggestions(r) {
   r.wordSwapRewrites.slice(0, 4).forEach(function (x) { items.push(rewriteItem(x)); });
   r.passiveSplit.noAgent.slice(0, 3).forEach(function (x) {
     items.push({ html: tierPill("question") +
-      "<p class=\"fix-sentence\">" + escapeHtml(x.label) + "</p><p class=\"fix-question\">" + passiveQuestionHtml(x.label) + "</p>" });
+      "<p class=\"fix-sentence\">" + escapeHtml(x.label) + "</p><p class=\"fix-question\">" + questionHtml(passiveQuestionParts(x.label)) + "</p>" });
   });
   r.emptyQuotes.slice(0, 3).forEach(function (q) {
     items.push({ html: tierPill("question") +
-      "<p class=\"fix-sentence\">“" + escapeHtml(q.text.trim()) + "”</p><p class=\"fix-question\">A useful quote gives a reason, a number, or a next step. This gives none. Ask your spokesperson why you actually did this.</p>" });
+      "<p class=\"fix-sentence\">“" + escapeHtml(q.text.trim()) + "”</p><p class=\"fix-question\">" + questionHtml(emptyQuoteQuestionParts()) + "</p>" });
   });
 
   if (items.length === 0) {
@@ -651,7 +651,7 @@ function buildReportText(r) {
       if (rewrite && rewrite.kind === "rewrite") {
         lines.push("   Suggested rewrite: " + rewrite.original + " -> " + rewrite.rewrite);
       } else if (rewrite && rewrite.kind === "question") {
-        lines.push("   Worth asking yourself: " + fixQuestionText(r, item.d.sentence, rewrite));
+        lines.push("   Worth asking yourself: " + questionText(fixQuestionParts(r, item.d.sentence, rewrite)));
       }
     });
   }

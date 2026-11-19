@@ -50,7 +50,7 @@ Three levels of confidence. Each fix is labelled with which one applies, so the 
 
 ### "Worth asking yourself" — guided question, no automatic fix
 - **Passive with no agent:** "Mistakes were made." → "Passive voice: “were made” doesn't say who did it. If you'd rather not say, make that a deliberate choice rather than an accident of grammar." (wording in COPY.md)
-- **Empty quote:** "A useful quote gives a reason, a number, or a next step. This gives none. Ask your spokesperson why you actually did this."
+- **Empty quote:** "Empty quote: A useful quote gives a reason, a number, or a next step. This gives none. Ask your spokesperson why you actually did this." (wording in COPY.md)
 
 ### "Flag only" — no rewrite offered
 - Superlatives, absolute claims, regulated claims. The fix is factual or legal, not linguistic.
