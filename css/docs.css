@@ -1,3 +1,20 @@
+/* The docs page keeps its own header and footer; the tool's layout.css
+   classes don't apply here (UI-SPEC §11: no docs redesign). */
+.docs-header {
+  padding: var(--space-5) var(--space-4) var(--space-4) var(--space-4);
+  background: var(--surface);
+  border-bottom: var(--border-thin) solid var(--line);
+}
+.docs-header p { margin: 0; color: var(--muted); font-size: var(--fs-body); }
+
+body > footer {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: var(--space-4);
+  color: var(--muted);
+  font-size: var(--fs-meta);
+}
+
 .docs-header {
   display: flex;
   align-items: baseline;

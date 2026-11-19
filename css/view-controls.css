@@ -1,46 +1,55 @@
-.view-level-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-  border: var(--border-thin) solid var(--line);
-  border-radius: var(--radius-control);
-  padding: var(--space-2) var(--space-3);
-  margin: 0 0 var(--space-4);
-}
-.view-level-group legend {
-  padding: 0 var(--space-1);
-  font-size: var(--fs-eyebrow);
-  font-weight: 600;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-eyebrow);
-}
-.view-level-option {
-  display: flex;
-  align-items: baseline;
-  gap: var(--space-1);
-  flex: 1 1 auto;
-  padding: var(--space-1) var(--space-2);
-  border-radius: var(--radius-control);
-  cursor: pointer;
-}
-.view-level-option:hover { background: var(--paper); }
-.view-level-option:has(input:checked) { background: var(--accent); }
-.view-level-option:has(input:checked) .view-level-name,
-.view-level-option:has(input:checked) .view-level-desc { color: var(--on-accent); }
-.view-level-option input:focus-visible { outline: var(--focus-ring); outline-offset: var(--focus-offset); }
-.view-level-name { font-weight: 600; }
-.view-level-desc { font-size: var(--fs-meta); color: var(--muted); }
+/* Detail level: segmented control (§3) and what each level shows (§2). */
 
-body[data-view="glance"] #boilerplate-note,
+.segmented {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  background: var(--line-soft);
+  border-radius: 12px;
+}
+.segment {
+  flex: 1 1 0;
+  width: auto;
+  min-height: var(--target-min);
+  margin: 0;
+  padding: 0 var(--space-4);
+  border: var(--border-thin) solid transparent;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--muted);
+  font-size: var(--fs-ui);
+  font-weight: 500;
+}
+.segment:hover { color: var(--ink); }
+.segment[aria-pressed="true"] {
+  background: var(--surface);
+  border-color: var(--control-border);
+  box-shadow: var(--shadow-sm);
+  color: var(--ink);
+  font-weight: 600;
+}
+.view-level-desc {
+  margin: 0;
+  font-size: var(--fs-meta);
+  color: var(--muted);
+}
+
+/* Glance: toolbar, forecast, privacy note and export actions only. */
+body[data-view="glance"] .results-columns,
 body[data-view="glance"] #sub-scores,
-body[data-view="glance"] #worst-offenders,
-body[data-view="glance"] #rewrite-suggestions,
-body[data-view="glance"] #copy-report-btn,
-body[data-view="glance"] .export-actions,
-body[data-view="glance"] .share-actions,
-body[data-view="glance"] #annotated-text-section,
-body[data-view="working"] #annotated-text-section {
+body[data-view="glance"] #rewrite-suggestions {
   display: none;
 }
+
+/* Working: plus the top five fixes in one centred column, and the checks.
+   No annotated text, boilerplate or rewrite suggestions. */
+body[data-view="working"] #annotated-text-section,
+body[data-view="working"] #boilerplate-note,
+body[data-view="working"] #rewrite-suggestions {
+  display: none !important;
+}
+body[data-view="working"] .results-columns { justify-content: center; }
+body[data-view="working"] .side-column { flex: 1 1 100%; max-width: 760px; }
+
+/* Rationale stays collapsed outside Full. */
 body[data-view="glance"] .why-wrap { display: none; }

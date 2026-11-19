@@ -1,6 +1,67 @@
 "use strict";
 
-elAnalyzeBtn.addEventListener("click", analyze);
+// ---- Input and Results states (UI-SPEC §2) ----
+// analyze() is never edited: these handlers run around it.
+
+// "Paste some text first." is the same words analyze() alerts with; shown
+// inline instead, because the check runs here before analyze() is called.
+var EMPTY_TEXT_MESSAGE = "Paste some text first.";
+
+function updateWordCount() {
+  var n = elInputText.value.trim() ? tokenizeWords(elInputText.value).length : 0;
+  elWordCount.textContent = n + " words";
+}
+
+// Called whenever a fresh result has been drawn, including re-runs after a
+// Sector or English variant change.
+function onResultsUpdated() {
+  elRewriteCount.textContent = String(elRewriteList.children.length);
+}
+
+function showEmptyMessage() {
+  // Clear first so a repeated message is announced again.
+  elEmptyMessage.textContent = "";
+  setTimeout(function () { elEmptyMessage.textContent = EMPTY_TEXT_MESSAGE; }, 50);
+  elInputText.focus();
+}
+
+function runAnalysis() {
+  if (!elInputText.value.trim()) { showEmptyMessage(); return; }
+  elEmptyMessage.textContent = "";
+  var previous = lastResult;
+  analyze();
+  if (lastResult === previous) return; // analyze() stopped early (word lists still loading)
+  onResultsUpdated();
+  setPageState("results");
+  elForecast.focus();
+}
+
+function backToInput(clearText) {
+  if (clearText) {
+    elInputText.value = "";
+    updateWordCount();
+  }
+  elEmptyMessage.textContent = "";
+  setPageState("input");
+  elInputText.focus();
+}
+
+elAnalyzeBtn.addEventListener("click", runAnalysis);
+elEditTextBtn.addEventListener("click", function () { backToInput(false); });
+elScoreNewBtn.addEventListener("click", function () { backToInput(true); });
+elInputText.addEventListener("input", function () {
+  updateWordCount();
+  if (elInputText.value.trim()) elEmptyMessage.textContent = "";
+});
+updateWordCount();
+
+// Changing the English variant re-runs the analysis while results are showing,
+// the same as changing Sector (see config.js).
+elVariantSelect.addEventListener("change", function () {
+  if (document.body.getAttribute("data-state") !== "results" || !elInputText.value.trim()) return;
+  analyze();
+  onResultsUpdated();
+});
 
 document.addEventListener("click", function (e) {
   var hl = e.target.closest(".hl");

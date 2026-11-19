@@ -13,11 +13,11 @@ textarea {
   font-family: var(--font-serif);
 }
 
-.variant-row { margin-top: var(--space-3); }
-.variant-row label { display: inline; font-weight: 600; margin-right: var(--space-2); }
 select {
-  font-size: var(--fs-body);
-  padding: var(--space-2) var(--space-2);
+  min-height: var(--target-min);
+  font-size: var(--fs-ui);
+  font-weight: 500;
+  padding: 0 var(--space-3);
   border: var(--border-thin) solid var(--control-border);
   border-radius: var(--radius-control);
   background: var(--surface);
@@ -26,21 +26,32 @@ select {
 }
 
 button {
-  display: flex;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+button.primary,
+button.secondary {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
-  width: 100%;
-  min-height: var(--target-primary);
-  font-size: var(--fs-input);
+  min-height: var(--target-min);
+  margin: 0;
+  padding: 0 var(--space-5);
+  font-size: var(--fs-ui);
   font-weight: 600;
-  border: none;
   border-radius: var(--radius-control);
+}
+
+button.primary {
+  border: none;
   background: var(--accent);
   color: var(--on-accent);
-  cursor: pointer;
-  margin-top: var(--space-3);
+  transition: background-color var(--dur-fast) var(--ease);
 }
+button.primary:hover { background: var(--accent-hover); }
+button.primary-large { min-height: var(--target-primary); padding: 0 var(--space-7); font-size: var(--fs-body); }
 
 .btn-icon { width: 1.15em; height: 1.15em; flex: none; }
 
@@ -50,6 +61,32 @@ button.secondary {
   background: var(--surface);
   color: var(--accent);
   border: var(--border-thin) solid var(--accent);
+}
+
+/* A button that reads as plain text, for in-page actions such as "Edit text".
+   Never underlined: a solid underline is reserved for real links. */
+button.text-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--target-min);
+  margin: 0;
+  padding: 0 var(--space-2);
+  border: none;
+  border-radius: var(--radius-control);
+  background: transparent;
+  color: var(--accent);
+  font-size: var(--fs-ui);
+  font-weight: 600;
+}
+button.text-button:hover { background: var(--paper); }
+
+button:focus-visible,
+a:focus-visible,
+select:focus-visible,
+summary:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-offset);
 }
 
 .export-actions, .share-actions { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-3); }
@@ -63,9 +100,9 @@ a.secondary-link {
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
-  min-height: var(--target-primary);
-  padding: 0 var(--space-4);
-  font-size: var(--fs-input);
+  min-height: var(--target-min);
+  padding: 0 var(--space-5);
+  font-size: var(--fs-ui);
   font-weight: 600;
   border: var(--border-thin) solid var(--accent);
   border-radius: var(--radius-control);
@@ -76,9 +113,9 @@ a.secondary-link {
 }
 a.secondary-link:active { opacity: 0.85; }
 
-.privacy-note { font-size: var(--fs-ui); color: var(--muted); margin-top: var(--space-3); }
+.privacy-note { font-size: var(--fs-ui); color: var(--muted); }
 
-.config-status { font-size: var(--fs-meta); color: var(--muted); margin-top: var(--space-2); }
+.config-status { font-size: var(--fs-meta); color: var(--muted); }
 /* The message text says what went wrong; weight and ink make it stand out
    without a colour of its own (the old amber was below 4.5:1 on paper). */
 .config-status.warn { color: var(--ink); font-weight: 600; }

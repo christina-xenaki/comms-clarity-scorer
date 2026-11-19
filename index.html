@@ -13,7 +13,6 @@
 <link rel="stylesheet" href="css/view-controls.css">
 <link rel="stylesheet" href="css/rewrites.css">
 <link rel="stylesheet" href="css/highlights.css">
-<link rel="stylesheet" href="css/responsive.css">
 <link rel="stylesheet" href="css/print.css" media="print">
 </head>
 <body>
@@ -39,107 +38,161 @@
       <path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.9A8 8 0 1 1 21 12z"></path>
     </symbol>
   </defs>
+    <symbol id="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="4"></circle>
+      <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+    </symbol>
+    <symbol id="icon-arrow-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M19 12H5M11 18l-6-6 6-6"></path>
+    </symbol>
+  </defs>
 </svg>
 
-<header>
-  <h1>Comms Clarity Scorer</h1>
-  <p>Paste a press release or pitch. Get a clarity score and exactly what's wrong with it.</p>
+<header class="site-header">
+  <div class="container site-header-inner">
+    <div class="brand">
+      <span class="brand-logo" aria-hidden="true"><svg class="brand-icon" focusable="false"><use href="#icon-sun"></use></svg></span>
+      <h1 class="brand-name">Comms Clarity Scorer</h1>
+    </div>
+    <a class="header-link" href="docs.html?doc=scoring">How scoring works</a>
+  </div>
 </header>
-
-<div class="sector-bar">
-  <label for="sector-select">Sector</label>
-  <select id="sector-select">
-    <option value="general">General</option>
-    <option value="healthcare">Healthcare</option>
-    <option value="greenwashing">Environmental claims</option>
-    <option value="ai">AI</option>
-    <option value="forward-looking">Forward-looking statements</option>
-  </select>
-</div>
 
 <div id="results-announcer" role="status" aria-live="polite" class="visually-hidden"></div>
 
-<main class="layout">
-  <div class="col-text">
-    <section id="input-section">
-      <label for="input-text">Your text</label>
-      <textarea id="input-text" placeholder="Paste your press release or pitch here…"></textarea>
+<main id="main" class="container page">
 
-      <div class="variant-row">
-        <label for="variant-select">English variant</label>
-        <select id="variant-select">
-          <option value="british-oxford">British (Oxford, -ize)</option>
-          <option value="british">British (-ise)</option>
-          <option value="american">American</option>
-        </select>
+  <div class="toolbar">
+    <div class="toolbar-field">
+      <label for="sector-select">Sector</label>
+      <select id="sector-select">
+        <option value="general">General</option>
+        <option value="healthcare">Healthcare</option>
+        <option value="greenwashing">Environmental claims</option>
+        <option value="ai">AI</option>
+        <option value="forward-looking">Forward-looking statements</option>
+      </select>
+    </div>
+    <div class="toolbar-field">
+      <label for="variant-select">English variant</label>
+      <select id="variant-select">
+        <option value="british-oxford">British (Oxford, -ize)</option>
+        <option value="british">British (-ise)</option>
+        <option value="american">American</option>
+      </select>
+    </div>
+    <div class="toolbar-field toolbar-levels">
+      <span class="toolbar-label" id="view-level-label">Detail level</span>
+      <div class="segmented" role="group" aria-labelledby="view-level-label">
+        <button type="button" class="segment" data-level="glance" aria-pressed="false" aria-describedby="view-level-desc">Glance</button>
+        <button type="button" class="segment" data-level="working" aria-pressed="false" aria-describedby="view-level-desc">Working</button>
+        <button type="button" class="segment" data-level="full" aria-pressed="false" aria-describedby="view-level-desc">Full</button>
       </div>
-
-      <button id="analyze-btn" type="button">Analyze</button>
-      <p class="privacy-note">The analysis runs in your browser, on your device. Your text is never uploaded anywhere, so you can safely paste a draft that hasn't been published yet.</p>
-      <p id="config-status" class="config-status">Loading word lists…</p>
-    </section>
-
-    <section id="annotated-text-section" hidden>
-      <h2>Your text, annotated</h2>
-      <div class="legend">
-        <span><span class="swatch hl-strength" aria-hidden="true">Aa</span> Strength (good) — double underline</span>
-        <span><span class="swatch hl-concrete" aria-hidden="true">Aa</span> Concrete detail (good) — double underline</span>
-        <span><span class="swatch hl-buzz" aria-hidden="true">Aa</span> Buzzword — dotted underline</span>
-        <span><span class="swatch hl-hedge" aria-hidden="true">Aa</span> Hedge word — dotted underline</span>
-        <span><span class="swatch hl-nominal" aria-hidden="true">Aa</span> Nominalisation — dotted underline</span>
-        <span><span class="swatch hl-superlative" aria-hidden="true">Aa</span> Superlative / absolute claim — wavy underline</span>
-        <span><span class="swatch hl-regulated" aria-hidden="true">Aa</span> Regulated claim — wavy underline</span>
-        <span><span class="swatch hl-passive" aria-hidden="true">Aa</span> Passive voice — dashed underline</span>
-        <span><span class="swatch hl-acronym" aria-hidden="true">Aa</span> Acronym (first use) — dashed underline</span>
-        <span><span class="swatch hl-long" aria-hidden="true">Aa</span> Long sentence — background tint</span>
-        <span><span class="swatch hl-quote" aria-hidden="true">Aa</span> Empty quote — background tint</span>
-      </div>
-      <p class="tap-hint">Tap a highlight for the explanation. Faded text is boilerplate (an "About", "Notes to editors"/references, or contact block) — excluded from your score and graded separately below.</p>
-      <div id="annotated-output" class="card"></div>
-    </section>
+      <p id="view-level-desc" class="view-level-desc"></p>
+    </div>
+    <div class="toolbar-spacer"></div>
+    <div class="toolbar-results">
+      <button id="score-new-btn" type="button" class="primary">Score new text</button>
+    </div>
   </div>
 
-  <div class="col-scores">
-    <section id="results-panel" hidden>
+  <section id="input-section" class="input-state">
+    <p class="intro">Paste a press release or pitch. Get a clarity score and exactly what's wrong with it.</p>
+    <div class="textbox-card">
+      <label for="input-text" class="textbox-label">Your text</label>
+      <textarea id="input-text" spellcheck="false" aria-describedby="empty-message" placeholder="Paste your press release or pitch here…"></textarea>
+      <p class="textbox-footer" id="word-count" aria-hidden="true">0 words</p>
+    </div>
+    <p id="empty-message" class="empty-message" role="status" aria-live="polite"></p>
+    <div class="actions-row">
+      <button id="analyze-btn" type="button" class="primary primary-large">Analyse</button>
+    </div>
+  </section>
 
-      <fieldset id="view-level-group" class="view-level-group">
-        <legend>Detail level</legend>
-        <label class="view-level-option">
-          <input type="radio" name="view-level" value="glance">
-          <span class="view-level-name">Glance</span>
-          <span class="view-level-desc">Grade and headline only</span>
-        </label>
-        <label class="view-level-option">
-          <input type="radio" name="view-level" value="working">
-          <span class="view-level-name">Working</span>
-          <span class="view-level-desc">Scores and the top five fixes</span>
-        </label>
-        <label class="view-level-option">
-          <input type="radio" name="view-level" value="full">
-          <span class="view-level-name">Full</span>
-          <span class="view-level-desc">Everything, including sources</span>
-        </label>
-      </fieldset>
+  <div id="results-panel" class="results-state" hidden>
 
+    <section id="forecast" class="forecast-region" aria-labelledby="overall-grade-heading" tabindex="-1">
       <div id="headline-metric" class="card"></div>
-
-      <section id="overall-card" class="card" aria-labelledby="overall-grade-heading">
+      <div id="overall-card" class="card">
         <h2 id="overall-grade-heading" class="summary-title">Overall grade</h2>
         <div id="overall-grade"><span id="overall-grade-icon" aria-hidden="true"></span> <span id="overall-grade-text">&mdash;</span></div>
         <p id="overall-verdict"></p>
+      </div>
+    </section>
+
+    <div class="results-actions">
+      <button id="copy-report-btn" type="button" class="secondary">
+        <svg class="btn-icon" aria-hidden="true" focusable="false"><use href="#icon-copy"></use></svg>
+        <span class="btn-label">Copy report</span>
+      </button>
+
+      <div class="export-actions">
+        <button id="export-email-btn" type="button" class="secondary">
+          <svg class="btn-icon" aria-hidden="true" focusable="false"><use href="#icon-mail"></use></svg>
+          <span class="btn-label">Copy for email</span>
+        </button>
+        <button id="export-slack-btn" type="button" class="secondary">
+          <svg class="btn-icon" aria-hidden="true" focusable="false"><use href="#icon-chat"></use></svg>
+          <span class="btn-label">Copy for Slack</span>
+        </button>
+      </div>
+
+      <div class="share-actions">
+        <button id="share-score-btn" type="button" class="secondary" aria-expanded="false" aria-controls="share-score-options">
+          <svg class="btn-icon" aria-hidden="true" focusable="false"><use href="#icon-share"></use></svg>
+          <span class="btn-label">Share score</span>
+        </button>
+        <div id="share-score-options" class="share-score-options" hidden>
+          <a id="share-whatsapp-link" class="secondary-link" href="https://wa.me/" target="_blank" rel="noopener noreferrer" aria-label="Share to WhatsApp (opens in a new tab)">
+            <span class="btn-label">Share to WhatsApp</span>
+          </a>
+          <button id="share-slack-btn" type="button" class="secondary">
+            <span class="btn-label">Share to Slack</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="results-columns">
+      <section id="annotated-text-section" class="document-card" aria-labelledby="annotated-heading" hidden>
+        <div class="document-header">
+          <h2 id="annotated-heading">Your text, annotated</h2>
+          <button id="edit-text-btn" type="button" class="text-button">
+            <svg class="btn-icon" aria-hidden="true" focusable="false"><use href="#icon-arrow-left"></use></svg>
+            <span>Edit text</span>
+          </button>
+        </div>
+        <div class="legend">
+          <span><span class="swatch hl-strength" aria-hidden="true">Aa</span> Strength (good) — double underline</span>
+          <span><span class="swatch hl-concrete" aria-hidden="true">Aa</span> Concrete detail (good) — double underline</span>
+          <span><span class="swatch hl-buzz" aria-hidden="true">Aa</span> Buzzword — dotted underline</span>
+          <span><span class="swatch hl-hedge" aria-hidden="true">Aa</span> Hedge word — dotted underline</span>
+          <span><span class="swatch hl-nominal" aria-hidden="true">Aa</span> Nominalisation — dotted underline</span>
+          <span><span class="swatch hl-superlative" aria-hidden="true">Aa</span> Superlative / absolute claim — wavy underline</span>
+          <span><span class="swatch hl-regulated" aria-hidden="true">Aa</span> Regulated claim — wavy underline</span>
+          <span><span class="swatch hl-passive" aria-hidden="true">Aa</span> Passive voice — dashed underline</span>
+          <span><span class="swatch hl-acronym" aria-hidden="true">Aa</span> Acronym (first use) — dashed underline</span>
+          <span><span class="swatch hl-long" aria-hidden="true">Aa</span> Long sentence — background tint</span>
+          <span><span class="swatch hl-quote" aria-hidden="true">Aa</span> Empty quote — background tint</span>
+        </div>
+        <p class="tap-hint">Tap a highlight for the explanation. Faded text is boilerplate (an "About", "Notes to editors"/references, or contact block) — excluded from your score and graded separately below.</p>
+        <div id="annotated-output"></div>
       </section>
 
-      <section id="boilerplate-note" class="card" hidden></section>
+      <div class="side-column">
+        <section id="worst-offenders" class="card">
+          <h2>Top five fixes</h2>
+          <p class="section-intro">The worst specific sentences, ranked worst to least-bad, with a suggested rewrite where the tool has one.</p>
+          <ol id="worst-offenders-list"></ol>
+        </section>
 
-      <section id="worst-offenders" class="card">
-        <h2>Top five fixes</h2>
-        <p class="section-intro">The worst specific sentences, ranked worst to least-bad, with a suggested rewrite where the tool has one.</p>
-        <ol id="worst-offenders-list"></ol>
-      </section>
+        <section id="boilerplate-note" class="card" hidden></section>
+      </div>
+    </div>
 
-      <section id="sub-scores">
-        <h2>Checks</h2>
-
+    <section id="sub-scores">
+      <h2>Checks</h2>
+      <div class="checks-grid">
         <details class="card" id="card-concreteness">
           <summary><h3 class="summary-title">Concreteness</h3><span class="summary-score" id="score-concreteness">&mdash;</span></summary>
           <div class="card-body" id="body-concreteness"></div>
@@ -219,50 +272,35 @@
           <summary><h3 class="summary-title">Regulated claims</h3><span class="summary-score" id="score-regulated-claims">&mdash;</span></summary>
           <div class="card-body" id="body-regulated-claims"></div>
         </details>
-      </section>
-
-      <section id="rewrite-suggestions" class="card">
-        <h2>Rewrite suggestions</h2>
-        <p class="section-intro">"Suggested rewrite" is an automatic fix — check the grammar before using it. "Worth asking yourself" is a question the tool can't answer for you.</p>
-        <ol id="rewrite-suggestions-list"></ol>
-      </section>
-
-      <button id="copy-report-btn" type="button" class="secondary">
-        <svg class="btn-icon" aria-hidden="true" focusable="false"><use href="#icon-copy"></use></svg>
-        <span class="btn-label">Copy report</span>
-      </button>
-
-      <div class="export-actions">
-        <button id="export-email-btn" type="button" class="secondary">
-          <svg class="btn-icon" aria-hidden="true" focusable="false"><use href="#icon-mail"></use></svg>
-          <span class="btn-label">Copy for email</span>
-        </button>
-        <button id="export-slack-btn" type="button" class="secondary">
-          <svg class="btn-icon" aria-hidden="true" focusable="false"><use href="#icon-chat"></use></svg>
-          <span class="btn-label">Copy for Slack</span>
-        </button>
-      </div>
-
-      <div class="share-actions">
-        <button id="share-score-btn" type="button" class="secondary" aria-expanded="false" aria-controls="share-score-options">
-          <svg class="btn-icon" aria-hidden="true" focusable="false"><use href="#icon-share"></use></svg>
-          <span class="btn-label">Share score</span>
-        </button>
-        <div id="share-score-options" class="share-score-options" hidden>
-          <a id="share-whatsapp-link" class="secondary-link" href="https://wa.me/" target="_blank" rel="noopener noreferrer" aria-label="Share to WhatsApp (opens in a new tab)">
-            <span class="btn-label">Share to WhatsApp</span>
-          </a>
-          <button id="share-slack-btn" type="button" class="secondary">
-            <span class="btn-label">Share to Slack</span>
-          </button>
-        </div>
       </div>
     </section>
+
+    <section id="rewrite-suggestions" class="rewrites-section">
+      <details class="card rewrites-details">
+        <summary><h2 class="summary-title">Rewrite suggestions</h2><span class="summary-score" id="rewrite-count"></span></summary>
+        <div class="card-body">
+          <p class="section-intro">"Suggested rewrite" is an automatic fix — check the grammar before using it. "Worth asking yourself" is a question the tool can't answer for you.</p>
+          <ol id="rewrite-suggestions-list"></ol>
+        </div>
+      </details>
+    </section>
   </div>
+
+  <p class="privacy-note">The analysis runs in your browser, on your device. Your text is never uploaded anywhere, so you can safely paste a draft that hasn't been published yet.</p>
 </main>
 
-<footer>
-  <p>Checks: concreteness, strengths, empty-quote detection, buzzword density, sentence length, readability, passive voice, hedging, superlatives &amp; absolute claims, nominalisation, self-reference, acronym load, inverted pyramid structure, consistency &amp; typos, English variant, and regulated claims (off by default, and never counted toward the overall grade). See <a href="docs.html?doc=scoring" aria-label="SCORING.md methodology document">SCORING.md</a> for exactly how each is calculated, including known limitations. This tool is directional, not authoritative — it does not replace an editor, and regulated-claim flags are a prompt to consult your legal/compliance/medical-affairs team, not a sign-off. A good score does not mean the release is accurate, newsworthy, or that it will earn coverage.</p>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-main">
+      <p>This tool is directional, not authoritative — it does not replace an editor, and regulated-claim flags are a prompt to consult your legal/compliance/medical-affairs team, not a sign-off. A good score does not mean the release is accurate, newsworthy, or that it will earn coverage.</p>
+      <p><a href="docs.html?doc=scoring">How scoring works</a></p>
+      <details class="what-it-checks">
+        <summary>What it checks</summary>
+        <p>Checks: concreteness, strengths, empty-quote detection, buzzword density, sentence length, readability, passive voice, hedging, superlatives &amp; absolute claims, nominalisation, self-reference, acronym load, inverted pyramid structure, consistency &amp; typos, English variant, and regulated claims (off by default, and never counted toward the overall grade). See <a href="docs.html?doc=scoring" aria-label="SCORING.md methodology document">SCORING.md</a> for exactly how each is calculated, including known limitations.</p>
+      </details>
+    </div>
+    <p id="config-status" class="config-status">Loading word lists…</p>
+  </div>
 </footer>
 
 <script src="js/dom.js"></script>
