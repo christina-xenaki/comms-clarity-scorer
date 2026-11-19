@@ -28,16 +28,40 @@ var elShareOptions = $("share-score-options");
 var elShareWhatsappLink = $("share-whatsapp-link");
 var elShareSlackBtn = $("share-slack-btn");
 var elAnnouncer = $("results-announcer");
-var elViewLevelRadios = document.querySelectorAll('input[name="view-level"]');
+var elViewLevelButtons = document.querySelectorAll(".segment[data-level]");
+var elViewLevelDesc = $("view-level-desc");
+var elInputSection = $("input-section");
+var elWordCount = $("word-count");
+var elEmptyMessage = $("empty-message");
+var elEditTextBtn = $("edit-text-btn");
+var elScoreNewBtn = $("score-new-btn");
+var elForecast = $("forecast");
+var elRewriteCount = $("rewrite-count");
 
 var lastReportText = "";
 var lastResult = null;
 
+// Level descriptions, verbatim from COPY.md "View names".
+var VIEW_LEVEL_DESCRIPTIONS = {
+  glance: "Grade and headline only",
+  working: "Scores and the top five fixes",
+  full: "Everything, including sources"
+};
+
 function setViewLevel(level) {
   document.body.setAttribute("data-view", level);
-  elViewLevelRadios.forEach(function (radio) { radio.checked = (radio.value === level); });
+  elViewLevelButtons.forEach(function (btn) {
+    btn.setAttribute("aria-pressed", String(btn.getAttribute("data-level") === level));
+  });
+  elViewLevelDesc.textContent = VIEW_LEVEL_DESCRIPTIONS[level];
 }
-elViewLevelRadios.forEach(function (radio) {
-  radio.addEventListener("change", function () { if (radio.checked) setViewLevel(radio.value); });
+elViewLevelButtons.forEach(function (btn) {
+  btn.addEventListener("click", function () { setViewLevel(btn.getAttribute("data-level")); });
 });
 setViewLevel(window.matchMedia("(max-width: 599px)").matches ? "glance" : "working");
+
+// Input or Results (UI-SPEC §2). The page starts in Input.
+function setPageState(state) {
+  document.body.setAttribute("data-state", state);
+}
+setPageState("input");

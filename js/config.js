@@ -21,7 +21,12 @@ function loadConfig(fileOrSector, isInitialLoad) {
       elConfigStatus.textContent = "Word lists loaded: " + (CONFIG.sectorName || file) + " (" + CONFIG.buzzwords.length + " buzzwords, " + CONFIG.hedges.length + " hedges)." +
         (CONFIG.regulatedClaims && CONFIG.regulatedClaims.enabled ? " Regulated-claim flags: on (tracked separately, not counted toward the overall grade)." : "");
       elConfigStatus.classList.remove("warn");
-      if (!isInitialLoad && elInputText.value.trim()) analyze();
+      // Re-run only while results are showing. In the Input state the next
+      // "Analyse" uses the new word lists anyway.
+      if (!isInitialLoad && elInputText.value.trim() && document.body.getAttribute("data-state") === "results") {
+        analyze();
+        onResultsUpdated();
+      }
     })
     .catch(function (err) {
       elConfigStatus.textContent = "Couldn't load " + file + " (" + err.message + "). This tool needs its config file to run — serve the folder with a local web server rather than opening the file directly.";

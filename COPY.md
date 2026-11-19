@@ -202,3 +202,29 @@ Loading state, while a document fetches:
 Error state, if a document fails to load:
 
 > Could not load [file]. Try refreshing the page.
+
+---
+
+## Page layout (UI-SPEC §9)
+
+Strings for the redesigned layout. Use verbatim. Further §9 strings are added here when the components that use them are built.
+
+Main button: **Analyse** (replaces the inline "Analyze"; British spelling, and Oxford spelling also keeps -yse).
+
+Toolbar, Results state only: **Score new text**. Returns to the text box with the box cleared.
+
+Annotated text header: **Edit text**. Returns to the text box with the text kept.
+
+Word count under the text box: **{n} words**
+
+Header and footer link to SCORING.md: **How scoring works**
+
+Footer disclosure, Input state only, holding the existing list of checks: **What it checks**
+
+---
+
+## Copy backlog
+
+Existing strings written inline in the JS, touched during the redesign. They stay inline for now and move here in a later copy session (UI-SPEC §0).
+
+- "Paste some text first." In `js/analyze.js` (alert) and now also `js/events.js`, which shows it inline under the text box.
