@@ -53,3 +53,9 @@ body[data-view="working"] .side-column { flex: 1 1 100%; max-width: 760px; }
 
 /* Rationale stays collapsed outside Full. */
 body[data-view="glance"] .why-wrap { display: none; }
+
+/* Forced-colours mode: the selected segment keeps a visible, heavier border. */
+@media (forced-colors: active) {
+  .segment { border-color: var(--fc-canvas); }
+  .segment[aria-pressed="true"] { border: 2px solid var(--fc-selected); }
+}

@@ -94,7 +94,7 @@ elVariantSelect.addEventListener("change", function () {
 document.addEventListener("click", function (e) {
   var hl = e.target.closest(".hl");
   document.querySelectorAll(".hl.open").forEach(function (el) { if (el !== hl) el.classList.remove("open"); });
-  if (hl) { hl.classList.toggle("open"); e.stopPropagation(); }
+  if (hl) { hl.classList.toggle("open"); placeTip(hl); e.stopPropagation(); }
 
   var whyBtn = e.target.closest(".why-toggle");
   if (whyBtn) {
@@ -112,7 +112,25 @@ document.addEventListener("keydown", function (e) {
   e.preventDefault();
   document.querySelectorAll(".hl.open").forEach(function (el) { if (el !== hl) el.classList.remove("open"); });
   hl.classList.toggle("open");
+  placeTip(hl);
 });
+
+// Keeps an open tip inside the viewport with a 16px margin (UI-SPEC v1.4,
+// §4). The tip sits under the start of its word; near the right edge it is
+// shifted left by just enough to fit.
+function placeTip(hl) {
+  var tip = hl.querySelector(".tip");
+  if (!tip) return;
+  tip.style.setProperty("--tip-shift", "0px");
+  if (!hl.classList.contains("open")) return;
+  var margin = 16;
+  var viewport = document.documentElement.clientWidth;
+  var rect = tip.getBoundingClientRect();
+  var shift = 0;
+  if (rect.right > viewport - margin) shift = viewport - margin - rect.right;
+  if (rect.left + shift < margin) shift = margin - rect.left;
+  tip.style.setProperty("--tip-shift", Math.round(shift) + "px");
+}
 
 // ---- Clipboard ----
 // Each copy calls onDone once the text is on the clipboard (or the fallback

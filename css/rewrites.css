@@ -63,9 +63,11 @@
 .fix-try .eyebrow { margin-right: var(--space-1); }
 .fix-question { margin: var(--space-2) 0 0; font-style: italic; color: var(--ink); }
 
+/* <del> and <ins>: the struck phrase keeps its line-through; the rewrite has
+   no underline, because a solid underline is reserved for real links. */
 .rewrite-original { font-family: var(--font-serif); color: var(--muted); text-decoration: line-through; }
 .rewrite-arrow { color: var(--muted); }
-.rewrite-new { font-family: var(--font-serif); color: var(--ink); font-weight: 600; }
+.rewrite-new { font-family: var(--font-serif); color: var(--ink); font-weight: 600; text-decoration: none; }
 
 /* ---- Tier pills: weight, not colour, tells the tiers apart ---- */
 .tier-pill {
@@ -83,3 +85,12 @@
 
 /* In the rewrite suggestions list the pill sits on its own line. */
 #rewrite-suggestions-list .tier-pill { margin-bottom: var(--space-2); }
+
+/* Forced-colours mode: the filled pill loses its fill, so each tier gets
+   its own border style: double, solid or dashed. */
+@media (forced-colors: active) {
+  .tier-rewrite { border: 3px double var(--fc-text); }
+  .tier-question { border: 1px solid var(--fc-text); }
+  .tier-flag { border: 1px dashed var(--fc-text); }
+  .fix-number { border: 1px solid var(--fc-text); }
+}

@@ -135,7 +135,7 @@ Full-width white bar with a `--line` bottom border. Its content sits **inside th
 - Right: "How scoring works" link to SCORING.md.
 
 ### Toolbar (one row, wraps on narrow screens)
-Sector select · English variant select · Detail level segmented control (Glance / Working / Full) · flexible space · *(Results only)* Export menu button · *(Results only)* "Score new text" primary button.
+Sector select · English variant select · *(Results only)* Detail level segmented control (Glance / Working / Full) · flexible space · *(Results only)* Export menu button · *(Results only)* "Score new text" primary button. The detail-level control is hidden in the Input state, where there is nothing to show at any level.
 
 ### Input state
 Centred single column, max-width 760px (toolbar included).
@@ -156,6 +156,8 @@ Container 1240px.
 6. **Rewrite suggestions** section (full width).
 7. Footer.
 
+**DOM order matches screen order**: the forecast card and the privacy callout sit straight after the input section in the DOM, ahead of `#results-panel`, so the privacy note follows the forecast card for screen readers too. The Input state hides the forecast card; the Results state hides the input section.
+
 "Edit text" returns to the Input state with the text kept. "Score new text" returns to the Input state with the box cleared. Changing Sector or English variant re-runs the analysis and stays in Results, as it does now.
 
 **Switching states**: `analyze()` stays untouched. Keep `#results-panel`, `#annotated-text-section` and the textarea in the page, and switch between Input and Results from events.js after `analyze()` returns.
@@ -163,6 +165,7 @@ Container 1240px.
 ### Forecast card
 - Background: the current grade's tint token (`--grade-a` to `--grade-e`). Radius 20, padding 36px 44px. Three regions in a wrapping row, vertically centred:
   - **Left**: weather icon (inline SVG, 80px, one per grade, see §6) · grade letter (40/700, `--ink`, **not** accent) next to "86/100" (18/600, `--muted`) · the grade's existing condition label (15/600, `--muted`).
+  - **The grade is read out in full**: a visually hidden paragraph holds the existing full label ("Grade C, Hazy. Score 74 out of 100."). The icon, letter, score and condition label are `aria-hidden`, so screen readers hear the grade once, in full.
   - **Middle** (`flex: 1 1 420px`): eyebrow "Your forecast" · **headline metric** (48/700): this is the primary display · the grade's existing summary sentence (18px, `--muted`).
   - **Right** (top-aligned): "Share score" secondary button with share icon.
 - **Share panel** opens inside the card, below the regions: white, radius 14, padding 20px 22px. Eyebrow "What gets shared" · the exact existing share text · a line with a small lock icon: "Only the grade and headline. Never your text." · the existing "Share to WhatsApp" and "Share to Slack" actions as text-only secondary buttons (§5). The trigger has `aria-expanded`. Focus moves into the panel when it opens and back to the trigger when it closes; Esc closes it.
@@ -184,14 +187,15 @@ White, 1px `--line`, radius 16, padding 40px 56px 48px (24px at 767px and below)
    - Suggested rewrite only: eyebrow "Try" + the rewrite (15px, `--ink`).
    - No "Why this check exists" control on fix cards; it lives on the check cards.
    - **Tier pills** (12/600, radius 999, padding 3px 10px), in sentence case as in the code and exports: **Suggested rewrite** = filled `--ink`, white text · **Worth asking yourself** = 1px solid `--ink` border, `--ink` text · **Flag only** = 1px dashed `--muted` border, `--muted` text. "Flag only" is for any fix that has neither of the other two.
-3. **What's working** card: the **Strengths check's existing findings**, each as a row with a check icon in `--good` and the finding text (14px/1.5). Hide the card when there are no strengths.
+3. **What's working** card: the **Strengths check's existing findings**, each as a row with a check icon in `--good` and the finding text (14px/1.5). Hide the card when there are no strengths. It shows in Working as well as Full.
 4. **Boilerplate** card: "Boilerplate" · its **word count and buzzword count** (existing figures and wording) · "not in main score" · the buzzwords found. Boilerplate has no grade. Don't add one.
 
 ### Checks section (Working and Full)
 - The existing "Checks" heading (22/700), then all 16 checks in their current order.
 - Layout: 2 columns at 1100px and up (`display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px`), 1 column below.
 - Each check is a `<details>` card: `--surface`, 1px `--line`, radius 14.
-  - **Summary row** (min-height 56px, padding 16px 20px, flex, space-between): check name (15/600) · its score, in today's format (14/600 `--muted`) · its number of findings, in today's wording (13px `--muted`) · chevron-right that rotates 90° when open.
+  - **Summary row** (min-height 56px, padding 16px 20px, flex, space-between): check name (15/600) · its score, in today's format (14/600 `--muted`) · its number of findings (13px `--muted`): "No findings", "1 finding" or "{n} findings" (COPY.md) · chevron-right that rotates 90° when open.
+  - **What counts as a finding**: itemised checks count the items they flag or credit, the same items they highlight or list (Concreteness: concrete details · Strengths: strength signals · Empty quote detector: empty quotes · Buzzword density: buzzwords · Sentence length: sentences over the limit · Passive voice, Hedging, Superlatives, Nominalisation: their matches · Acronym load: acronyms never expanded · Consistency: issue types · English variant: mismatches · Regulated claims: regulated terms, or none when no sector is on). Readability, Self-reference and Inverted pyramid flag no single items, so they count the actions they raise, using the same conditions as their existing Action text (Readability and Self-reference: 0 or 1; Inverted pyramid: 0 to 4). Presentation only: no score changes.
   - **When open** (padding 0 20px 20px): the check's existing findings (14px/1.55), then the existing "Why this check exists" control, restyled with a `--line-soft` pill, 12/500 `--muted` text, min-height 32px and a rotating chevron. The expanded rationale is 13/1.5 `--muted`, indented 18px, with sources as links with solid underlines.
 - All cards are collapsed by default. Keep the existing content and wording; this is a restyle of today's 16 check cards.
 
@@ -201,8 +205,9 @@ White, 1px `--line`, radius 16, padding 40px 56px 48px (24px at 767px and below)
 
 ### Detail levels
 - **Glance**: toolbar (including Export), forecast card, privacy callout. Nothing else.
-- **Working**: everything in Glance, plus the top five fixes in a single centred column (max 760px), plus the Checks section (scores visible, cards collapsed). No annotated text.
+- **Working**: everything in Glance, plus the top five fixes and What's working in a single centred column (max 760px), plus the Checks section (scores and findings counts visible, cards collapsed). No annotated text, boilerplate or rewrite suggestions.
 - **Full**: everything: the two-column layout, the Checks section and the Rewrite suggestions section.
+- **Default level**, chosen once when the page loads: **Full** at 768px and wider, **Working** from 600 to 767px, **Glance** under 600px. The reader can change it at any time.
 
 ### Footer (both states)
 1px `--line` top border, 13px/1.55 `--muted`. Left (max 720px): **today's footer disclaimer text** (see §9) and the "How scoring works" link. Right: the "Word lists loaded…" line (moved here from under the button). In the Input state, add a `<details>` disclosure "What it checks" holding the existing checks list.
@@ -217,7 +222,8 @@ White, 1px `--line`, radius 16, padding 40px 56px 48px (24px at 767px and below)
 - **Secondary button**: `--surface` background, 1px `--control-border`, `--ink` text.
 - **Segmented control**: `--line-soft` track, radius 12, padding 3px. Segments: min-height 44px, radius 9, 14/500 `--muted`. Selected segment: `--surface` background, 1px `--control-border`, `--shadow-sm`, 600 `--ink`. Uses `aria-pressed`. **Level descriptions** (the existing "Grade and headline only" and so on): show the selected level's description as visible text right after the control (13px `--muted`, wrapping below it on narrow screens), linked with `aria-describedby`. Don't use `title` attributes: they don't show on touch screens or to keyboard users.
 - **Focus**: `:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }` on every interactive element. Never remove an outline without a replacement.
-- **Target size**: 44px minimum for main controls; nothing interactive smaller than 24×24px.
+- **Chips**: 36px tall, radius 999, 1px `--control-border`, 14/500; switched off: `--chip-off` background, `--muted` text, dashed border (§2, §4).
+- **Target size**: 44px minimum for main controls. Chips are 36px. Nothing interactive has a hit area smaller than 24×24px: the 18px fix markers and the 16px-tall footer links get an invisible 24px hit area (a pseudo-element or padding with a matching negative margin) without changing how they look.
 
 ---
 
@@ -235,9 +241,11 @@ The nine existing categories already group by underline style. This change conso
 - All highlights: `text-underline-offset: 5px; text-decoration-skip-ink: none;`. No background tints.
 - **Sentence-level highlights** (Long sentence, Empty quote) sit lower, at `text-underline-offset: 10px`, so they never overlap the underline of a word inside them.
 - **Keep the existing highlight mechanics**: `<mark class="hl" tabindex="0" role="button" aria-describedby=…>`, the `.tip` that screen readers can always read, Click/Enter/Space toggling `.open`, and one tip open at a time. Restyle only: the tip popover uses an `--ink` background, white 13px/1.5 text, radius 10, padding 10px 12px and `--shadow-menu`.
+- **Tips stay inside the viewport**: max width `min(320px, 100vw − 32px)`. A tip sits under the start of its word; when that would cross the right edge (16px margin), it shifts left by just enough to fit.
 - **Switching a family off** removes its underlines and sets its highlights to `tabindex="-1"`, so keyboard users don't tab through invisible items. Switching it back on restores `tabindex="0"`. Screen-reader tips stay in place.
 - The specific category name stays in each highlight's explanation and in the fix cards.
-- A solid underline is still reserved for external links.
+- A solid underline is still reserved for external links. The rewrite in a fix card is an `<ins>` with its default underline removed; the phrase it replaces is a `<del>` and keeps its line-through.
+- **Forced-colours mode** (Windows high contrast): fills and colours are replaced, so states are carried by border style. Chips: solid border when on, dashed when off. Tier pills: double border (Suggested rewrite), solid (Worth asking yourself), dashed (Flag only). The selected segment gets a heavier border. Highlight families stay distinct by underline style. System colours are tokens in §1's `:root` block.
 
 ---
 
@@ -282,7 +290,7 @@ Already exists. Keep its two actions and its output exactly as they are: **Share
 ## 6. Icons
 
 Inline SVG on a 24px grid, stroke 1.8–2, round caps and joins, `currentColor` except the weather icons.
-- **Weather, one per grade** (replace the on-screen emoji; keep emoji in exports): A sun · B sun partly behind a cloud · C cloud with a little sun · D two clouds · E cloud with rain. Sun strokes in `--sun`, cloud and rain strokes in `--ink`. Each has `role="img"` and an `aria-label` with the grade's condition label.
+- **Weather, one per grade** (replace the on-screen emoji; keep emoji in exports): A sun · B sun partly behind a cloud · C cloud with a little sun · D two clouds · E cloud with rain. Sun strokes in `--sun`, cloud and rain strokes in `--ink`, stroke width 1.8. The icon is `aria-hidden` on the forecast card, where the grade is read out from visually hidden text (§2).
 - **Interface**: logo sun, lock, download, chevron-down, chevron-right, share, mail, chat bubble, printer, check, arrow-left. All decorative icons get `aria-hidden="true"`.
 
 ---
@@ -290,9 +298,9 @@ Inline SVG on a 24px grid, stroke 1.8–2, round caps and joins, `currentColor` 
 ## 7. Responsive
 
 - **1100px and up**: as described.
-- **768–1099px**: the side column narrows to 300px minimum, then wraps below the document (via flex-wrap). The forecast card's regions wrap.
+- **768–1099px**: the side column (`flex: 1 1 340px`) wraps below the document (via flex-wrap) once the row can't fit a 600px document and a 340px column. The forecast card's regions wrap.
 - **767px and below**: container padding 16px; forecast card padding 24px with its regions stacked; toolbar wraps and the segmented control goes full width; document card padding 24px; chips wrap; the export menu becomes full width under its button.
-- **390px**: no horizontal scrolling anywhere. Text must reflow at 200% zoom.
+- **390px**: no horizontal scrolling anywhere, including with a highlight tip open (§4). Text must reflow at 200% zoom.
 
 ---
 

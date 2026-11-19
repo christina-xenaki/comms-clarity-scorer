@@ -19,7 +19,7 @@ function loadConfig(fileOrSector, isInitialLoad) {
       CONFIG = json;
       if (isInitialLoad && CONFIG.defaultEnglishVariant) elVariantSelect.value = CONFIG.defaultEnglishVariant;
       elConfigStatus.textContent = "Word lists loaded: " + (CONFIG.sectorName || file) + " (" + CONFIG.buzzwords.length + " buzzwords, " + CONFIG.hedges.length + " hedges)." +
-        (CONFIG.regulatedClaims && CONFIG.regulatedClaims.enabled ? " Regulated-claim flags: on (tracked separately, not counted toward the overall grade)." : "");
+        (CONFIG.regulatedClaims && CONFIG.regulatedClaims.enabled ? " Regulated-claim flags: on (tracked separately, not counted towards the overall grade)." : "");
       elConfigStatus.classList.remove("warn");
       // Re-run only while results are showing. In the Input state the next
       // "Analyse" uses the new word lists anyway.
