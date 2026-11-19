@@ -1,9 +1,24 @@
 # UI-SPEC.md — Comms Clarity Scorer redesign
 
-Version 1.3 · November 2026 · Direction: "Combined" (forecast card + annotated text with side column + lock privacy note) · Palette: Evergreen
+Version 1.4 · November 2026 · Direction: "Combined" (forecast card + annotated text with side column + lock privacy note) · Palette: Evergreen
 
 This is a **visual and layout refactor only**. Read it alongside SPEC.md (behaviour) and COPY.md (interface text).
 
+> **Changes in v1.4** (after the final review, built in UI-5)
+> - `--control-border` is now `#737976`: 3.4:1 or more on every background, including grade E.
+> - **Highlight tips** stay inside the viewport: max width min(320px, 100vw − 32px), shifted left near the right edge.
+> - **The grade is read out in full** from visually hidden text; the visual parts are `aria-hidden`. `lang="en-GB"` on both pages.
+> - **Check summaries show a findings count**: "No findings", "1 finding" or "{n} findings", on screen and in print.
+> - **Fix markers and the footer link** get a hit area of at least 24×24px without changing how they look.
+> - **The privacy note comes straight after the forecast card** in the DOM, matching where it appears on screen.
+> - **Forced-colours mode**: chips and tier pills stay distinguishable by border style. Weather icon strokes are 1.8. "toward" becomes "towards".
+> - **Struck-through phrase before a rewrite** uses `<del>`, and the rewrite uses `<ins>`.
+> - **Default detail level**: Full at 768px and wider, Working from 600 to 767px, Glance under 600px.
+> - **Kept as built**: What's working also shows in Working; the detail-level control is hidden in the Input state; the side column wraps at 340px; the export menu flips left when needed; a second `:root` block for small-screen sizes; chips 36px tall.
+> - **Parked for later**:
+>   - Highlights split into several tab stops per phrase.
+>   - Headline and first paragraph counted as one sentence. Fixing this changes scoring, so it needs its own session and a deliberately regenerated baseline.
+>
 > **Changes in v1.3** (answers to the second review)
 > - **New "Checks" and "Rewrite suggestions" sections** keep every finding on the page. Working shows each check's score (§2).
 > - **Fix cards show their existing detail line**, not a check name. "Why this check exists" moves to the check cards (§2).
@@ -57,7 +72,7 @@ All colours, type sizes, spacing, radii, shadows and durations live as CSS custo
 | `--muted` | `#565C5A` | Secondary text, rationale, meta | 6.3:1 on paper; 5.3:1 on the darkest grade tint |
 | `--line` | `#E4E1DA` | Card borders (decorative only) | — |
 | `--line-soft` | `#EEECE6` | Dividers, segmented-control track, rationale pill | — |
-| `--control-border` | `#7D8380` | Borders of text box, selects, secondary buttons, selected segment | 3.3:1 or more on every background it sits on |
+| `--control-border` | `#737976` | Borders of text box, selects, secondary buttons, selected segment | 3.4:1 or more on every background it sits on (lowest: grade E) |
 | `--accent` | `#1D5B4F` (the existing green, kept) | **Actions only**: primary buttons, links, focus ring, logo | 7.9:1 with white |
 | `--accent-hover` | `#164840` | Primary button hover | 10.3:1 with white |
 | `--on-accent` | `#FFFFFF` | Text on accent | — |
@@ -67,7 +82,7 @@ All colours, type sizes, spacing, radii, shadows and durations live as CSS custo
 | `--word` | `#B07400` | Word choice underline. **Never use for text** | 3.9:1 on white |
 | `--claim` | `#B4233C` | Claims underline | 6.5:1 on white |
 | `--struct` | `#1F3F80` | Structure underline | 10.1:1 on white |
-| `--sun` | `#B7791F` | Sun strokes in weather icons | 3.1:1 or more on every grade tint |
+| `--sun` | `#B7791F` | Sun strokes in weather icons (A, B and C only; D and E have no sun) | 3.1:1 or more on grade A, B and C tints |
 | `--grade-a` | `#FBF3DD` | Forecast card, grade A | muted 6.2:1 |
 | `--grade-b` | `#E6F0F3` | Forecast card, grade B | muted 5.9:1 |
 | `--grade-c` | `#ECEFF2` | Forecast card, grade C | muted 5.9:1 |
