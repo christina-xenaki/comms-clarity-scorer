@@ -223,6 +223,28 @@ Footer disclosure, Input state only, holding the existing list of checks: **What
 
 ---
 
+## Results components (UI-SPEC §9)
+
+Forecast card eyebrow (also the results heading): **Your forecast**
+
+Annotated text header: **Your text, annotated · {n} words**
+
+Highlight chips: group label **Show or hide highlight types**. One chip per family:
+- **Strong detail** (double underline): strengths and concrete details
+- **Word choice** (dotted underline): buzzwords, hedge words and nominalisations
+- **Claims** (wavy underline): superlatives, absolute claims and regulated claims
+- **Structure** (dashed underline): passive voice, first-use acronyms, long sentences and empty quotes
+
+Fix tier for a top fix with neither a suggested rewrite nor a question: **Flag only** (sentence case, matching "Suggested rewrite" and "Worth asking yourself").
+
+Fix marker after a flagged sentence, accessible name: **See fix {n}**
+
+Rewrite eyebrow on fix cards and rewrite suggestions: **Try**
+
+Side column cards: **What's working** (the Strengths check's findings) and **Boilerplate**, with the eyebrow **Boilerplate · graded separately** above the boilerplate in the annotated text and the note **not in main score** on the card.
+
+---
+
 ## Copy backlog
 
 Existing strings written inline in the JS, touched during the redesign. They stay inline for now and move here in a later copy session (UI-SPEC §0).

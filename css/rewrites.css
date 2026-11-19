@@ -1,26 +1,85 @@
-#worst-offenders ol, #rewrite-suggestions ol { margin: 0; padding-left: var(--space-5); }
-#worst-offenders li, #rewrite-suggestions li { margin-bottom: var(--space-4); }
-#worst-offenders .reason { display: block; font-size: var(--fs-ui); color: var(--muted); }
-.worst-rewrite { display: block; margin-top: var(--space-2); font-size: var(--fs-ui); }
+/* Top five fixes and rewrite suggestions (UI-SPEC §2 fix cards). */
 
-.rewrite-tier {
-  display: inline-block;
-  font-size: var(--fs-eyebrow);
+.fixes-section h2,
+.side-card h2 {
+  margin: 0 0 var(--space-3);
+  font-size: var(--fs-text);
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-eyebrow);
-  padding: 0.1rem var(--space-2);
-  border-radius: 4px;
-  background: var(--paper);
-  border: var(--border-thin) solid var(--line);
-  color: var(--muted);
-  margin-bottom: var(--space-1);
 }
-.rewrite-arrow { color: var(--muted); }
-.rewrite-original { text-decoration: line-through; color: var(--muted); }
-.rewrite-new { color: var(--good); font-weight: 600; }
-.rewrite-question { font-style: italic; }
+.heading-count { font-weight: 600; color: var(--muted); }
 
-/* Quoted sentences and rewrites use the serif, like the analysed text (§1). */
-#worst-offenders li, .rewrite-original, .rewrite-new, .rewrite-question { font-family: var(--font-serif); }
-#worst-offenders .reason, .rewrite-tier, .rewrite-arrow { font-family: var(--font-sans); }
+#worst-offenders-list,
+#rewrite-suggestions-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.fix-card {
+  background: var(--surface);
+  border: var(--border-thin) solid var(--line);
+  border-radius: var(--radius-card);
+  padding: var(--space-5) 22px;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--ink);
+}
+.fix-card:focus { outline: none; }
+.fix-card:focus-visible, .fix-card:target { outline: var(--focus-ring); outline-offset: var(--focus-offset); }
+.fix-empty { color: var(--muted); }
+
+.fix-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+.fix-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: var(--radius-pill);
+  background: var(--ink);
+  color: var(--on-accent);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+}
+.fix-detail { font-size: var(--fs-meta); color: var(--muted); }
+
+.fix-sentence {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: var(--fs-body);
+  color: var(--muted);
+}
+.fix-try { margin: var(--space-2) 0 0; font-size: var(--fs-body); color: var(--ink); }
+.fix-try .eyebrow { margin-right: var(--space-1); }
+.fix-question { margin: var(--space-2) 0 0; font-style: italic; color: var(--ink); }
+
+.rewrite-original { font-family: var(--font-serif); color: var(--muted); text-decoration: line-through; }
+.rewrite-arrow { color: var(--muted); }
+.rewrite-new { font-family: var(--font-serif); color: var(--ink); font-weight: 600; }
+
+/* ---- Tier pills: weight, not colour, tells the tiers apart ---- */
+.tier-pill {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-eyebrow);
+  font-weight: 600;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+.tier-rewrite { background: var(--ink); color: var(--on-accent); border: var(--border-thin) solid var(--ink); }
+.tier-question { background: transparent; color: var(--ink); border: var(--border-thin) solid var(--ink); }
+.tier-flag { background: transparent; color: var(--muted); border: var(--border-thin) dashed var(--muted); }
+
+/* In the rewrite suggestions list the pill sits on its own line. */
+#rewrite-suggestions-list .tier-pill { margin-bottom: var(--space-2); }

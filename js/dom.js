@@ -37,6 +37,15 @@ var elEditTextBtn = $("edit-text-btn");
 var elScoreNewBtn = $("score-new-btn");
 var elForecast = $("forecast");
 var elRewriteCount = $("rewrite-count");
+var elOverallGradeScore = $("overall-grade-score");
+var elOverallGradeLabel = $("overall-grade-label");
+var elAnnotatedWordCount = $("annotated-word-count");
+var elFixCount = $("fix-count");
+var elWhatsWorking = $("whats-working");
+var elWhatsWorkingList = $("whats-working-list");
+var elBoilerplateCounts = $("boilerplate-counts");
+var elBoilerplateBuzzwords = $("boilerplate-buzzwords");
+var elChips = document.querySelectorAll(".chip[data-family]");
 
 var lastReportText = "";
 var lastResult = null;
