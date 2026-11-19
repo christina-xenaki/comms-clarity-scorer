@@ -536,6 +536,8 @@
     "will now",
     "has opted to"
   ],
+  "nextStepIndicators": ["next step", "next steps", "will begin", "will start", "will open", "will launch", "will roll out", "will be available", "will expand", "plans to", "starting", "from next", "later this year", "by the end of", "over the next", "in the coming"],
+  "spelledNumbers": ["two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety", "hundred", "thousand", "million", "billion", "dozen", "half", "double", "twice"],
   "confusionGroups": [
     [
       "its",

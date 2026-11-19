@@ -301,6 +301,20 @@ The Empty quote detector's own check card keeps the question without the lead-in
 
 ---
 
+## Empty quote card
+
+Changed strings on the Empty quote detector's check card. They replace the old finding ("…empty — no numbers or concrete nouns, and high on buzzwords.") and rationale, which described a rule the check no longer uses.
+
+Finding, after the count ("{n} of {n} quotes are empty."), shown only when at least one quote is flagged:
+
+> No reason, number or next step in this quote.
+
+Rationale:
+
+> A quote is flagged empty when it is at least 6 words long and gives no reason (such as "because" or "which means"), no number or date, and no next step (such as "plans to" or "will launch").
+
+---
+
 ## Copy backlog
 
 Existing strings written inline in the JS, touched during the redesign. They stay inline for now and move here in a later copy session (UI-SPEC §0).
@@ -314,4 +328,5 @@ Existing strings written inline in the JS, touched during the redesign. They sta
   - `js/render.js`: "…This score is tracked separately and does not count towards your overall clarity grade above." (regulated claims finding when a sector is on)
   - `index.html`: the "What it checks" list in the footer, "…never counted towards the overall grade"
 - Boilerplate card figures, `js/render.js` (`renderBoilerplateCard`): "{n} words, {n} buzzword(s)". This replaced the old "Boilerplate detected. The trailing "About"/"Notes to editors"/contact block ({n} words, {n} buzzwords) is excluded from every score above and graded here separately, not folded into your main grade." in UI-3.
+- Empty quote card, `js/render.js`: the finding "No reason, number or next step in this quote." and the new rationale (see "Empty quote card" above) are still written inline. Both were changed with the empty-quote scoring fix. The count before the finding ("{n} of {n} quotes are empty.") is unchanged and also inline.
 - Fix questions, `js/render.js`: `findRewriteForSentence` still returns the old question text ("Who did it? …" and the empty quote question without its lead-in), because it can't be edited yet (UI-SPEC §0). Neither is shown or exported. The renderer works out separately which question it chose and which passive phrase it matched (`fixQuestionParts`). Once that function can be edited, have it return the matched passive phrase and which question applies, then remove that duplicate lookup.

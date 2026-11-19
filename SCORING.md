@@ -93,7 +93,7 @@ score = min(100, (signals per 100 words ÷ target) × 100)
 1. **Numbers with a baseline** — a number near a comparison phrase from `baselineIndicators` ("up from," "compared to," "versus," …). "Revenue rose to $12m, up from $8m" is more informative than a bare "$12m," and the tool credits the difference.
 2. **Named actor + active, precise verb** — a sentence that (a) starts with what looks like a proper name (two-plus capitalised words, or a name followed by Inc/Corp/Ltd/LLC/PLC/Co), (b) contains a verb from the `preciseVerbs` list, and (c) contains no passive-voice match. This is a heuristic proxy for "the structural opposite of passive," not a real parse.
 3. **Precise verbs** — matches against `preciseVerbs` (cut, doubled, delayed, acquired, halved, closed, launched, raised, hired, …) wherever they appear, independent of signal 2.
-4. **Informative quotes** — a quote that contains a number, a reason-word (`reasonIndicators`: because, since, as a result…), or a decision-word (`decisionIndicators`: decided to, has chosen to…). This overlaps deliberately with the empty-quote detector (a quote can be both "not informative" and "empty" at once — they're two views of the same underlying weakness).
+4. **Informative quotes** — a quote that gives a reason, a number or a next step. This is the same test the empty-quote detector uses (section 3), so a quote is never credited here and flagged as empty there at the same time.
 5. **Plain word choices** — an occurrence of the *plain* side of a `wordSwaps` pair (see section C) — e.g. finding "use" credits the writer for not reaching for "leverage."
 
 **Scoring:**
@@ -108,9 +108,19 @@ with `strengthsTargetPer100ContentWords` defaulting to **4**. There's no zero-fl
 
 **The signature feature.** Extracts every quoted span in the text (inside straight `"…"` or curly `"…"` quotation marks) and judges each one independently.
 
+**The test: does the quote give a reason, a number or a next step?** Each is matched against a word list in config:
+
+- **A reason** — a word or phrase from `reasonIndicators`: because, since, so that, as a result, which means, which is why.
+- **A number** — any concrete signal (same detector as the concreteness check, above: digits, money, percentages, specific dates), or a spelled-out number from `spelledNumbers`: two to twelve, twenty to ninety in tens, hundred, thousand, million, billion, dozen, half, double, twice. "One" is left out because it's so often a pronoun ("one of our customers"). Spelled-out numbers count here only, not in the concreteness check.
+- **A next step** — a phrase from `decisionIndicators` (decided to, has chosen to, is moving to, will now, has opted to) or `nextStepIndicators` (next step, next steps, will begin, will start, will open, will launch, will roll out, will be available, will expand, plans to, starting, from next, later this year, by the end of, over the next, in the coming). A bare "will" is deliberately not on the list, because "We will continue to deliver…" isn't a next step.
+
 **A quote is flagged "empty" when both are true:**
-- It contains **zero** concrete signals (same detector as the concreteness check, above), **and**
+- It gives **none** of the three, **and**
 - It's at least `emptyQuoteMinWords` words long (default **6** — long enough to be a real sentence, not just a one-word aside like "Yes." or "No").
+
+The Strengths check (section 2) uses the same test, so a quote that passes it is credited there as informative.
+
+Examples: "We are delighted to announce the move, because it puts our designers and engineers in the same building" gives a reason and isn't flagged. "We'll have the new office open within eight weeks" gives a number. "We will launch a Saturday delivery service" gives a next step. "We're thrilled to bring this innovative solution to our valued customers" gives none and is flagged.
 
 **Scoring:**
 ```
@@ -120,7 +130,12 @@ No quotes in the text at all → score is 100 with a note that the check didn't 
 
 **Presentation:** every flagged quote is shown verbatim in its score card under the shareable line *"This quote would work equally well in a press release about a completely different product"* — and, per the three-tier rewrite system (section C below), paired with a fixed guided question rather than an invented rewrite: *"A useful quote gives a reason, a number, or a next step. This gives none. Ask your spokesperson why you actually did this."* The tool can identify the problem; only a human can supply what the quote is missing, so it asks rather than guesses.
 
-**Known limitation:** a quote is only recognised if it sits entirely within one paragraph (no line break inside the quotation marks) and is under 600 characters. Genuinely concrete quotes that avoid numbers entirely (naming a specific product or person only) will still be flagged empty, for the same named-entity-detection reason as the concreteness check.
+**Known limitations:**
+- A quote is only recognised if it sits entirely within one paragraph (no line break inside the quotation marks) and is under 600 characters.
+- A quote split by its attribution ("…," said X. "…") is judged as two separate quotes, so the first half can be flagged even when the second half gives the number.
+- The check can't see an implied reason. A strong opinion quote without a reason word can still be flagged: "Schools spend money on power that should go on teaching" explains the motivation but uses no word from `reasonIndicators`, so it's flagged.
+- Genuinely concrete quotes that name a specific product or person but give no reason, number or next step will still be flagged empty, for the same named-entity-detection reason as the concreteness check.
+- Matching is by word list, not meaning. A reason word or next-step phrase in an otherwise empty quote is enough to pass it ("since we started…"), and "in the coming" counts as a next step even though the Strengths check also cautions about "in the coming months" as a vague timeframe.
 
 ### 4. Buzzword density — weight `1`
 
@@ -361,6 +376,8 @@ An in-page settings panel for editing word lists without touching `config/config
 
 Follow-up: word lists are duplicated across six config files; consider a shared base list.
 
+Follow-up: the concreteness detector ignores spelled-out numbers. British house style spells out one to nine, so the concrete-facts count undercounts well-written British releases. (The empty-quote test already counts them, through `spelledNumbers`.)
+
 ## Editing the numbers
 
 Everything above lives in `config/config.json`. To recalibrate:
@@ -368,7 +385,7 @@ Everything above lives in `config/config.json`. To recalibrate:
 - Change a `target` value to make a check stricter (lower target) or more forgiving (higher target).
 - Change a `penaltyPerPercent`/`penaltyPerGrade`/`penaltyPerWordOverAverage`/`penaltyEach`/`penaltyPerMismatch`/`penaltyPerIssueType`/`penaltyPerMatch`/`penaltyPerSharePoint` value to make the score fall faster or slower once past the target. (Exception: `clusteringMinMatches` and `clusteringShareThreshold` are currently hardcoded in `js/render.js`, not read from this file — see the "Clustering" known limitation in section A above.)
 - Change a value in `weights` to make a check matter more or less to the overall grade, or set it to `0` to turn it off entirely. (`regulatedClaims` is deliberately not a `weights` key — see section E.)
-- Add or remove words from any list (`buzzwords`, `hedges`, `superlativesAndAbsolutes`, `companyFacingTerms`, `audienceFacingTerms`, `thirdPartyTerms`, `irregularVerbs`, `passiveAdjectiveExclusions`, `nominalisationSuffixes`, `nominalisationVerbMap`, `acronymAllowlist`, `wordSwaps`, `baselineIndicators`, `preciseVerbs`, `vagueTimeframes`, `reasonIndicators`, `decisionIndicators`, `confusionGroups`, `variantWordPairs`, `alwaysIseWords`, `titleAbbreviations`, `stopwords`, `boilerplateHeadingPatterns`, `contactIndicators`) to match your own house style or sector.
+- Add or remove words from any list (`buzzwords`, `hedges`, `superlativesAndAbsolutes`, `companyFacingTerms`, `audienceFacingTerms`, `thirdPartyTerms`, `irregularVerbs`, `passiveAdjectiveExclusions`, `nominalisationSuffixes`, `nominalisationVerbMap`, `acronymAllowlist`, `wordSwaps`, `baselineIndicators`, `preciseVerbs`, `vagueTimeframes`, `reasonIndicators`, `decisionIndicators`, `nextStepIndicators`, `spelledNumbers`, `confusionGroups`, `variantWordPairs`, `alwaysIseWords`, `titleAbbreviations`, `stopwords`, `boilerplateHeadingPatterns`, `contactIndicators`) to match your own house style or sector.
 - Build a new sector config for regulated claims by copying `config/config.json`, changing `sectorName`/`disclaimer`/`sourceUrl`, and setting `regulatedClaims.enabled: true` with your own `terms` list — then load it with `?config=<yourname>` (matching a file named `config/config.<yourname>.json`) until it earns a permanent spot in the Sector selector's dropdown.
 
 No code changes required for any of that — reload the page after editing `config/config.json` and the new numbers take effect immediately.
