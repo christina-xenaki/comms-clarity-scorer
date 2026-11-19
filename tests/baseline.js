@@ -42,7 +42,8 @@ var CASES = [
   { fixture: "clinic-trial.txt", sector: "general", variant: "british-oxford" },
   { fixture: "clinic-trial.txt", sector: "healthcare", variant: "british-oxford" },
   { fixture: "solar-partnership.txt", sector: "general", variant: "british" },
-  { fixture: "solar-partnership.txt", sector: "greenwashing", variant: "american" }
+  { fixture: "solar-partnership.txt", sector: "greenwashing", variant: "american" },
+  { fixture: "office-move.txt", sector: "general", variant: "british" }
 ];
 
 // Same mapping as SECTOR_FILES in js/config.js (not loaded here, as it fetches
