@@ -1,0 +1,29 @@
+/* Motion (UI-SPEC §8). Nothing loops; everything is off under
+   prefers-reduced-motion. */
+
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Results appear: forecast card, then the columns, staggered 40ms. An
+   animation runs again whenever an element goes from hidden to shown, so this
+   plays on entering Results and not on a re-run in place. */
+body[data-state="results"] .forecast-card { animation: rise-in var(--dur) var(--ease) both; }
+body[data-state="results"] .results-columns { animation: rise-in var(--dur) var(--ease) 40ms both; }
+body[data-state="results"] #sub-scores { animation: rise-in var(--dur) var(--ease) 80ms both; }
+
+/* Menus and panels fade. */
+.export-menu:not([hidden]),
+.share-panel:not([hidden]) { animation: fade-in var(--dur-fast) var(--ease) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

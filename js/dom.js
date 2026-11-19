@@ -46,6 +46,16 @@ var elWhatsWorkingList = $("whats-working-list");
 var elBoilerplateCounts = $("boilerplate-counts");
 var elBoilerplateBuzzwords = $("boilerplate-buzzwords");
 var elChips = document.querySelectorAll(".chip[data-family]");
+var elExportBtn = $("export-btn");
+var elExportBtnLabel = $("export-btn-label");
+var elExportBtnIcon = elExportBtn.querySelector(".export-icon use");
+var elExportMenu = $("export-menu");
+var elPrintBtn = $("print-btn");
+var elCopyAnnouncer = $("copy-announcer");
+var elSharePreview = $("share-preview");
+var elPrintTitle = $("print-title");
+var elPrintMeta = $("print-meta");
+var elPrintUrl = $("print-url");
 
 var lastReportText = "";
 var lastResult = null;

@@ -58,7 +58,7 @@ Short version, shown under the grade:
 | D | 🌫 | Foggy | "Grade D, Foggy" |
 | E | 🌧 | Murky | "Grade E, Murky" |
 
-The emoji must never be the only carrier of meaning. Always pair with the letter and the label in visible text.
+On screen, each grade shows an inline SVG weather icon labelled with its condition (UI-SPEC §6). The emoji are used in the copy and share exports. The emoji must never be the only carrier of meaning. Always pair with the letter and the label in visible text.
 
 ---
 
@@ -82,9 +82,15 @@ Before anything is pasted:
 
 ## Share button
 
-Label: **Share score**
+Label: **Share score**. It sits on the forecast card and opens a share panel inside the card.
 
-Clicking it reveals two destination controls: **Share to WhatsApp** and **Share to Slack**. WhatsApp opens with the message pre-filled, since WhatsApp has a public link for that (`wa.me`). Slack has no equivalent public link for arbitrary text, so that button copies the message to the clipboard instead; its feedback text is **Copied! Paste into Slack.**, reverting to its label after a moment.
+Share panel:
+- Eyebrow: **What gets shared**
+- Then the exact text that will be shared (the template below)
+- Then, with a small lock icon: **Only the grade and headline. Never your text.**
+- Then two text-only buttons: **Share to WhatsApp** and **Share to Slack**
+
+WhatsApp opens with the message pre-filled, since WhatsApp has a public link for that (`wa.me`). Slack has no equivalent public link for arbitrary text, so that button copies the message to the clipboard instead; its feedback text is **Copied! Paste into Slack.**, reverting to its label after a moment.
 
 Shared text template:
 
@@ -95,25 +101,31 @@ Never include the analysed text or any flagged sentence in a share link. Share l
 
 ---
 
-## Export buttons
+## Export menu
 
-Two buttons sit next to "Copy report": one copies a short summary as rich text (for pasting into an email), the other copies the same summary as plain text (for pasting into Slack).
+Toolbar button, Results only: **Export**. It opens a menu. Each item has a label and a one-line description:
 
-Labels: **Copy for email** and **Copy for Slack**
+- **Copy for email**: "Rich text: grade, headline and top five fixes"
+- **Copy for Slack**: "Plain text, same structure"
+- **Copy full report**: "Plain text, everything in the report" (the former "Copy report")
+- **Print or save as PDF**: "Full report, legible in greyscale"
 
-Structure, both formats:
+Copy for email and Copy for Slack copy the same short summary, as rich text and as plain text. Structure, both formats:
 1. Grade and weather icon
 2. The headline metric (e.g. "11 buzzwords. 2 concrete facts.")
 3. The top five fixes, each with its rewrite where the tool has one
 4. The export footer, verbatim (see below)
 
-Copy feedback, both buttons: **Copied!**, reverting to the button's label after a moment (same pattern as "Copy report").
+Copy feedback: the Export button's label changes for two seconds, with a check icon, and the same words are announced to screen readers:
+- **Copied for email**
+- **Copied for Slack**
+- **Copied full report**
 
 ---
 
 ## Export footer
 
-Used verbatim, with [URL] resolved to the page's own address, by the "Copy for email" and "Copy for Slack" export buttons above. The older "Copy report" button (`js/render.js`'s `buildReportText`) is unchanged by this and still ends with its own different line ("comms-clarity-scorer — analysis runs entirely in the browser, nothing uploaded.") with no URL.
+Used verbatim, with [URL] resolved to the page's own address, by "Copy for email", "Copy for Slack" and the printed report's footer. "Copy full report" (`js/render.js`'s `buildReportText`) still ends with its own different line ("comms-clarity-scorer — analysis runs entirely in the browser, nothing uploaded.") with no URL.
 
 > Scored with Comms Clarity Scorer — [URL]
 > Runs in your browser. Nothing is uploaded.
@@ -122,10 +134,22 @@ Used verbatim, with [URL] resolved to the page's own address, by the "Copy for e
 
 ## Print stylesheet
 
-No navigation or buttons appear on a printed page — only the analysed text, grade, and check results. Printing can't guarantee background colour survives to paper, so the two highlight categories that rely on background tint alone on screen (long sentence, empty quote) get a print-only text label so the meaning still comes through in greyscale:
+No navigation or buttons appear on a printed page. A print-only heading block opens the report:
+
+- Eyebrow: **Comms Clarity Scorer · Report**
+- Heading: the first line of the submitted text, up to 120 characters
+- Meta line: **Scored {date} · Sector: {sector} · English: {variant} · {n} words**
+
+A legend line sits above the annotated text:
+
+> Strong detail (double) · Word choice (dotted) · Claims (wavy) · Structure (dashed)
+
+Long sentences and empty quotes share the Structure family's dashed underline, so on paper they also get a text label:
 
 - Long sentence — prefixed **[Long sentence]**
 - Empty quote — prefixed **[Empty quote]**
+
+The footer carries the privacy note, the export footer and the disclaimer.
 
 ---
 
@@ -250,3 +274,4 @@ Side column cards: **What's working** (the Strengths check's findings) and **Boi
 Existing strings written inline in the JS, touched during the redesign. They stay inline for now and move here in a later copy session (UI-SPEC §0).
 
 - "Paste some text first." In `js/analyze.js` (alert) and now also `js/events.js`, which shows it inline under the text box.
+- "Copied!" The old copy feedback on the export buttons. Replaced by "Copied for email", "Copied for Slack" and "Copied full report" (UI-SPEC §5); no longer used in the code.

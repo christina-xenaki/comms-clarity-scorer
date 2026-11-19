@@ -72,7 +72,6 @@ h2 { font-size: var(--fs-text); margin: 0 0 var(--space-3) 0; }
 .forecast-summary { margin: 0; font-size: var(--fs-text); color: var(--muted); }
 
 .forecast-right { align-self: flex-start; }
-.forecast-right .share-actions { margin-top: 0; justify-content: flex-end; }
 
 /* ---- Privacy callout (§3) ---- */
 .privacy-note {
@@ -213,5 +212,4 @@ details[open] > summary .summary-chevron { transform: rotate(90deg); }
   .forecast-regions { flex-direction: column; align-items: flex-start; }
   .forecast-middle { flex-basis: auto; }
   .forecast-right { align-self: stretch; }
-  .forecast-right .share-actions { justify-content: flex-start; }
 }

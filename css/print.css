@@ -1,50 +1,150 @@
-@media print {
-  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; color-adjust: exact; }
+/* Print and PDF (UI-SPEC §5). Loaded with media="print". */
 
-  /* No navigation, no buttons. (Full print redesign: UI-4.) */
-  .header-link,
+@page { size: A4; margin: 18mm; }
+
+@media print {
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  /* No entry animations on paper: a PDF can capture them part-way. */
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+
+  /* Keep headings with what follows them. */
+  h2, .document-header, .print-legend { break-after: avoid; }
+
+  html, body {
+    background: var(--surface) !important;
+    color: var(--ink) !important;
+    font-size: 12pt;
+  }
+  body { padding: 0 !important; }
+  .container { max-width: none !important; padding: 0 !important; }
+
+  /* ---- Hidden on paper ---- */
+  .site-header,
   .toolbar,
   #input-section,
-  .privacy-note,
-  .config-status,
-  .what-it-checks,
-  .tap-hint,
-  .results-actions,
-  #edit-text-btn,
+  button,
   .chips,
-  .forecast-right,
-  .why-toggle,
+  .share-panel,
+  .export-wrap,
+  .tap-hint,
+  .why-wrap,
+  .card-body,
+  .summary-chevron,
+  #rewrite-suggestions,
+  .what-it-checks,
+  .config-status,
+  .footer-main p:has(a[href^="docs.html"]),
+  .privacy-icon,
   mark.hl .tip {
     display: none !important;
   }
 
-  /* Show the full report on paper regardless of the on-screen detail level. */
-  .forecast-card,
+  /* ---- Order: heading, forecast, top five fixes, annotated text, what's
+     working, boilerplate, checks, then the footer lines. display: contents
+     lets the fixes move ahead of the text without duplicating the DOM. ---- */
+  .page { display: flex !important; flex-direction: column; padding: 0 !important; max-width: none !important; }
+  #results-panel,
   .results-columns,
-  #boilerplate-note,
-  #sub-scores,
-  #worst-offenders,
-  #rewrite-suggestions,
-  #annotated-text-section {
-    display: block !important;
+  .side-column { display: contents !important; }
+  .print-heading { order: 0; }
+  .forecast-card { order: 1; }
+  #worst-offenders { order: 2; }
+  #annotated-text-section { order: 3; }
+  #whats-working { order: 4; }
+  #boilerplate-note { order: 5; }
+  #sub-scores { order: 6; }
+  .privacy-note { order: 7; }
+
+  /* Every detail level prints the full report. The body[data-view] prefix
+     matches the specificity of the detail-level rules in view-controls.css. */
+  body[data-view] .forecast-card,
+  body[data-view] #worst-offenders,
+  body[data-view] #annotated-text-section,
+  body[data-view] #sub-scores { display: block !important; }
+  body[data-view] #whats-working:not([hidden]),
+  body[data-view] #boilerplate-note:not([hidden]) { display: block !important; }
+
+  section { margin: 0 0 8mm; break-inside: auto; }
+  h2 { font-size: 13pt; }
+
+  /* ---- Print-only heading block ---- */
+  .print-heading { display: block; margin-bottom: 6mm; }
+  .print-title { margin: 1mm 0 1mm; font-size: 18pt; line-height: 1.25; }
+  .print-meta { margin: 0; font-size: 9pt; color: var(--muted); }
+
+  /* ---- Forecast card: border, no background ---- */
+  .forecast-card {
+    --wx-bg: var(--surface);
+    background: none !important;
+    border: 1.5px solid var(--ink);
+    padding: 6mm 8mm;
+    break-inside: avoid;
   }
-  .side-column { max-width: none !important; }
-  .checks-grid { display: block !important; }
-  .why-panel[hidden] { display: block !important; }
-  .why-panel { border-left-color: var(--ink); }
+  .forecast-right { display: none !important; }
+  .forecast-regions { flex-wrap: nowrap; gap: 8mm; }
+  .weather-icon { width: 56px; height: 56px; }
+  .headline-metric { font-size: 26pt; }
+  .forecast-summary, .grade-score, .grade-condition { font-size: 11pt; }
 
-  body { padding: 0 !important; background: var(--surface) !important; color: var(--ink) !important; }
-  .container { max-width: 100% !important; padding: 0 !important; }
-  .document-card { padding: 0 !important; border: none !important; }
-  section { margin-bottom: var(--space-4); }
+  /* ---- Top five fixes: a numbered list separated by rules ---- */
+  .fixes-section .section-intro { display: none; }
+  #worst-offenders-list { gap: 0; }
+  .fix-card {
+    border: none;
+    border-top: 1px solid var(--line);
+    border-radius: 0;
+    padding: 3mm 0;
+    break-inside: avoid;
+  }
+  .fix-card:first-child { border-top: none; }
+  .fix-number { background: none; color: var(--ink); width: auto; height: auto; font-size: 11pt; font-weight: 700; }
+  .fix-number::after { content: "."; }
 
-  a[href]::after { content: " (" attr(href) ")"; font-size: 0.75em; font-weight: normal; }
-  a.fix-marker::after { content: none; }
-
-  /* Every highlight family carries its meaning in the underline pattern
-     (double, dotted, wavy, dashed), so it survives greyscale. Long sentences
-     and empty quotes share Structure's dashed line, so they also keep a text
-     label on paper. */
+  /* ---- Annotated text: keeps its underline styles and colours ---- */
+  .document-card { border: none !important; padding: 0 !important; }
+  .document-header { margin-bottom: 2mm; }
+  .print-legend { display: block; margin: 0 0 3mm; font-size: 9pt; color: var(--muted); }
+  #annotated-output { font-size: 11pt; line-height: 1.7; max-width: none; }
+  /* Fix markers print as bracketed superscripts: [1] */
+  a.fix-marker {
+    width: auto;
+    height: auto;
+    margin: 0 0 0 1px;
+    background: none;
+    color: var(--ink);
+    font-size: 8pt;
+    border-radius: 0;
+  }
+  a.fix-marker::before { content: "["; }
+  a.fix-marker::after { content: "]"; }
+  /* Long sentences and empty quotes share Structure's dashed line, so they
+     keep a text label on paper. */
   mark.hl-long[data-first-frag]::before { content: "[Long sentence] "; font-weight: 700; }
   mark.hl-quote[data-first-frag]::before { content: "[Empty quote] "; font-weight: 700; }
+
+  /* ---- Side cards ---- */
+  .side-card { border: none; padding: 0; break-inside: avoid; }
+
+  /* ---- Checks: name and score only ---- */
+  #sub-scores h2 { font-size: 13pt; margin-bottom: 2mm; }
+  .checks-grid { display: grid !important; grid-template-columns: 1fr 1fr; column-gap: 10mm; row-gap: 0; }
+  .checks-grid > details.card { border: none; border-bottom: 1px solid var(--line); border-radius: 0; margin: 0; break-inside: avoid; }
+  details.card summary { min-height: 0; padding: 1.5mm 0; }
+  .summary-title, .summary-score { font-size: 10pt; }
+
+  /* ---- Footer: privacy line, export footer and disclaimer, 9pt ---- */
+  .privacy-note {
+    display: block !important;
+    margin: 6mm 0 0;
+    padding: 3mm 0 0;
+    background: none;
+    border-top: 1px solid var(--line);
+    border-radius: 0;
+    font-size: 9pt;
+  }
+  .site-footer { border: none; margin: 0; font-size: 9pt; }
+  /* Block, not flex: a flex footer makes Chrome add a blank last page. */
+  .footer-inner { display: block; padding-top: 2mm; }
+  .print-footer { display: block; margin: 0 0 2mm; }
+  .footer-main p { margin: 0; }
 }
