@@ -291,7 +291,9 @@ Inline SVG on a 24px grid, stroke 1.8–2, round caps and joins, `currentColor` 
 
 ## 11. Repo, git and docs
 
-- **Git**: pushing straight to main is approved, because GitHub Pages serves main. Before UI-0, tag the current main as `pre-redesign` so the whole redesign can be rolled back in one step. If your session can't push tags or to main, say so and wait.
+- **Git**: never push to main, merge into main or push tags. Work on your session branch. At the end of each session, open one pull request into main and stop. Christina reviews and merges it herself. Before starting the next session, update your branch from main.
+- **Pull request descriptions**: plain text explaining what changed, why, and how to test it. No links of any kind: no URLs, and no links to files, commits, issues, other pull requests, sessions or attribution pages.
+- **Rollback**: any merged pull request can be undone with GitHub's "Revert" button, so keep each session to one pull request.
 - **docs.html**: in UI-1, switch it to the self-hosted fonts and the tokens. No other redesign of docs.html.
-- **README.md and SPEC.md**: update them **once, at the end of UI-4**, to describe the new layout, controls and export menu. Don't edit them every session.
+- **README.md and SPEC.md**: update them once, in the UI-4 pull request, to describe the new layout, controls and export menu. Don't edit them every session.
 - **Example texts**: none ship in the repo today. UI-0 adds 2–3 fictional releases under `tests/`. **Don't** add a "Try an example" button in this refactor.
