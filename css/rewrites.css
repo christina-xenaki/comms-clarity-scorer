@@ -62,6 +62,7 @@
 .fix-try { margin: var(--space-2) 0 0; font-size: var(--fs-body); color: var(--ink); }
 .fix-try .eyebrow { margin-right: var(--space-1); }
 .fix-question { margin: var(--space-2) 0 0; font-style: italic; color: var(--ink); }
+.fix-question .fix-lead { font-weight: 600; }
 
 /* <del> and <ins>: the struck phrase keeps its line-through; the rewrite has
    no underline, because a solid underline is reserved for real links. */

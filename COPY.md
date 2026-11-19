@@ -279,6 +279,28 @@ Each check card's summary row, and the printed checks list, shows the check's nu
 
 ---
 
+## Fix questions
+
+"Worth asking yourself" text on fix cards, in Rewrite suggestions and in all three copy exports. Each starts with a lead-in naming its check. On screen, the lead-in ("Passive voice", "Empty quote") is set in weight 600. The exports keep it as plain text.
+
+**Passive with no agent.** {phrase} is the passive phrase the check matched. When it is available:
+
+> Passive voice: “{phrase}” doesn't say who did it. If you'd rather not say, make that a deliberate choice rather than an accident of grammar.
+
+Otherwise:
+
+> Passive voice doesn't say who did it. If you'd rather not say, make that a deliberate choice rather than an accident of grammar.
+
+These replace "Who did it? If you'd rather not say, make that a deliberate choice rather than an accident of grammar."
+
+**Empty quote:**
+
+> Empty quote: A useful quote gives a reason, a number, or a next step. This gives none. Ask your spokesperson why you actually did this.
+
+The Empty quote detector's own check card keeps the question without the lead-in, since the card already names the check.
+
+---
+
 ## Copy backlog
 
 Existing strings written inline in the JS, touched during the redesign. They stay inline for now and move here in a later copy session (UI-SPEC §0).
@@ -292,3 +314,4 @@ Existing strings written inline in the JS, touched during the redesign. They sta
   - `js/render.js`: "…This score is tracked separately and does not count towards your overall clarity grade above." (regulated claims finding when a sector is on)
   - `index.html`: the "What it checks" list in the footer, "…never counted towards the overall grade"
 - Boilerplate card figures, `js/render.js` (`renderBoilerplateCard`): "{n} words, {n} buzzword(s)". This replaced the old "Boilerplate detected. The trailing "About"/"Notes to editors"/contact block ({n} words, {n} buzzwords) is excluded from every score above and graded here separately, not folded into your main grade." in UI-3.
+- Fix questions, `js/render.js`: `findRewriteForSentence` still returns the old question text ("Who did it? …" and the empty quote question without its lead-in), because it can't be edited yet (UI-SPEC §0). Neither is shown or exported. The renderer works out separately which question it chose and which passive phrase it matched (`fixQuestionParts`). Once that function can be edited, have it return the matched passive phrase and which question applies, then remove that duplicate lookup.

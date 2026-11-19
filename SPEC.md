@@ -49,8 +49,8 @@ Three levels of confidence. Each fix is labelled with which one applies, so the 
 - **Word swaps:** substitution dictionary in config. leverage→use, facilitate→help, commence→start, in order to→to, at this point in time→now, is designed to→does, utilise→use, prior to→before
 
 ### "Worth asking yourself" — guided question, no automatic fix
-- **Passive with no agent:** "Mistakes were made." → "Who made them? If you'd rather not say, make that a deliberate choice rather than an accident of grammar."
-- **Empty quote:** "A useful quote gives a reason, a number, or a next step. This gives none. Ask your spokesperson why you actually did this."
+- **Passive with no agent:** "Mistakes were made." → "Passive voice: “were made” doesn't say who did it. If you'd rather not say, make that a deliberate choice rather than an accident of grammar." (wording in COPY.md)
+- **Empty quote:** "Empty quote: A useful quote gives a reason, a number, or a next step. This gives none. Ask your spokesperson why you actually did this." (wording in COPY.md)
 
 ### "Flag only" — no rewrite offered
 - Superlatives, absolute claims, regulated claims. The fix is factual or legal, not linguistic.
