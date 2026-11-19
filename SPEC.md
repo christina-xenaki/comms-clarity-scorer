@@ -112,15 +112,15 @@ Affects: spelling (-ise/-ize, -our/-or, -re/-er, -ll-/-l-), date format, punctua
 - Results announced via `aria-live` when analysis completes
 - Contrast at least 4.5:1 on every highlight colour
 - Meaning never carried by colour alone — pair with underline styles and text labels
-- **Weather emoji need `aria-label`s.** A screen reader must say "Grade B" not "sun behind cloud"
-- Visible focus indicators; respect `prefers-reduced-motion`
+- **Weather icons need accessible labels.** A screen reader must hear the grade and its condition, never just "sun behind cloud". On screen the icons are inline SVG labelled with the condition; the grade's full `aria-label` reads "Grade B, Mostly clear"
+- Visible focus indicators on every control; all motion off under `prefers-reduced-motion`
 - Real `<label>` on the textarea
 
 ---
 
 ## I. Layout
 
-Desktop-optimised, mobile-intact. Two columns on wide screens: text on the left, scores on the right. On a phone it must not break — single column, nothing overlapping or overflowing — but the phone is not the primary target.
+Desktop-optimised, mobile-intact; the detailed layout is in UI-SPEC.md. The page has two states. **Input** is one centred column: the text box, "Analyse" and the privacy note. **Results** replace the text box, so the text is never shown twice: a toolbar (Sector, English variant, detail level, Export, "Score new text"), the forecast card, the privacy note, then two columns on a wide screen (annotated text, and a side column with the top five fixes, what's working and boilerplate), the checks and the rewrite suggestions. On a phone it must not break: single column, nothing overlapping or overflowing, no sideways scroll at 390px. The phone is not the primary target.
 
 ---
 
@@ -133,6 +133,8 @@ Desktop-optimised, mobile-intact. Two columns on wide screens: text on the left,
 | C | ⛅ | Hazy |
 | D | 🌫 | Foggy |
 | E | 🌧 | Murky |
+
+On screen each grade is drawn as an inline SVG weather icon in the same scale (sun; sun behind a cloud; cloud with a little sun; two clouds; cloud with rain) on the forecast card. Exports use the emoji above, since email clients don't reliably render inline SVG.
 
 Deliberately not faces. People run this over a colleague's or CEO's copy; being told a quote is 💀 is awkward in an open-plan office.
 
@@ -172,17 +174,18 @@ Use this on the page and in the README, verbatim:
 
 ## N. Export — treat as a distribution channel
 
-- Two formats: rich text for email, plain text for Slack
-- Structure: grade and weather icon → the "11 buzzwords, 2 facts" headline → top five fixes with their concrete rewrites
+- One Export menu in the results toolbar: "Copy for email" (rich text), "Copy for Slack" (plain text), "Copy full report" (plain text, everything) and "Print or save as PDF"
+- Email and Slack structure: grade and weather icon → the "11 buzzwords, 2 facts" headline → top five fixes with their concrete rewrites. Never the annotated text.
 - Tool name and URL in the footer. The recipient is a target user.
-- Print stylesheet — gives PDF export free, since browsers print to PDF
+- Share score: a panel on the forecast card showing exactly what will be shared (grade, headline counts, tool URL, never the text), with Share to WhatsApp and Share to Slack
+- Print stylesheet: an A4 report that gives PDF export free, since browsers print to PDF. It reads in greyscale.
 - *Future idea: shareable PNG scorecard for LinkedIn*
 
 ---
 
 ## O. Visual design
 
-Real typeface from Google Fonts, restrained palette, generous max-width, soft cards for sub-scores. Colour-blind safe: roughly 8% of men have some colour vision deficiency and this interface is colour-coded throughout.
+Real typefaces, self-hosted (Inter for the interface, Source Serif 4 for the analysed text), a restrained palette defined as design tokens, generous max-width, soft cards for sub-scores. Colour-blind safe: roughly 8% of men have some colour vision deficiency, so every colour-coded distinction is also carried by shape, pattern or text. Highlights are told apart by underline style (double, dotted, wavy, dashed) and fix tiers by weight (filled, outlined, dashed). The full visual specification is UI-SPEC.md.
 
 ---
 

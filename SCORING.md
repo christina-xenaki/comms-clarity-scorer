@@ -34,8 +34,8 @@ The overall score maps to a letter grade the same way school grades usually do: 
 Every check's card body is split into up to three labelled parts, styled differently on purpose:
 
 - **Finding** — the factual observation: what the tool actually counted or detected. Normal size, normal contrast.
-- **Action** — what to do about it, in plain imperative language ("Swap them for concrete facts," "No action needed"). Its label is in the accent colour so it's easy to scan for across cards.
-- **Rationale** — the generic background: why the check exists, where a threshold came from, or a link to further reading. This is reference material you only need once, not every time, so it's deliberately **smaller, indented, lower-contrast, and collapsed by default**, behind a pill-shaped **"Why this check exists"** button under the Finding/Action text. The button is a real `<button>`, reachable by Tab and activated by Enter/Space, with `aria-expanded` reflecting its state and `aria-controls` pointing at the panel it reveals, so a screen reader announces it correctly. Its chevron rotates on open and respects `prefers-reduced-motion`. For nine checks — concreteness, passive voice, sentence length, readability, hedging, nominalisation, superlatives, inverted pyramid, and regulated claims — this text is quoted verbatim from `COPY.md`, the repo's canonical interface-copy source; the rest keep this document's own wording.
+- **Action** — what to do about it, in plain imperative language ("Swap them for concrete facts," "No action needed"). Its uppercase label makes it easy to scan for across cards.
+- **Rationale** — the generic background: why the check exists, where a threshold came from, or a link to further reading. This is reference material you only need once, not every time, so it's deliberately **smaller, indented, in muted text, and collapsed by default**, behind a pill-shaped **"Why this check exists"** button under the Finding/Action text. The button is a real `<button>`, reachable by Tab and activated by Enter/Space, with `aria-expanded` reflecting its state and `aria-controls` pointing at the panel it reveals, so a screen reader announces it correctly. Its chevron rotates on open and respects `prefers-reduced-motion`. For nine checks — concreteness, passive voice, sentence length, readability, hedging, nominalisation, superlatives, inverted pyramid, and regulated claims — this text is quoted verbatim from `COPY.md`, the repo's canonical interface-copy source; the rest keep this document's own wording.
 
 Where a claim is genuinely sourced (Flesch-Kincaid, the inverted-pyramid convention, Helen Sword's "zombie nouns," Oxford spelling, a sector's regulator), the Rationale links to it — opening in a new tab, with an accessible label describing the destination rather than a bare "click here." Where a number is a convention rather than a citable finding (the 20% passive-voice threshold, this tool's own scoring targets), the Rationale says so explicitly and deliberately carries **no** link, so a link's presence or absence is itself an honest signal of how sourced a number is.
 
@@ -336,7 +336,7 @@ score = 100 − mismatchCount × englishVariantPenaltyPerMismatch (default 5)
 
 ## "Worst offenders" ranking
 
-The five sentences shown in "Worst offenders" are ranked by a combined **badness score** per sentence, not by any single check:
+The five sentences shown as the "Top five fixes" (called "worst offenders" in the code, `rankWorstOffenders` in `js/render.js`) are ranked by a combined **badness score** per sentence, not by any single check:
 
 ```
 badness = wordsOverLimit

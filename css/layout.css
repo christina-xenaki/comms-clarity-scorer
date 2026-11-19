@@ -94,7 +94,6 @@ body[data-state="results"] .what-it-checks { display: none !important; }
 .toolbar { order: 0; }
 #input-section, .forecast-card { order: 1; }
 .privacy-note { order: 2; }
-.results-actions { order: 3; }
 .results-columns { order: 4; }
 #sub-scores { order: 5; }
 #rewrite-suggestions { order: 6; }
@@ -141,15 +140,6 @@ body[data-state="results"] .what-it-checks { display: none !important; }
 
 /* ---- Results state ---- */
 
-.results-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-  margin-bottom: var(--space-6);
-}
-.results-actions .export-actions,
-.results-actions .share-actions { margin-top: 0; }
-.results-actions .share-actions { flex-wrap: wrap; }
 
 .results-columns {
   display: flex;
@@ -234,10 +224,14 @@ body[data-state="results"] .what-it-checks { display: none !important; }
   .toolbar-levels { flex-basis: 100%; }
   .segmented { flex: 1 1 100%; }
   .toolbar-spacer { display: none; }
-  .toolbar-results, .toolbar-results button { flex: 1 1 100%; }
+  .toolbar-results { flex: 1 1 100%; flex-wrap: wrap; }
+  .toolbar-results > * { flex: 1 1 100%; }
   .document-card { padding: var(--space-6); }
   .textbox-label, .textbox-footer { padding-left: var(--space-4); padding-right: var(--space-4); }
   .textbox-card textarea { padding-left: var(--space-4); padding-right: var(--space-4); }
   .actions-row button { flex: 1 1 100%; }
   .side-column { max-width: none; }
 }
+
+/* Print-only blocks (UI-SPEC §5); shown by print.css. */
+.print-heading, .print-legend, .print-footer { display: none; }

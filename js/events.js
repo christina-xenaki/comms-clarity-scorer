@@ -17,6 +17,8 @@ function updateWordCount() {
 function onResultsUpdated() {
   elRewriteCount.textContent = String(elRewriteList.querySelectorAll(".fix-card:not(.fix-empty)").length);
   applyChipStates(); // a re-run draws fresh highlights; keep the reader's chip choices
+  if (!elShareOptions.hidden) refreshSharePanel();
+  updatePrintHeading();
 }
 
 // ---- Highlight chips (UI-SPEC §4) ----
@@ -66,6 +68,8 @@ function backToInput(clearText) {
     updateWordCount();
   }
   elEmptyMessage.textContent = "";
+  closeExportMenu(false);
+  closeSharePanel(false);
   setPageState("input");
   elInputText.focus();
 }
@@ -110,74 +114,177 @@ document.addEventListener("keydown", function (e) {
   hl.classList.toggle("open");
 });
 
-elCopyBtn.addEventListener("click", function () {
-  if (!lastReportText) return;
-  copyPlainText(lastReportText, elCopyBtn, "Copy report");
-});
+// ---- Clipboard ----
+// Each copy calls onDone once the text is on the clipboard (or the fallback
+// has run). What gets copied is built in export.js and render.js, unchanged.
 
-function flashButtonLabel(btn, idleLabel, tempLabel) {
-  var label = btn.querySelector(".btn-label") || btn;
-  label.textContent = tempLabel;
-  setTimeout(function () { label.textContent = idleLabel; }, 1500);
-}
-
-function copyPlainText(text, btn, idleLabel, tempLabel) {
-  tempLabel = tempLabel || "Copied!";
+function copyPlainText(text, onDone) {
   if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(text).then(function () {
-      flashButtonLabel(btn, idleLabel, tempLabel);
-    }, function () { fallbackCopy(text, btn, idleLabel, tempLabel); });
+    navigator.clipboard.writeText(text).then(onDone, function () { fallbackCopy(text, onDone); });
   } else {
-    fallbackCopy(text, btn, idleLabel, tempLabel);
+    fallbackCopy(text, onDone);
   }
 }
 
-function copyRichText(html, text, btn, idleLabel) {
+function copyRichText(html, text, onDone) {
   if (navigator.clipboard && window.ClipboardItem && navigator.clipboard.write) {
     var item = new ClipboardItem({
       "text/html": new Blob([html], { type: "text/html" }),
       "text/plain": new Blob([text], { type: "text/plain" })
     });
-    navigator.clipboard.write([item]).then(function () {
-      flashButtonLabel(btn, idleLabel, "Copied!");
-    }, function () { copyPlainText(text, btn, idleLabel); });
+    navigator.clipboard.write([item]).then(onDone, function () { copyPlainText(text, onDone); });
   } else {
-    copyPlainText(text, btn, idleLabel);
+    copyPlainText(text, onDone);
   }
 }
 
-function fallbackCopy(text, btn, idleLabel, tempLabel) {
+function fallbackCopy(text, onDone) {
   var ta = document.createElement("textarea");
   ta.value = text;
-  ta.style.position = "fixed";
-  ta.style.left = "-9999px";
+  ta.setAttribute("readonly", "");
+  ta.className = "clipboard-fallback";
   document.body.appendChild(ta);
-  ta.focus();
   ta.select();
   try { document.execCommand("copy"); } catch (e) {}
   document.body.removeChild(ta);
-  flashButtonLabel(btn, idleLabel, tempLabel || "Copied!");
+  onDone();
 }
+
+function announceCopy(message) {
+  elCopyAnnouncer.textContent = "";
+  setTimeout(function () { elCopyAnnouncer.textContent = message; }, 50);
+}
+
+// ---- Export menu (UI-SPEC §5) ----
+var exportResetTimer = null;
+
+function exportMenuItems() {
+  return Array.prototype.slice.call(elExportMenu.querySelectorAll('[role="menuitem"]'));
+}
+
+function openExportMenu(focusLast) {
+  elExportMenu.classList.remove("align-left");
+  elExportMenu.hidden = false;
+  if (elExportMenu.getBoundingClientRect().left < 0) elExportMenu.classList.add("align-left");
+  elExportBtn.setAttribute("aria-expanded", "true");
+  var items = exportMenuItems();
+  items[focusLast ? items.length - 1 : 0].focus();
+}
+
+function closeExportMenu(returnFocus) {
+  if (elExportMenu.hidden) return;
+  elExportMenu.hidden = true;
+  elExportBtn.setAttribute("aria-expanded", "false");
+  if (returnFocus) elExportBtn.focus();
+}
+
+// On screen, the Export button shows the confirmation with a check icon for
+// two seconds; screen readers hear the same words.
+function confirmExport(message) {
+  closeExportMenu(true);
+  elExportBtnLabel.textContent = message;
+  elExportBtnIcon.setAttribute("href", "#icon-check");
+  elExportBtn.classList.add("is-confirmed");
+  announceCopy(message);
+  clearTimeout(exportResetTimer);
+  exportResetTimer = setTimeout(function () {
+    elExportBtnLabel.textContent = "Export";
+    elExportBtnIcon.setAttribute("href", "#icon-download");
+    elExportBtn.classList.remove("is-confirmed");
+  }, 2000);
+}
+
+elExportBtn.addEventListener("click", function () {
+  if (elExportMenu.hidden) openExportMenu(false); else closeExportMenu(true);
+});
+elExportBtn.addEventListener("keydown", function (e) {
+  if (e.key === "ArrowDown") { e.preventDefault(); openExportMenu(false); }
+  if (e.key === "ArrowUp") { e.preventDefault(); openExportMenu(true); }
+});
+elExportMenu.addEventListener("keydown", function (e) {
+  var items = exportMenuItems();
+  var i = items.indexOf(document.activeElement);
+  if (e.key === "ArrowDown") { e.preventDefault(); items[(i + 1) % items.length].focus(); }
+  else if (e.key === "ArrowUp") { e.preventDefault(); items[(i - 1 + items.length) % items.length].focus(); }
+  else if (e.key === "Home") { e.preventDefault(); items[0].focus(); }
+  else if (e.key === "End") { e.preventDefault(); items[items.length - 1].focus(); }
+  else if (e.key === "Escape") { e.preventDefault(); closeExportMenu(true); }
+  else if (e.key === "Tab") { closeExportMenu(false); }
+});
+document.addEventListener("click", function (e) {
+  if (!elExportMenu.hidden && !e.target.closest(".export-wrap")) closeExportMenu(false);
+});
 
 elExportEmailBtn.addEventListener("click", function () {
   if (!lastResult) return;
-  copyRichText(buildExportRichHtml(lastResult), buildExportPlainText(lastResult), elExportEmailBtn, "Copy for email");
+  copyRichText(buildExportRichHtml(lastResult), buildExportPlainText(lastResult), function () { confirmExport("Copied for email"); });
 });
 
 elExportSlackBtn.addEventListener("click", function () {
   if (!lastResult) return;
-  copyPlainText(buildExportPlainText(lastResult), elExportSlackBtn, "Copy for Slack");
+  copyPlainText(buildExportPlainText(lastResult), function () { confirmExport("Copied for Slack"); });
 });
+
+elCopyBtn.addEventListener("click", function () {
+  if (!lastReportText) return;
+  copyPlainText(lastReportText, function () { confirmExport("Copied full report"); });
+});
+
+elPrintBtn.addEventListener("click", function () {
+  closeExportMenu(true);
+  updatePrintHeading();
+  window.print();
+});
+
+// ---- Share panel (UI-SPEC §2, §5) ----
+// The panel shows exactly what the share actions send: the grade, the two
+// counts and the tool URL, never the analysed text.
+function refreshSharePanel() {
+  if (!lastResult) return;
+  var text = buildShareText(lastResult);
+  elSharePreview.textContent = text;
+  elShareWhatsappLink.href = "https://wa.me/?text=" + encodeURIComponent(text);
+}
+
+function closeSharePanel(returnFocus) {
+  if (elShareOptions.hidden) return;
+  elShareOptions.hidden = true;
+  elShareScoreBtn.setAttribute("aria-expanded", "false");
+  if (returnFocus) elShareScoreBtn.focus();
+}
 
 elShareScoreBtn.addEventListener("click", function () {
   if (!lastResult) return;
-  var expanded = elShareScoreBtn.getAttribute("aria-expanded") === "true";
-  elShareScoreBtn.setAttribute("aria-expanded", String(!expanded));
-  elShareOptions.hidden = expanded;
-  elShareWhatsappLink.href = "https://wa.me/?text=" + encodeURIComponent(buildShareText(lastResult));
+  if (!elShareOptions.hidden) { closeSharePanel(true); return; }
+  refreshSharePanel();
+  elShareOptions.hidden = false;
+  elShareScoreBtn.setAttribute("aria-expanded", "true");
+  elShareOptions.focus();
+});
+elShareOptions.addEventListener("keydown", function (e) {
+  if (e.key === "Escape") { e.preventDefault(); closeSharePanel(true); }
 });
 
+// "Copied! Paste into Slack." is this button's existing feedback (COPY.md).
 elShareSlackBtn.addEventListener("click", function () {
   if (!lastResult) return;
-  copyPlainText(buildShareText(lastResult), elShareSlackBtn, "Share to Slack", "Copied! Paste into Slack.");
+  copyPlainText(buildShareText(lastResult), function () {
+    var label = elShareSlackBtn.querySelector(".btn-label");
+    label.textContent = "Copied! Paste into Slack.";
+    announceCopy("Copied! Paste into Slack.");
+    setTimeout(function () { label.textContent = "Share to Slack"; }, 2000);
+  });
 });
+
+// ---- Print-only heading and footer (UI-SPEC §5) ----
+function updatePrintHeading() {
+  if (!lastResult) return;
+  var firstLine = lastResult.text.split("\n").map(function (l) { return l.trim(); }).filter(Boolean)[0] || "";
+  elPrintTitle.textContent = firstLine.length > 120 ? firstLine.slice(0, 120).trim() + "…" : firstLine;
+  var date = new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+  var sector = elSectorSelect.options[elSectorSelect.selectedIndex].text;
+  var variant = elVariantSelect.options[elVariantSelect.selectedIndex].text;
+  elPrintMeta.textContent = "Scored " + date + " · Sector: " + sector + " · English: " + variant + " · " + tokenizeWords(lastResult.text).length + " words";
+  elPrintUrl.textContent = location.origin + location.pathname;
+}
+window.addEventListener("beforeprint", updatePrintHeading);
