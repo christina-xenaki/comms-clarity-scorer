@@ -59,9 +59,10 @@ button:active { opacity: 0.85; }
 
 button.secondary {
   background: var(--surface);
-  color: var(--accent);
-  border: var(--border-thin) solid var(--accent);
+  color: var(--ink);
+  border: var(--border-thin) solid var(--control-border);
 }
+button.secondary:hover { background: var(--paper); }
 
 /* A button that reads as plain text, for in-page actions such as "Edit text".
    Never underlined: a solid underline is reserved for real links. */
@@ -104,10 +105,10 @@ a.secondary-link {
   padding: 0 var(--space-5);
   font-size: var(--fs-ui);
   font-weight: 600;
-  border: var(--border-thin) solid var(--accent);
+  border: var(--border-thin) solid var(--control-border);
   border-radius: var(--radius-control);
   background: var(--surface);
-  color: var(--accent);
+  color: var(--ink);
   text-decoration: none;
   cursor: pointer;
 }

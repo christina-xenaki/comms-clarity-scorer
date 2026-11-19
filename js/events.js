@@ -15,8 +15,32 @@ function updateWordCount() {
 // Called whenever a fresh result has been drawn, including re-runs after a
 // Sector or English variant change.
 function onResultsUpdated() {
-  elRewriteCount.textContent = String(elRewriteList.children.length);
+  elRewriteCount.textContent = String(elRewriteList.querySelectorAll(".fix-card:not(.fix-empty)").length);
+  applyChipStates(); // a re-run draws fresh highlights; keep the reader's chip choices
 }
+
+// ---- Highlight chips (UI-SPEC §4) ----
+// A switched-off family loses its underlines and leaves the tab order; its
+// screen-reader explanations stay in place.
+function applyChipStates() {
+  elChips.forEach(function (chip) {
+    var family = chip.getAttribute("data-family");
+    var on = chip.getAttribute("aria-pressed") === "true";
+    elAnnotated.classList.toggle("hide-" + family, !on);
+    HIGHLIGHT_FAMILIES[family].forEach(function (cls) {
+      elAnnotated.querySelectorAll("mark." + cls).forEach(function (mark) {
+        mark.setAttribute("tabindex", on ? "0" : "-1");
+        if (!on) mark.classList.remove("open");
+      });
+    });
+  });
+}
+elChips.forEach(function (chip) {
+  chip.addEventListener("click", function () {
+    chip.setAttribute("aria-pressed", String(chip.getAttribute("aria-pressed") !== "true"));
+    applyChipStates();
+  });
+});
 
 function showEmptyMessage() {
   // Clear first so a repeated message is announced again.

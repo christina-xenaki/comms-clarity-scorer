@@ -92,7 +92,7 @@ body[data-state="results"] .what-it-checks { display: none !important; }
    columns without duplicating it. */
 #results-panel:not([hidden]) { display: contents; }
 .toolbar { order: 0; }
-#input-section, .forecast-region { order: 1; }
+#input-section, .forecast-card { order: 1; }
 .privacy-note { order: 2; }
 .results-actions { order: 3; }
 .results-columns { order: 4; }
@@ -136,19 +136,10 @@ body[data-state="results"] .what-it-checks { display: none !important; }
 .empty-message:empty { display: none; }
 .actions-row { display: flex; justify-content: flex-end; margin-top: var(--space-4); }
 
-/* ---- Privacy note (callout styling arrives in UI-3) ---- */
-.privacy-note { margin: var(--space-6) 0 var(--space-6); }
+/* ---- Privacy callout (styled in cards.css) ---- */
+.privacy-note { margin: var(--space-6) 0; }
 
 /* ---- Results state ---- */
-.forecast-region {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-4);
-  margin-bottom: 0;
-}
-.forecast-region:focus { outline: none; }
-.forecast-region:focus-visible { outline: var(--focus-ring); outline-offset: var(--focus-offset); }
-.forecast-region > .card { flex: 1 1 320px; margin: 0; }
 
 .results-actions {
   display: flex;
@@ -185,6 +176,7 @@ body[data-state="results"] .what-it-checks { display: none !important; }
   margin-bottom: var(--space-4);
 }
 .document-header h2 { margin: 0; }
+.document-header #annotated-word-count { font-variant-numeric: tabular-nums; }
 #annotated-output { max-width: var(--measure-text); }
 .side-column {
   flex: 1 1 340px;
@@ -234,7 +226,7 @@ body[data-state="results"] .what-it-checks { display: none !important; }
 /* Formerly inline style attributes in index.html. */
 .icon-sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
 .tap-hint { margin-top: calc(-1 * var(--space-2)); color: var(--muted); font-size: var(--fs-ui); }
-.section-intro { margin-top: 0; color: var(--muted); font-size: var(--fs-ui); }
+.section-intro { margin: 0 0 var(--space-3); color: var(--muted); font-size: var(--fs-meta); }
 
 /* ---- Responsive (§7) ---- */
 @media (max-width: 767px) {

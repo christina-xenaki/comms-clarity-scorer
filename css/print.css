@@ -11,13 +11,15 @@
   .tap-hint,
   .results-actions,
   #edit-text-btn,
+  .chips,
+  .forecast-right,
   .why-toggle,
   mark.hl .tip {
     display: none !important;
   }
 
   /* Show the full report on paper regardless of the on-screen detail level. */
-  .forecast-region,
+  .forecast-card,
   .results-columns,
   #boilerplate-note,
   #sub-scores,
@@ -37,13 +39,12 @@
   section { margin-bottom: var(--space-4); }
 
   a[href]::after { content: " (" attr(href) ")"; font-size: 0.75em; font-weight: normal; }
+  a.fix-marker::after { content: none; }
 
-  /* Word/phrase-level highlights already carry their category in the underline
-     pattern (dotted/wavy/dashed/double), not colour alone, so they survive
-     greyscale as-is. The two container-level categories rely on background tint
-     only on screen, which paper can't guarantee, so give them a text label here
-     instead of leaning on colour. */
-  mark.hl-long, mark.hl-quote { background: transparent !important; text-decoration-line: none; }
+  /* Every highlight family carries its meaning in the underline pattern
+     (double, dotted, wavy, dashed), so it survives greyscale. Long sentences
+     and empty quotes share Structure's dashed line, so they also keep a text
+     label on paper. */
   mark.hl-long[data-first-frag]::before { content: "[Long sentence] "; font-weight: 700; }
   mark.hl-quote[data-first-frag]::before { content: "[Empty quote] "; font-weight: 700; }
 }

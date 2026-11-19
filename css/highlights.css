@@ -1,67 +1,132 @@
-#annotated-output { font-family: var(--font-serif); white-space: pre-wrap; font-size: var(--fs-base); line-height: var(--lh-input); }
-.boilerplate-text { opacity: 0.55; }
+/* Annotated text and highlight families (UI-SPEC §2 document card, §4). */
 
-.legend { display: flex; flex-wrap: wrap; gap: var(--space-3); font-size: var(--fs-meta); color: var(--muted); margin-bottom: var(--space-3); }
-.legend span { display: inline-flex; align-items: center; gap: var(--space-1); }
-.swatch {
-  display: inline-block;
-  padding: 0 var(--space-1);
-  border-radius: 3px;
-  font-size: var(--fs-eyebrow);
-  font-weight: 700;
+#annotated-output {
+  font-family: var(--font-serif);
+  font-size: var(--fs-text);
+  line-height: var(--lh-text);
+  white-space: pre-wrap;
+  max-width: var(--measure-text);
   color: var(--ink);
-  line-height: 1.4;
 }
 
-.hl, .swatch {
+/* ---- Highlights: one colour per underline style, no background tints ----
+   The underline style carries the meaning; colour only reinforces it. A solid
+   underline is never used here: it is reserved for real links. */
+.hl {
   position: relative;
   background: transparent;
   color: inherit;
-  border-radius: 3px;
   text-decoration-line: underline;
+  text-underline-offset: 5px;
+  text-decoration-skip-ink: none;
+}
+mark.hl { cursor: pointer; border-radius: 2px; }
+mark.hl:focus-visible { outline: var(--focus-ring); outline-offset: var(--focus-offset); }
+
+/* Strong detail: double, --good */
+.hl-strength, .hl-concrete, .fam-strong {
+  text-decoration-style: double;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--good);
+}
+/* Word choice: dotted, --word */
+.hl-buzz, .hl-hedge, .hl-nominal, .fam-word {
+  text-decoration-style: dotted;
   text-decoration-thickness: 2px;
-  text-underline-offset: 3px;
+  text-decoration-color: var(--word);
+}
+/* Claims: wavy, --claim */
+.hl-superlative, .hl-regulated, .fam-claim {
+  text-decoration-style: wavy;
+  text-decoration-thickness: 1.5px;
+  text-decoration-color: var(--claim);
+}
+/* Structure: dashed, --struct */
+.hl-passive, .hl-acronym, .hl-long, .hl-quote, .fam-struct {
+  text-decoration-style: dashed;
+  text-decoration-thickness: 1.5px;
+  text-decoration-color: var(--struct);
+}
+/* Sentence-level highlights sit lower, so they never overlap the underline of
+   a word inside them. */
+.hl-long, .hl-quote { text-underline-offset: 10px; }
+
+/* Switched-off families (chips): no underline. Tips stay for screen readers. */
+#annotated-output.hide-strong :is(.hl-strength, .hl-concrete),
+#annotated-output.hide-word :is(.hl-buzz, .hl-hedge, .hl-nominal),
+#annotated-output.hide-claim :is(.hl-superlative, .hl-regulated),
+#annotated-output.hide-struct :is(.hl-passive, .hl-acronym, .hl-long, .hl-quote) {
+  text-decoration-line: none;
+  cursor: auto;
 }
 
-mark.hl { cursor: pointer; }
+/* ---- Highlight chips ---- */
+.chips { display: flex; flex-wrap: wrap; gap: var(--space-2); margin: 0 0 var(--space-4); }
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 36px;
+  padding: 0 var(--space-3);
+  border: var(--border-thin) solid var(--control-border);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: var(--fs-ui);
+  font-weight: 500;
+}
+.chip-sample {
+  font-family: var(--font-serif);
+  font-size: var(--fs-body);
+  font-weight: 600;
+  text-decoration-line: underline;
+  text-underline-offset: 4px;
+  text-decoration-skip-ink: none;
+}
+.chip-count { font-size: var(--fs-meta); font-weight: 600; color: var(--muted); }
+.chip[aria-pressed="false"] {
+  background: var(--chip-off);
+  color: var(--muted);
+  border-style: dashed;
+}
+.chip[aria-pressed="false"] .chip-sample { text-decoration-line: none; }
 
-mark.hl:focus-visible {
-  outline: var(--focus-ring);
-  outline-offset: var(--focus-offset);
+.tap-hint { margin: 0 0 var(--space-4); color: var(--muted); font-size: var(--fs-meta); }
+
+/* ---- Boilerplate inside the text ---- */
+.boilerplate-text { color: var(--muted); font-size: var(--fs-base); }
+.boilerplate-divider {
+  display: block;
+  margin: 0 0 var(--space-2);
+  padding-top: var(--space-4);
+  border-top: var(--border-thin) dashed var(--line);
+  white-space: normal;
 }
 
-/* Container-level marks (whole sentence / whole quote): background tint only —
-   already distinguished from word-level marks by their much larger extent, so no
-   underline pattern is layered on top of running, wrapped text. */
-.hl-long { background: var(--interim-long-bg); text-decoration-line: none; }
-mark.hl-long { box-decoration-break: clone; -webkit-box-decoration-break: clone; }
-.hl-quote { background: var(--interim-quote-bg); text-decoration-line: none; }
-mark.hl-quote { box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+/* ---- Fix markers: numbered circles at the end of a top-five sentence ---- */
+.fix-sup { line-height: 0; }
+a.fix-marker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  margin-left: 2px;
+  border-radius: var(--radius-pill);
+  background: var(--ink);
+  color: var(--on-accent);
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  vertical-align: super;
+}
 
-/* Word/phrase-level marks: background tint + a non-solid underline style, grouped by
-   family so the pattern alone (independent of colour) tells the categories apart —
-   solid underline stays reserved for real links (see .card-body a). Shared with the
-   legend's ".swatch" samples so the key always matches what's on the page. */
-.hl-buzz, .hl-hedge, .hl-nominal { text-decoration-style: dotted; }
-.hl-superlative, .hl-regulated { text-decoration-style: wavy; }
-.hl-passive, .hl-acronym { text-decoration-style: dashed; }
-.hl-concrete, .hl-strength { text-decoration-style: double; text-decoration-thickness: 3px; }
-
-.hl-buzz { background: var(--interim-buzz-bg); text-decoration-color: var(--interim-buzz-border); }
-.hl-hedge { background: var(--interim-hedge-bg); text-decoration-color: var(--interim-hedge-border); }
-.hl-superlative { background: var(--interim-superlative-bg); text-decoration-color: var(--interim-superlative-border); }
-.hl-passive { background: var(--interim-passive-bg); text-decoration-color: var(--interim-passive-border); }
-.hl-nominal { background: var(--interim-nominal-bg); text-decoration-color: var(--interim-nominal-border); }
-.hl-acronym { background: var(--interim-acronym-bg); text-decoration-color: var(--interim-acronym-border); }
-.hl-concrete { background: var(--interim-concrete-bg); text-decoration-color: var(--interim-concrete-border); }
-.hl-strength { background: var(--interim-strength-bg); text-decoration-color: var(--interim-strength-border); }
-.hl-regulated { background: var(--interim-regulated-bg); text-decoration-color: var(--interim-regulated-border); }
-mark.hl-buzz, mark.hl-hedge, mark.hl-superlative, mark.hl-passive, mark.hl-nominal,
-mark.hl-acronym, mark.hl-concrete, mark.hl-strength, mark.hl-regulated { padding: 0 1px; }
-
-/* The explanation stays in the accessibility tree at all times (so aria-describedby
-   always works for screen readers) but is only visually shown once .open is toggled —
-   tap-to-toggle for sighted keyboard/touch users, always-on for assistive tech. */
+/* ---- Explanation tip ----
+   The explanation stays in the accessibility tree at all times (so
+   aria-describedby always works for screen readers) but is only shown on
+   screen once .open is toggled. */
 mark.hl .tip {
   position: absolute;
   width: 1px;
@@ -76,22 +141,24 @@ mark.hl .tip {
 
 mark.hl.open .tip {
   position: absolute;
+  left: 0;
+  top: 100%;
+  z-index: 10;
   width: max-content;
+  max-width: min(320px, 80vw);
   height: auto;
-  margin: 0;
-  padding: var(--space-2) var(--space-3);
+  margin: var(--space-2) 0 0;
+  padding: 10px var(--space-3);
   clip: auto;
   overflow: visible;
   white-space: normal;
-  left: 0;
-  top: 100%;
-  margin-top: var(--space-1);
-  z-index: 10;
   background: var(--ink);
-  color: var(--surface);
+  color: var(--on-accent);
+  font-family: var(--font-sans);
   font-size: var(--fs-meta);
+  font-weight: 400;
   line-height: var(--lh-ui);
+  text-decoration: none;
   border-radius: var(--radius-control);
-  max-width: 80vw;
   box-shadow: var(--shadow-menu);
 }
