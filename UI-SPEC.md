@@ -1,13 +1,26 @@
 # UI-SPEC.md — Comms Clarity Scorer redesign
 
-Version 1.1 · November 2026 · Direction: "Combined" (forecast card + annotated text with side column + lock privacy note) · Palette: Evergreen
+Version 1.3 · November 2026 · Direction: "Combined" (forecast card + annotated text with side column + lock privacy note) · Palette: Evergreen
 
 This is a **visual and layout refactor only**. Read it alongside SPEC.md (behaviour) and COPY.md (interface text).
 
+> **Changes in v1.3** (answers to the second review)
+> - **New "Checks" and "Rewrite suggestions" sections** keep every finding on the page. Working shows each check's score (§2).
+> - **Fix cards show their existing detail line**, not a check name. "Why this check exists" moves to the check cards (§2).
+> - **Tiers use sentence case**, as in the code and exports. "Flag only" is added for fixes with no rewrite (§2, §9).
+> - **What's working shows the Strengths check's existing findings** and is hidden when there are none (§2).
+> - **Boilerplate shows its word and buzzword counts.** No grade, because that would be a scoring change (§2).
+> - **Copy confirmations are visible on screen** as well as announced to screen readers (§5).
+> - **Detail-level descriptions stay as visible text**, not `title` tooltips (§3).
+> - **The empty-text alert becomes an inline message**, if that's possible without touching analyze.js (§2).
+> - **Confirmed as proposed**: switching states from events.js, markers at the end of sentences, sentence-level underlines offset lower, `display: contents` for print order, Export in every detail level, keeping `#1d5b4f`, and docs.css token renames.
+>
+> **Changes in v1.2**
+> - **Never push to main.** Each session ends with a pull request that Christina reviews and merges herself. Pull request descriptions are plain text with no links (§11). This replaces the v1.1 git rule.
+>
 > **Changes in v1.1** (answers to the code review)
 > - **Copy scope**: only new and changed strings go into COPY.md. Existing inline strings stay where they are for now (§0, §9).
 > - **Scoring and ranking code is off limits**, including `rankWorstOffenders` and `findRewriteForSentence` in render.js (§0).
-> - **Push to main is approved**, after tagging the current main as `pre-redesign` (§11).
 > - **Export menu keeps the existing "Copy report"** as "Copy full report" (§5).
 > - **Share keeps its two existing actions**, as text-only buttons. The Slack and WhatsApp brand logos are removed, so no brand colours are needed (§5).
 > - **Long-sentence and empty-quote highlights join the Structure family** and keep their print text labels (§4, §5).
@@ -45,7 +58,7 @@ All colours, type sizes, spacing, radii, shadows and durations live as CSS custo
 | `--line` | `#E4E1DA` | Card borders (decorative only) | — |
 | `--line-soft` | `#EEECE6` | Dividers, segmented-control track, rationale pill | — |
 | `--control-border` | `#7D8380` | Borders of text box, selects, secondary buttons, selected segment | 3.3:1 or more on every background it sits on |
-| `--accent` | `#1E5B50` | **Actions only**: primary buttons, links, focus ring, logo | 7.9:1 with white |
+| `--accent` | `#1D5B4F` (the existing green, kept) | **Actions only**: primary buttons, links, focus ring, logo | 7.9:1 with white |
 | `--accent-hover` | `#164840` | Primary button hover | 10.3:1 with white |
 | `--on-accent` | `#FFFFFF` | Text on accent | — |
 | `--accent-soft` | `#E8F0EC` | Privacy callout background | muted text 5.9:1 |
@@ -61,7 +74,6 @@ All colours, type sizes, spacing, radii, shadows and durations live as CSS custo
 | `--grade-d` | `#E7E8EA` | Forecast card, grade D | muted 5.6:1 |
 | `--grade-e` | `#E1E2E5` | Forecast card, grade E | muted 5.3:1 |
 
-If the repo's current button green is within a shade of `#1E5B50`, keep the existing hex as `--accent` and confirm it still gives at least 4.5:1 with white.
 
 **Colour rules**
 1. Each colour has one job. The accent is for actions only: never for grades, "good" highlights or tiers.
@@ -115,6 +127,7 @@ Centred single column, max-width 760px (toolbar included).
 1. Intro line from COPY.md ("Paste a press release or pitch…"), 18px, `--muted`.
 2. **Text box card**: white, radius 16, 1px `--control-border`, min-height 320px, padding 24px 28px, Source Serif 17px/1.7, `spellcheck="false"` (the browser's red wavy lines clash with the Claims underline), resize vertical, visible label from COPY.md. A footer strip inside the card shows the word count (13px, `--muted`, right-aligned).
 3. Actions row: "Analyse" primary button, right-aligned, min-height 48px. (No "Try an example" button in this refactor; see §11.)
+   - **Empty text**: if events.js can check for empty text before calling `analyze()`, replace the "Paste some text first." `alert()` with the same words shown inline under the text box (13px, `--claim`, in a polite live region, with focus moved to the text box). If that needs a change to analyze.js, leave the alert as it is.
 4. **Privacy callout** (see §3).
 5. Footer (see below).
 
@@ -124,9 +137,13 @@ Container 1240px.
 2. **Forecast card.**
 3. **Privacy callout.**
 4. Two columns (flex, wrap, gap 32px, align start): **Document card** (`flex: 999 1 600px; min-width: 0`) and **Side column** (`flex: 1 1 340px; max-width: 420px`).
-5. Footer.
+5. **Checks** section (full width, below the columns).
+6. **Rewrite suggestions** section (full width).
+7. Footer.
 
-"Edit text" returns to the Input state with the text kept. "Score new text" returns to the Input state with the box cleared. Changing Sector or English variant keeps the current behaviour.
+"Edit text" returns to the Input state with the text kept. "Score new text" returns to the Input state with the box cleared. Changing Sector or English variant re-runs the analysis and stays in Results, as it does now.
+
+**Switching states**: `analyze()` stays untouched. Keep `#results-panel`, `#annotated-text-section` and the textarea in the page, and switch between Input and Results from events.js after `analyze()` returns.
 
 ### Forecast card
 - Background: the current grade's tint token (`--grade-a` to `--grade-e`). Radius 20, padding 36px 44px. Three regions in a wrapping row, vertically centred:
@@ -142,26 +159,38 @@ White, 1px `--line`, radius 16, padding 40px 56px 48px (24px at 767px and below)
 - The user's text in Source Serif 18/1.75, max 68ch, paragraphs as entered. Don't add structure detection.
 - **Boilerplate**: separated by a 1px dashed `--line` top border, eyebrow "Boilerplate · graded separately", text in `--muted`, 16px.
 - **Keep the existing highlight behaviour**: every highlight is focusable and opens its explanation on click or Enter. Restyle it with the tokens; don't rebuild it.
-- **Fix markers**: right after a highlight that is one of the top five fixes, add a numbered marker: an 18px `--ink` circle with the white number (11px/600), set as superscript, linking to `#fix-n`, with `aria-label="See fix n"`.
+- **Fix markers**: fixes are whole sentences, so put each marker **at the end of its sentence**: an 18px `--ink` circle with the white number (11px/600), set as superscript, linking to `#fix-n`, with `aria-label="See fix n"`.
 
 ### Side column (Full)
 1. "Top five fixes" heading (existing copy) with the count in `--muted`.
 2. **Fix cards** (white, 1px `--line`, radius 14, padding 20px 22px, `id="fix-n"`):
-   - Header row: marker n · tier pill · check name and detail (13px `--muted`, for example "Long sentence · 41 words").
+   - Header row: marker n · tier pill · **the fix's existing detail line** (13px `--muted`, for example "45 words (15 over the 30-word limit)"). Top fixes are ranked on a combined score, so they have no single check name. Don't invent one, and don't add new labels.
    - The flagged sentence: Source Serif 15px, `--muted`. If it is over about 25 words, shorten the middle with "…".
-   - Suggested Rewrite only: eyebrow "Try" + the rewrite (15px, `--ink`).
-   - "Why this check exists": the existing chevron-plus-pill control, restyled with a `--line-soft` pill, 12/500 `--muted` text, min-height 32px and a chevron that rotates 90° when open. The expanded text is 13/1.5 `--muted`, indented 18px. Sources are links with solid underlines.
-   - **Tier pills** (12/600, radius 999, padding 3px 10px): **Suggested Rewrite** = filled `--ink`, white text · **Worth Asking Yourself** = 1px solid `--ink` border, `--ink` text · **Flag Only** = 1px dashed `--muted` border, `--muted` text.
-3. **What's working** card: a check icon in `--good`, a bold lead phrase, then the sentence.
-4. **Boilerplate** card: "Boilerplate" · its grade and "not in main score" · the buzzwords found.
+   - Suggested rewrite only: eyebrow "Try" + the rewrite (15px, `--ink`).
+   - No "Why this check exists" control on fix cards; it lives on the check cards.
+   - **Tier pills** (12/600, radius 999, padding 3px 10px), in sentence case as in the code and exports: **Suggested rewrite** = filled `--ink`, white text · **Worth asking yourself** = 1px solid `--ink` border, `--ink` text · **Flag only** = 1px dashed `--muted` border, `--muted` text. "Flag only" is for any fix that has neither of the other two.
+3. **What's working** card: the **Strengths check's existing findings**, each as a row with a check icon in `--good` and the finding text (14px/1.5). Hide the card when there are no strengths.
+4. **Boilerplate** card: "Boilerplate" · its **word count and buzzword count** (existing figures and wording) · "not in main score" · the buzzwords found. Boilerplate has no grade. Don't add one.
+
+### Checks section (Working and Full)
+- The existing "Checks" heading (22/700), then all 16 checks in their current order.
+- Layout: 2 columns at 1100px and up (`display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px`), 1 column below.
+- Each check is a `<details>` card: `--surface`, 1px `--line`, radius 14.
+  - **Summary row** (min-height 56px, padding 16px 20px, flex, space-between): check name (15/600) · its score, in today's format (14/600 `--muted`) · its number of findings, in today's wording (13px `--muted`) · chevron-right that rotates 90° when open.
+  - **When open** (padding 0 20px 20px): the check's existing findings (14px/1.55), then the existing "Why this check exists" control, restyled with a `--line-soft` pill, 12/500 `--muted` text, min-height 32px and a rotating chevron. The expanded rationale is 13/1.5 `--muted`, indented 18px, with sources as links with solid underlines.
+- All cards are collapsed by default. Keep the existing content and wording; this is a restyle of today's 16 check cards.
+
+### Rewrite suggestions section (Full only)
+- The existing "Rewrite suggestions" heading and list, inside one `<details>` closed by default. The summary row shows the heading and the number of suggestions.
+- Each suggestion uses the fix-card style without a marker: tier pill · the original sentence (Source Serif 15px, `--muted`) · eyebrow "Try" + the rewrite. Keep the existing content and order.
 
 ### Detail levels
-- **Glance**: toolbar, forecast card, privacy callout. Nothing else.
-- **Working**: everything in Glance, plus the top five fixes in a single centred column (max 760px), rationale collapsed. No annotated text.
-- **Full**: the two-column layout above, including the annotated text, strengths, boilerplate, rationale and sources.
+- **Glance**: toolbar (including Export), forecast card, privacy callout. Nothing else.
+- **Working**: everything in Glance, plus the top five fixes in a single centred column (max 760px), plus the Checks section (scores visible, cards collapsed). No annotated text.
+- **Full**: everything: the two-column layout, the Checks section and the Rewrite suggestions section.
 
 ### Footer (both states)
-1px `--line` top border, 13px/1.55 `--muted`. Left (max 720px): the disclaimer from COPY.md and the "How scoring works" link. Right: the "Word lists loaded…" line (moved here from under the button). In the Input state, add a `<details>` disclosure "What it checks" holding the existing checks list.
+1px `--line` top border, 13px/1.55 `--muted`. Left (max 720px): **today's footer disclaimer text** (see §9) and the "How scoring works" link. Right: the "Word lists loaded…" line (moved here from under the button). In the Input state, add a `<details>` disclosure "What it checks" holding the existing checks list.
 
 ---
 
@@ -171,7 +200,7 @@ White, 1px `--line`, radius 16, padding 40px 56px 48px (24px at 767px and below)
 - **Selects and text box**: height 44px (selects), radius 10, 1px `--control-border`, `--surface` background, 14/500.
 - **Primary button**: `--accent` background, `--on-accent` text, 14–15/600, radius 10–12, min-height 44px (48px for Analyse), `--accent-hover` on hover.
 - **Secondary button**: `--surface` background, 1px `--control-border`, `--ink` text.
-- **Segmented control**: `--line-soft` track, radius 12, padding 3px. Segments: min-height 44px, radius 9, 14/500 `--muted`. Selected segment: `--surface` background, 1px `--control-border`, `--shadow-sm`, 600 `--ink`. Uses `aria-pressed`.
+- **Segmented control**: `--line-soft` track, radius 12, padding 3px. Segments: min-height 44px, radius 9, 14/500 `--muted`. Selected segment: `--surface` background, 1px `--control-border`, `--shadow-sm`, 600 `--ink`. Uses `aria-pressed`. **Level descriptions** (the existing "Grade and headline only" and so on): show the selected level's description as visible text right after the control (13px `--muted`, wrapping below it on narrow screens), linked with `aria-describedby`. Don't use `title` attributes: they don't show on touch screens or to keyboard users.
 - **Focus**: `:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }` on every interactive element. Never remove an outline without a replacement.
 - **Target size**: 44px minimum for main controls; nothing interactive smaller than 24×24px.
 
@@ -189,6 +218,7 @@ The nine existing categories already group by underline style. This change conso
 | Structure | dashed, 1.5px | `--struct` | Passive voice, Acronym (first use), Long sentence, Empty quote, any other dashed or sentence-level category |
 
 - All highlights: `text-underline-offset: 5px; text-decoration-skip-ink: none;`. No background tints.
+- **Sentence-level highlights** (Long sentence, Empty quote) sit lower, at `text-underline-offset: 10px`, so they never overlap the underline of a word inside them.
 - **Keep the existing highlight mechanics**: `<mark class="hl" tabindex="0" role="button" aria-describedby=…>`, the `.tip` that screen readers can always read, Click/Enter/Space toggling `.open`, and one tip open at a time. Restyle only: the tip popover uses an `--ink` background, white 13px/1.5 text, radius 10, padding 10px 12px and `--shadow-menu`.
 - **Switching a family off** removes its underlines and sets its highlights to `tabindex="-1"`, so keyboard users don't tab through invisible items. Switching it back on restores `tabindex="0"`. Screen-reader tips stay in place.
 - The specific category name stays in each highlight's explanation and in the fix cards.
@@ -206,7 +236,9 @@ Secondary button with a download icon, "Export" and a chevron. It has `aria-hasp
 4. *(divider)*
 5. **Print or save as PDF**: "Full report, legible in greyscale" (calls `window.print()`)
 
-Keyboard: Enter or Space opens the menu, arrow keys move between items, Esc closes it and returns focus to the button, and a click outside closes it. After copying, announce "Copied for email" or "Copied for Slack" in a polite live region.
+Keyboard: Enter or Space opens the menu, arrow keys move between items, Esc closes it and returns focus to the button, and a click outside closes it.
+
+**After copying**, confirm it two ways: on screen, the Export button's label changes to "Copied for email", "Copied for Slack" or "Copied full report" with a check icon for 2 seconds; for screen readers, the same words are announced in a polite live region. This replaces today's "Copied!" flash; add "Copied!" to the Copy backlog. Export is available in **every** detail level.
 
 **Export content: unchanged.** All three copy exports already exist. Move them into this menu **without changing what they output**. Exports keep using emoji, not SVG, because email clients don't reliably render inline SVG or non-solid underlines. Email and Slack exports **never** include the annotated text.
 
@@ -220,7 +252,8 @@ Already exists. Keep its two actions and its output exactly as they are: **Share
 - **Hide**: header link, toolbar, all buttons, chips, the share panel, the export menu, "Edit text", the "Why this check exists" controls and the privacy callout. The privacy line moves to the print footer.
 - **Print-only heading block**: eyebrow "Comms Clarity Scorer · Report"; an `h1` with the first line of the submitted text (up to 120 characters); meta line "Scored {date} · Sector: {sector} · English: {variant} · {n} words".
 - **Forecast card**: 1.5px `--ink` border with no background (browsers drop backgrounds when printing). Keep the icon, grade, headline metric and summary.
-- **Order**: forecast → top five fixes → annotated text → what's working → boilerplate → footer. Use CSS `order`; don't duplicate the DOM.
+- **Order**: forecast → top five fixes → annotated text → what's working → boilerplate → checks summary → footer. Don't duplicate the DOM. Use `display: contents` on the column wrappers in print so `order` can move the fixes ahead of the text. The screen `h1` is hidden in print, in favour of the print-only `h1`.
+- **Checks in print**: a compact list of all 16 checks with name, score and number of findings only. No findings text and no rationale. The Rewrite suggestions section is not printed, because the top five fixes carry the rewrites.
 - **Fix markers** print as bracketed superscripts "[1]". Fix cards print as a numbered list separated by 1px rules, each kept whole (`break-inside: avoid`).
 - The annotated text keeps its underline styles and colours. Print a legend line above it: "Strong detail (double) · Word choice (dotted) · Claims (wavy) · Structure (dashed)".
 - **Keep the existing print text labels** on long-sentence and empty-quote highlights.
@@ -268,6 +301,8 @@ Inline SVG on a 24px grid, stroke 1.8–2, round caps and joins, `currentColor` 
 - "Score new text" · "Edit text" · "{n} words"
 - "Your text, annotated · {n} words" · "Show or hide highlight types"
 - Family names: "Strong detail" · "Word choice" · "Claims" · "Structure"
+- Tier: "Flag only" (sentence case, matching the existing "Suggested rewrite" and "Worth asking yourself")
+- "How scoring works" (header and footer link)
 - "Boilerplate · graded separately" · "not in main score" · "What's working" · "Try"
 - "What it checks"
 - Print: "Comms Clarity Scorer · Report" · "Scored {date} · Sector: {sector} · English: {variant} · {n} words" · "Strong detail (double) · Word choice (dotted) · Claims (wavy) · Structure (dashed)"
@@ -285,15 +320,15 @@ Inline SVG on a 24px grid, stroke 1.8–2, round caps and joins, `currentColor` 
 3. Every interactive element can be reached and used with the keyboard, with a visible focus ring.
 4. No horizontal scroll at 390px.
 5. Print preview in black and white: the four highlight families can still be told apart.
-6. The live site works at the end of every session, because main is what GitHub Pages serves.
+6. The site still works once the session's pull request is merged, because main is what GitHub Pages serves.
 
 ---
 
 ## 11. Repo, git and docs
 
-- **Git**: never push to main, merge into main or push tags. Work on your session branch. At the end of each session, open one pull request into main and stop. Christina reviews and merges it herself. Before starting the next session, update your branch from main.
-- **Pull request descriptions**: plain text explaining what changed, why, and how to test it. No links of any kind: no URLs, and no links to files, commits, issues, other pull requests, sessions or attribution pages.
+- **Git: never push to main, merge into main or push tags.** Work on your session branch. At the end of each session, open **one pull request into main** and stop. Christina reviews and merges it herself. Before starting the next session, update your branch from main.
+- **Pull request descriptions**: plain text explaining what changed, why, and how to test it. **No links of any kind**: no URLs, and no links to files, commits, issues, other pull requests, sessions or attribution pages.
 - **Rollback**: any merged pull request can be undone with GitHub's "Revert" button, so keep each session to one pull request.
 - **docs.html**: in UI-1, switch it to the self-hosted fonts and the tokens. No other redesign of docs.html.
-- **README.md and SPEC.md**: update them once, in the UI-4 pull request, to describe the new layout, controls and export menu. Don't edit them every session.
+- **README.md and SPEC.md**: update them **once, in the UI-4 pull request**, to describe the new layout, controls and export menu. Don't edit them every session.
 - **Example texts**: none ship in the repo today. UI-0 adds 2–3 fictional releases under `tests/`. **Don't** add a "Try an example" button in this refactor.
