@@ -7,7 +7,7 @@
       "variant": "british-oxford",
       "grade": "C",
       "gradeLabel": "Hazy",
-      "score": 74,
+      "score": 75,
       "headline": "11 buzzwords. 9 concrete facts.",
       "checks": {
         "concreteness": 100,
@@ -16,7 +16,7 @@
         "buzzwordDensity": 0,
         "sentenceLength": 74.0625,
         "readability": 77.19450867052024,
-        "passiveVoice": 40,
+        "passiveVoice": 65,
         "hedging": 79.19811320754717,
         "superlatives": 65.04716981132074,
         "nominalisation": 100,
@@ -44,7 +44,7 @@
           "overBy": 0,
           "rewrite": {
             "kind": "question",
-            "question": "Who did it? If you'd rather not say, make that a deliberate choice rather than an accident of grammar."
+            "question": "A useful quote gives a reason, a number, or a next step. This gives none. Ask your spokesperson why you actually did this."
           }
         },
         {
@@ -65,9 +65,9 @@
         }
       ],
       "outputs": {
-        "copyReport": "Comms Clarity Scorer report\n11 buzzwords. 9 concrete facts.\nOverall: C (74/100) — Readable, but corporate mush is creeping in.\n\nConcreteness: 100/100\nStrengths: 100/100\nEmpty quote detector: 0/100 — 1/1 quotes empty\nBuzzword density: 0/100 — 11 matches\nSentence length: 74/100 — average 20.4 words\nReadability: 77/100 — grade 10.9\nPassive voice: 40/100 — 50.0%\nHedging: 79/100\nSuperlatives/absolutes: 65/100\nNominalisation: 100/100\nSelf-reference: 100/100 — 0 company-facing, 0 audience-facing, 0 third-party sentences\nAcronym load: 76/100 — 2 never expanded\nInverted pyramid: 50/100\nConsistency: 100/100 — 0 issue type(s)\nEnglish variant (british-oxford): 95/100 — 1 mismatch(es)\n\nTop fixes:\n1. Brindlewick Appliances launches the Q7 kettle, which boils a full cup in 45 seconds\n\nLONDON, 3 March 2026 – Brindlewick Appliances today announced the Q7, a next-generation smart kettle that is designed to leverage cutting-edge heating technology to deliver a seamless, best-in-class boiling experience for households across the UK who may be looking for an innovative solution to their morning routine.\n   Suggested rewrite: is designed to -> does\n2. \"We are thrilled to unveil this game-changing product and are committed to empowering our customers on their tea journey,\" said Dana Okafor, Chief Executive Officer of Brindlewick Appliances.\n   Worth asking yourself: Who did it? If you'd rather not say, make that a deliberate choice rather than an accident of grammar.\n3. It is the most advanced kettle ever made and is completely silent.\n4. The implementation of the new element was carried out by the R&D team in partnership with the BSI.\n   Suggested rewrite: The implementation of the new element -> implementing the new element\n\ncomms-clarity-scorer — analysis runs entirely in the browser, nothing uploaded.",
-        "exportPlain": "⛅ Grade C — Hazy (74/100)\n11 buzzwords. 9 concrete facts.\n\nTop five fixes:\n1. Brindlewick Appliances launches the Q7 kettle, which boils a full cup in 45 seconds\n\nLONDON, 3 March 2026 – Brindlewick Appliances today announced the Q7, a next-generation smart kettle that is designed to leverage cutting-edge heating technology to deliver a seamless, best-in-class boiling experience for households across the UK who may be looking for an innovative solution to their morning routine.\n   Suggested rewrite: is designed to -> does\n2. \"We are thrilled to unveil this game-changing product and are committed to empowering our customers on their tea journey,\" said Dana Okafor, Chief Executive Officer of Brindlewick Appliances.\n   Worth asking yourself: Who did it? If you'd rather not say, make that a deliberate choice rather than an accident of grammar.\n3. It is the most advanced kettle ever made and is completely silent.\n4. The implementation of the new element was carried out by the R&D team in partnership with the BSI.\n   Suggested rewrite: The implementation of the new element -> implementing the new element\n\nScored with Comms Clarity Scorer — https://example.invalid/\nRuns in your browser. Nothing is uploaded.",
-        "exportRichHtml": "<p><strong>⛅ Grade C — Hazy (74/100)</strong></p><p>11 buzzwords. 9 concrete facts.</p><p><strong>Top five fixes</strong></p><ol><li>Brindlewick Appliances launches the Q7 kettle, which boils a full cup in 45 seconds\n\nLONDON, 3 March 2026 – Brindlewick Appliances today announced the Q7, a next-generation smart kettle that is designed to leverage cutting-edge heating technology to deliver a seamless, best-in-class boiling experience for households across the UK who may be looking for an innovative solution to their morning routine.<br><em>Suggested rewrite:</em> is designed to → does</li><li>&quot;We are thrilled to unveil this game-changing product and are committed to empowering our customers on their tea journey,&quot; said Dana Okafor, Chief Executive Officer of Brindlewick Appliances.<br><em>Worth asking yourself:</em> Who did it? If you&#39;d rather not say, make that a deliberate choice rather than an accident of grammar.</li><li>It is the most advanced kettle ever made and is completely silent.</li><li>The implementation of the new element was carried out by the R&amp;D team in partnership with the BSI.<br><em>Suggested rewrite:</em> The implementation of the new element → implementing the new element</li></ol><p>Scored with Comms Clarity Scorer — <a href=\"https://example.invalid/\">https://example.invalid/</a><br>Runs in your browser. Nothing is uploaded.</p>",
+        "copyReport": "Comms Clarity Scorer report\n11 buzzwords. 9 concrete facts.\nOverall: C (75/100) — Readable, but corporate mush is creeping in.\n\nConcreteness: 100/100\nStrengths: 100/100\nEmpty quote detector: 0/100 — 1/1 quotes empty\nBuzzword density: 0/100 — 11 matches\nSentence length: 74/100 — average 20.4 words\nReadability: 77/100 — grade 10.9\nPassive voice: 65/100 — 37.5%\nHedging: 79/100\nSuperlatives/absolutes: 65/100\nNominalisation: 100/100\nSelf-reference: 100/100 — 0 company-facing, 0 audience-facing, 0 third-party sentences\nAcronym load: 76/100 — 2 never expanded\nInverted pyramid: 50/100\nConsistency: 100/100 — 0 issue type(s)\nEnglish variant (british-oxford): 95/100 — 1 mismatch(es)\n\nTop fixes:\n1. Brindlewick Appliances launches the Q7 kettle, which boils a full cup in 45 seconds\n\nLONDON, 3 March 2026 – Brindlewick Appliances today announced the Q7, a next-generation smart kettle that is designed to leverage cutting-edge heating technology to deliver a seamless, best-in-class boiling experience for households across the UK who may be looking for an innovative solution to their morning routine.\n   Suggested rewrite: is designed to -> does\n2. \"We are thrilled to unveil this game-changing product and are committed to empowering our customers on their tea journey,\" said Dana Okafor, Chief Executive Officer of Brindlewick Appliances.\n   Worth asking yourself: A useful quote gives a reason, a number, or a next step. This gives none. Ask your spokesperson why you actually did this.\n3. It is the most advanced kettle ever made and is completely silent.\n4. The implementation of the new element was carried out by the R&D team in partnership with the BSI.\n   Suggested rewrite: The implementation of the new element -> implementing the new element\n\ncomms-clarity-scorer — analysis runs entirely in the browser, nothing uploaded.",
+        "exportPlain": "⛅ Grade C — Hazy (75/100)\n11 buzzwords. 9 concrete facts.\n\nTop five fixes:\n1. Brindlewick Appliances launches the Q7 kettle, which boils a full cup in 45 seconds\n\nLONDON, 3 March 2026 – Brindlewick Appliances today announced the Q7, a next-generation smart kettle that is designed to leverage cutting-edge heating technology to deliver a seamless, best-in-class boiling experience for households across the UK who may be looking for an innovative solution to their morning routine.\n   Suggested rewrite: is designed to -> does\n2. \"We are thrilled to unveil this game-changing product and are committed to empowering our customers on their tea journey,\" said Dana Okafor, Chief Executive Officer of Brindlewick Appliances.\n   Worth asking yourself: A useful quote gives a reason, a number, or a next step. This gives none. Ask your spokesperson why you actually did this.\n3. It is the most advanced kettle ever made and is completely silent.\n4. The implementation of the new element was carried out by the R&D team in partnership with the BSI.\n   Suggested rewrite: The implementation of the new element -> implementing the new element\n\nScored with Comms Clarity Scorer — https://example.invalid/\nRuns in your browser. Nothing is uploaded.",
+        "exportRichHtml": "<p><strong>⛅ Grade C — Hazy (75/100)</strong></p><p>11 buzzwords. 9 concrete facts.</p><p><strong>Top five fixes</strong></p><ol><li>Brindlewick Appliances launches the Q7 kettle, which boils a full cup in 45 seconds\n\nLONDON, 3 March 2026 – Brindlewick Appliances today announced the Q7, a next-generation smart kettle that is designed to leverage cutting-edge heating technology to deliver a seamless, best-in-class boiling experience for households across the UK who may be looking for an innovative solution to their morning routine.<br><em>Suggested rewrite:</em> is designed to → does</li><li>&quot;We are thrilled to unveil this game-changing product and are committed to empowering our customers on their tea journey,&quot; said Dana Okafor, Chief Executive Officer of Brindlewick Appliances.<br><em>Worth asking yourself:</em> A useful quote gives a reason, a number, or a next step. This gives none. Ask your spokesperson why you actually did this.</li><li>It is the most advanced kettle ever made and is completely silent.</li><li>The implementation of the new element was carried out by the R&amp;D team in partnership with the BSI.<br><em>Suggested rewrite:</em> The implementation of the new element → implementing the new element</li></ol><p>Scored with Comms Clarity Scorer — <a href=\"https://example.invalid/\">https://example.invalid/</a><br>Runs in your browser. Nothing is uploaded.</p>",
         "share": "Clarity score: C Hazy. 11 buzzwords, 9 concrete facts.\nScored with https://example.invalid/"
       },
       "findings": {
@@ -143,7 +143,7 @@
             "superlative": 0,
             "nominal": 0,
             "acronym": 0,
-            "passive": true,
+            "passive": false,
             "precise": 0
           },
           {
@@ -397,16 +397,6 @@
             "label": "is designed"
           },
           {
-            "start": 409,
-            "end": 421,
-            "label": "are thrilled"
-          },
-          {
-            "start": 463,
-            "end": 476,
-            "label": "are committed"
-          },
-          {
             "start": 748,
             "end": 758,
             "label": "was tested"
@@ -417,9 +407,9 @@
             "label": "was carried"
           }
         ],
-        "passivePercent": 50,
-        "passiveSentenceCount": 4,
-        "passiveScore": 40,
+        "passivePercent": 37.5,
+        "passiveSentenceCount": 3,
+        "passiveScore": 65,
         "passiveSplit": {
           "withAgent": [
             {
@@ -434,16 +424,6 @@
               "start": 191,
               "end": 202,
               "label": "is designed"
-            },
-            {
-              "start": 409,
-              "end": 421,
-              "label": "are thrilled"
-            },
-            {
-              "start": 463,
-              "end": 476,
-              "label": "are committed"
             },
             {
               "start": 836,
@@ -698,7 +678,7 @@
         "selfRefCompanySharePercent": 0,
         "selfRefScore": 100,
         "lengthScore": 74.0625,
-        "overall": 74
+        "overall": 75
       }
     },
     {
@@ -1894,7 +1874,7 @@
       "variant": "british",
       "grade": "B",
       "gradeLabel": "Mostly clear",
-      "score": 86,
+      "score": 87,
       "headline": "1 buzzword. 8 concrete facts.",
       "checks": {
         "concreteness": 100,
@@ -1903,7 +1883,7 @@
         "buzzwordDensity": 87.5,
         "sentenceLength": 73.57142857142858,
         "readability": 75.50220614828206,
-        "passiveVoice": 82.85714285714286,
+        "passiveVoice": 100,
         "hedging": 100,
         "superlatives": 91.875,
         "nominalisation": 100,
@@ -1925,16 +1905,13 @@
           "sentence": "We organized the program with the council to optimize costs, and we are delighted to be the only provider who can offer this.\n\n",
           "badness": 5,
           "overBy": 0,
-          "rewrite": {
-            "kind": "question",
-            "question": "Who did it? If you'd rather not say, make that a deliberate choice rather than an accident of grammar."
-          }
+          "rewrite": null
         }
       ],
       "outputs": {
-        "copyReport": "Comms Clarity Scorer report\n1 buzzwords. 8 concrete facts.\nOverall: B (86/100) — Solid, with a few things worth tightening.\n\nConcreteness: 100/100\nStrengths: 100/100\nEmpty quote detector: 50/100 — 1/2 quotes empty\nBuzzword density: 88/100 — 1 matches\nSentence length: 74/100 — average 19.9 words\nReadability: 76/100 — grade 11.1\nPassive voice: 83/100 — 28.6%\nHedging: 100/100\nSuperlatives/absolutes: 92/100\nNominalisation: 100/100\nSelf-reference: 55/100 — 1 company-facing, 0 audience-facing, 0 third-party sentences\nAcronym load: 100/100 — 0 never expanded\nInverted pyramid: 75/100\nConsistency: 90/100 — 1 issue type(s)\nEnglish variant (british): 85/100 — 3 mismatch(es)\n\nTop fixes:\n1. Tallow & Reed Energy signs deal to supply solar power to 30 schools\n\nTallow & Reed Energy will install solar panels on 30 primary schools in Norfolk by September 2026, under a contract signed on 10 November 2025.\n2. We organized the program with the council to optimize costs, and we are delighted to be the only provider who can offer this.\n   Worth asking yourself: Who did it? If you'd rather not say, make that a deliberate choice rather than an accident of grammar.\n\ncomms-clarity-scorer — analysis runs entirely in the browser, nothing uploaded.",
-        "exportPlain": "🌤 Grade B — Mostly clear (86/100)\n1 buzzword. 8 concrete facts.\n\nTop five fixes:\n1. Tallow & Reed Energy signs deal to supply solar power to 30 schools\n\nTallow & Reed Energy will install solar panels on 30 primary schools in Norfolk by September 2026, under a contract signed on 10 November 2025.\n2. We organized the program with the council to optimize costs, and we are delighted to be the only provider who can offer this.\n   Worth asking yourself: Who did it? If you'd rather not say, make that a deliberate choice rather than an accident of grammar.\n\nScored with Comms Clarity Scorer — https://example.invalid/\nRuns in your browser. Nothing is uploaded.",
-        "exportRichHtml": "<p><strong>🌤 Grade B — Mostly clear (86/100)</strong></p><p>1 buzzword. 8 concrete facts.</p><p><strong>Top five fixes</strong></p><ol><li>Tallow &amp; Reed Energy signs deal to supply solar power to 30 schools\n\nTallow &amp; Reed Energy will install solar panels on 30 primary schools in Norfolk by September 2026, under a contract signed on 10 November 2025.</li><li>We organized the program with the council to optimize costs, and we are delighted to be the only provider who can offer this.<br><em>Worth asking yourself:</em> Who did it? If you&#39;d rather not say, make that a deliberate choice rather than an accident of grammar.</li></ol><p>Scored with Comms Clarity Scorer — <a href=\"https://example.invalid/\">https://example.invalid/</a><br>Runs in your browser. Nothing is uploaded.</p>",
+        "copyReport": "Comms Clarity Scorer report\n1 buzzwords. 8 concrete facts.\nOverall: B (87/100) — Solid, with a few things worth tightening.\n\nConcreteness: 100/100\nStrengths: 100/100\nEmpty quote detector: 50/100 — 1/2 quotes empty\nBuzzword density: 88/100 — 1 matches\nSentence length: 74/100 — average 19.9 words\nReadability: 76/100 — grade 11.1\nPassive voice: 100/100 — 14.3%\nHedging: 100/100\nSuperlatives/absolutes: 92/100\nNominalisation: 100/100\nSelf-reference: 55/100 — 1 company-facing, 0 audience-facing, 0 third-party sentences\nAcronym load: 100/100 — 0 never expanded\nInverted pyramid: 75/100\nConsistency: 90/100 — 1 issue type(s)\nEnglish variant (british): 85/100 — 3 mismatch(es)\n\nTop fixes:\n1. Tallow & Reed Energy signs deal to supply solar power to 30 schools\n\nTallow & Reed Energy will install solar panels on 30 primary schools in Norfolk by September 2026, under a contract signed on 10 November 2025.\n2. We organized the program with the council to optimize costs, and we are delighted to be the only provider who can offer this.\n\ncomms-clarity-scorer — analysis runs entirely in the browser, nothing uploaded.",
+        "exportPlain": "🌤 Grade B — Mostly clear (87/100)\n1 buzzword. 8 concrete facts.\n\nTop five fixes:\n1. Tallow & Reed Energy signs deal to supply solar power to 30 schools\n\nTallow & Reed Energy will install solar panels on 30 primary schools in Norfolk by September 2026, under a contract signed on 10 November 2025.\n2. We organized the program with the council to optimize costs, and we are delighted to be the only provider who can offer this.\n\nScored with Comms Clarity Scorer — https://example.invalid/\nRuns in your browser. Nothing is uploaded.",
+        "exportRichHtml": "<p><strong>🌤 Grade B — Mostly clear (87/100)</strong></p><p>1 buzzword. 8 concrete facts.</p><p><strong>Top five fixes</strong></p><ol><li>Tallow &amp; Reed Energy signs deal to supply solar power to 30 schools\n\nTallow &amp; Reed Energy will install solar panels on 30 primary schools in Norfolk by September 2026, under a contract signed on 10 November 2025.</li><li>We organized the program with the council to optimize costs, and we are delighted to be the only provider who can offer this.</li></ol><p>Scored with Comms Clarity Scorer — <a href=\"https://example.invalid/\">https://example.invalid/</a><br>Runs in your browser. Nothing is uploaded.</p>",
         "share": "Clarity score: B Mostly clear. 1 buzzword, 8 concrete facts.\nScored with https://example.invalid/"
       },
       "findings": {
@@ -2037,7 +2014,7 @@
             "superlative": 1,
             "nominal": 0,
             "acronym": 0,
-            "passive": true,
+            "passive": false,
             "precise": 0
           },
           {
@@ -2183,27 +2160,17 @@
         "readScore": 75.50220614828206,
         "passiveMatches": [
           {
-            "start": 532,
-            "end": 545,
-            "label": "are delighted"
-          },
-          {
             "start": 878,
             "end": 888,
             "label": "be carried"
           }
         ],
-        "passivePercent": 28.57142857142857,
-        "passiveSentenceCount": 2,
-        "passiveScore": 82.85714285714286,
+        "passivePercent": 14.285714285714285,
+        "passiveSentenceCount": 1,
+        "passiveScore": 100,
         "passiveSplit": {
           "withAgent": [],
           "noAgent": [
-            {
-              "start": 532,
-              "end": 545,
-              "label": "are delighted"
-            },
             {
               "start": 878,
               "end": 888,
@@ -2436,7 +2403,7 @@
         "selfRefCompanySharePercent": 100,
         "selfRefScore": 55,
         "lengthScore": 73.57142857142858,
-        "overall": 86
+        "overall": 87
       }
     },
     {
@@ -2445,7 +2412,7 @@
       "variant": "american",
       "grade": "B",
       "gradeLabel": "Mostly clear",
-      "score": 87,
+      "score": 88,
       "headline": "1 buzzword. 8 concrete facts.",
       "checks": {
         "concreteness": 100,
@@ -2454,7 +2421,7 @@
         "buzzwordDensity": 87.5,
         "sentenceLength": 73.57142857142858,
         "readability": 75.50220614828206,
-        "passiveVoice": 82.85714285714286,
+        "passiveVoice": 100,
         "hedging": 100,
         "superlatives": 91.875,
         "nominalisation": 100,
@@ -2476,16 +2443,13 @@
           "sentence": "We organized the program with the council to optimize costs, and we are delighted to be the only provider who can offer this.\n\n",
           "badness": 5,
           "overBy": 0,
-          "rewrite": {
-            "kind": "question",
-            "question": "Who did it? If you'd rather not say, make that a deliberate choice rather than an accident of grammar."
-          }
+          "rewrite": null
         }
       ],
       "outputs": {
-        "copyReport": "Comms Clarity Scorer report\n1 buzzwords. 8 concrete facts.\nOverall: B (87/100) — Solid, with a few things worth tightening.\n\nConcreteness: 100/100\nStrengths: 100/100\nEmpty quote detector: 50/100 — 1/2 quotes empty\nBuzzword density: 88/100 — 1 matches\nSentence length: 74/100 — average 19.9 words\nReadability: 76/100 — grade 11.1\nPassive voice: 83/100 — 28.6%\nHedging: 100/100\nSuperlatives/absolutes: 92/100\nNominalisation: 100/100\nSelf-reference: 55/100 — 1 company-facing, 0 audience-facing, 0 third-party sentences\nAcronym load: 100/100 — 0 never expanded\nInverted pyramid: 75/100\nConsistency: 90/100 — 1 issue type(s)\nEnglish variant (american): 100/100 — 0 mismatch(es)\nRegulated claims (not counted in the overall grade): 70/100 — 2 term(s)\n\nTop fixes:\n1. Tallow & Reed Energy signs deal to supply solar power to 30 schools\n\nTallow & Reed Energy will install solar panels on 30 primary schools in Norfolk by September 2026, under a contract signed on 10 November 2025.\n2. We organized the program with the council to optimize costs, and we are delighted to be the only provider who can offer this.\n   Worth asking yourself: Who did it? If you'd rather not say, make that a deliberate choice rather than an accident of grammar.\n\ncomms-clarity-scorer — analysis runs entirely in the browser, nothing uploaded.",
-        "exportPlain": "🌤 Grade B — Mostly clear (87/100)\n1 buzzword. 8 concrete facts.\n\nTop five fixes:\n1. Tallow & Reed Energy signs deal to supply solar power to 30 schools\n\nTallow & Reed Energy will install solar panels on 30 primary schools in Norfolk by September 2026, under a contract signed on 10 November 2025.\n2. We organized the program with the council to optimize costs, and we are delighted to be the only provider who can offer this.\n   Worth asking yourself: Who did it? If you'd rather not say, make that a deliberate choice rather than an accident of grammar.\n\nScored with Comms Clarity Scorer — https://example.invalid/\nRuns in your browser. Nothing is uploaded.",
-        "exportRichHtml": "<p><strong>🌤 Grade B — Mostly clear (87/100)</strong></p><p>1 buzzword. 8 concrete facts.</p><p><strong>Top five fixes</strong></p><ol><li>Tallow &amp; Reed Energy signs deal to supply solar power to 30 schools\n\nTallow &amp; Reed Energy will install solar panels on 30 primary schools in Norfolk by September 2026, under a contract signed on 10 November 2025.</li><li>We organized the program with the council to optimize costs, and we are delighted to be the only provider who can offer this.<br><em>Worth asking yourself:</em> Who did it? If you&#39;d rather not say, make that a deliberate choice rather than an accident of grammar.</li></ol><p>Scored with Comms Clarity Scorer — <a href=\"https://example.invalid/\">https://example.invalid/</a><br>Runs in your browser. Nothing is uploaded.</p>",
+        "copyReport": "Comms Clarity Scorer report\n1 buzzwords. 8 concrete facts.\nOverall: B (88/100) — Solid, with a few things worth tightening.\n\nConcreteness: 100/100\nStrengths: 100/100\nEmpty quote detector: 50/100 — 1/2 quotes empty\nBuzzword density: 88/100 — 1 matches\nSentence length: 74/100 — average 19.9 words\nReadability: 76/100 — grade 11.1\nPassive voice: 100/100 — 14.3%\nHedging: 100/100\nSuperlatives/absolutes: 92/100\nNominalisation: 100/100\nSelf-reference: 55/100 — 1 company-facing, 0 audience-facing, 0 third-party sentences\nAcronym load: 100/100 — 0 never expanded\nInverted pyramid: 75/100\nConsistency: 90/100 — 1 issue type(s)\nEnglish variant (american): 100/100 — 0 mismatch(es)\nRegulated claims (not counted in the overall grade): 70/100 — 2 term(s)\n\nTop fixes:\n1. Tallow & Reed Energy signs deal to supply solar power to 30 schools\n\nTallow & Reed Energy will install solar panels on 30 primary schools in Norfolk by September 2026, under a contract signed on 10 November 2025.\n2. We organized the program with the council to optimize costs, and we are delighted to be the only provider who can offer this.\n\ncomms-clarity-scorer — analysis runs entirely in the browser, nothing uploaded.",
+        "exportPlain": "🌤 Grade B — Mostly clear (88/100)\n1 buzzword. 8 concrete facts.\n\nTop five fixes:\n1. Tallow & Reed Energy signs deal to supply solar power to 30 schools\n\nTallow & Reed Energy will install solar panels on 30 primary schools in Norfolk by September 2026, under a contract signed on 10 November 2025.\n2. We organized the program with the council to optimize costs, and we are delighted to be the only provider who can offer this.\n\nScored with Comms Clarity Scorer — https://example.invalid/\nRuns in your browser. Nothing is uploaded.",
+        "exportRichHtml": "<p><strong>🌤 Grade B — Mostly clear (88/100)</strong></p><p>1 buzzword. 8 concrete facts.</p><p><strong>Top five fixes</strong></p><ol><li>Tallow &amp; Reed Energy signs deal to supply solar power to 30 schools\n\nTallow &amp; Reed Energy will install solar panels on 30 primary schools in Norfolk by September 2026, under a contract signed on 10 November 2025.</li><li>We organized the program with the council to optimize costs, and we are delighted to be the only provider who can offer this.</li></ol><p>Scored with Comms Clarity Scorer — <a href=\"https://example.invalid/\">https://example.invalid/</a><br>Runs in your browser. Nothing is uploaded.</p>",
         "share": "Clarity score: B Mostly clear. 1 buzzword, 8 concrete facts.\nScored with https://example.invalid/"
       },
       "findings": {
@@ -2588,7 +2552,7 @@
             "superlative": 1,
             "nominal": 0,
             "acronym": 0,
-            "passive": true,
+            "passive": false,
             "precise": 0
           },
           {
@@ -2734,27 +2698,17 @@
         "readScore": 75.50220614828206,
         "passiveMatches": [
           {
-            "start": 532,
-            "end": 545,
-            "label": "are delighted"
-          },
-          {
             "start": 878,
             "end": 888,
             "label": "be carried"
           }
         ],
-        "passivePercent": 28.57142857142857,
-        "passiveSentenceCount": 2,
-        "passiveScore": 82.85714285714286,
+        "passivePercent": 14.285714285714285,
+        "passiveSentenceCount": 1,
+        "passiveScore": 100,
         "passiveSplit": {
           "withAgent": [],
           "noAgent": [
-            {
-              "start": 532,
-              "end": 545,
-              "label": "are delighted"
-            },
             {
               "start": 878,
               "end": 888,
@@ -2985,7 +2939,486 @@
         "selfRefCompanySharePercent": 100,
         "selfRefScore": 55,
         "lengthScore": 73.57142857142858,
-        "overall": 87
+        "overall": 88
+      }
+    },
+    {
+      "fixture": "office-move.txt",
+      "sector": "general",
+      "variant": "british",
+      "grade": "B",
+      "gradeLabel": "Mostly clear",
+      "score": 81,
+      "headline": "1 buzzword. 5 concrete facts.",
+      "checks": {
+        "concreteness": 100,
+        "strengths": 100,
+        "emptyQuote": 0,
+        "buzzwordDensity": 81.25,
+        "sentenceLength": 97.08333333333333,
+        "readability": 100,
+        "passiveVoice": 73.33333333333334,
+        "hedging": 60.625,
+        "superlatives": 100,
+        "nominalisation": 100,
+        "selfReference": 55,
+        "acronymLoad": 88,
+        "invertedPyramid": 50,
+        "consistency": 80,
+        "englishVariant": 95,
+        "regulatedClaims": null
+      },
+      "topFixes": [
+        {
+          "sentence": "Harrowgate Lighting moves its head office to Leeds\n\nLEEDS, 12 May 2026 – Harrowgate Lighting today moved its head office from Sheffield to Leeds, bringing 40 staff under one roof.\n\n",
+          "badness": 3,
+          "overBy": 0,
+          "rewrite": null
+        },
+        {
+          "sentence": "\"We are delighted to announce the move, because it puts our designers and engineers in the same building,\" said Priya Lennox, Managing Director of Harrowgate Lighting.\n\n",
+          "badness": 3,
+          "overBy": 0,
+          "rewrite": {
+            "kind": "question",
+            "question": "A useful quote gives a reason, a number, or a next step. This gives none. Ask your spokesperson why you actually did this."
+          }
+        },
+        {
+          "sentence": "The device is designed to cut energy use.\n",
+          "badness": 2,
+          "overBy": 0,
+          "rewrite": {
+            "kind": "rewrite",
+            "original": "is designed to",
+            "rewrite": "does"
+          }
+        }
+      ],
+      "outputs": {
+        "copyReport": "Comms Clarity Scorer report\n1 buzzwords. 5 concrete facts.\nOverall: B (81/100) — Solid, with a few things worth tightening.\n\nConcreteness: 100/100\nStrengths: 100/100\nEmpty quote detector: 0/100 — 1/1 quotes empty\nBuzzword density: 81/100 — 1 matches\nSentence length: 97/100 — average 16.2 words\nReadability: 100/100 — grade 6.8\nPassive voice: 73/100 — 33.3%\nHedging: 61/100\nSuperlatives/absolutes: 100/100\nNominalisation: 100/100\nSelf-reference: 55/100 — 2 company-facing, 0 audience-facing, 0 third-party sentences\nAcronym load: 88/100 — 1 never expanded\nInverted pyramid: 50/100\nConsistency: 80/100 — 2 issue type(s)\nEnglish variant (british): 95/100 — 1 mismatch(es)\n\nTop fixes:\n1. Harrowgate Lighting moves its head office to Leeds\n\nLEEDS, 12 May 2026 – Harrowgate Lighting today moved its head office from Sheffield to Leeds, bringing 40 staff under one roof.\n2. \"We are delighted to announce the move, because it puts our designers and engineers in the same building,\" said Priya Lennox, Managing Director of Harrowgate Lighting.\n   Worth asking yourself: A useful quote gives a reason, a number, or a next step. This gives none. Ask your spokesperson why you actually did this.\n3. The device is designed to cut energy use.\n   Suggested rewrite: is designed to -> does\n\ncomms-clarity-scorer — analysis runs entirely in the browser, nothing uploaded.",
+        "exportPlain": "🌤 Grade B — Mostly clear (81/100)\n1 buzzword. 5 concrete facts.\n\nTop five fixes:\n1. Harrowgate Lighting moves its head office to Leeds\n\nLEEDS, 12 May 2026 – Harrowgate Lighting today moved its head office from Sheffield to Leeds, bringing 40 staff under one roof.\n2. \"We are delighted to announce the move, because it puts our designers and engineers in the same building,\" said Priya Lennox, Managing Director of Harrowgate Lighting.\n   Worth asking yourself: A useful quote gives a reason, a number, or a next step. This gives none. Ask your spokesperson why you actually did this.\n3. The device is designed to cut energy use.\n   Suggested rewrite: is designed to -> does\n\nScored with Comms Clarity Scorer — https://example.invalid/\nRuns in your browser. Nothing is uploaded.",
+        "exportRichHtml": "<p><strong>🌤 Grade B — Mostly clear (81/100)</strong></p><p>1 buzzword. 5 concrete facts.</p><p><strong>Top five fixes</strong></p><ol><li>Harrowgate Lighting moves its head office to Leeds\n\nLEEDS, 12 May 2026 – Harrowgate Lighting today moved its head office from Sheffield to Leeds, bringing 40 staff under one roof.</li><li>&quot;We are delighted to announce the move, because it puts our designers and engineers in the same building,&quot; said Priya Lennox, Managing Director of Harrowgate Lighting.<br><em>Worth asking yourself:</em> A useful quote gives a reason, a number, or a next step. This gives none. Ask your spokesperson why you actually did this.</li><li>The device is designed to cut energy use.<br><em>Suggested rewrite:</em> is designed to → does</li></ol><p>Scored with Comms Clarity Scorer — <a href=\"https://example.invalid/\">https://example.invalid/</a><br>Runs in your browser. Nothing is uploaded.</p>",
+        "share": "Clarity score: B Mostly clear. 1 buzzword, 5 concrete facts.\nScored with https://example.invalid/"
+      },
+      "findings": {
+        "sentences": [
+          {
+            "text": "Harrowgate Lighting moves its head office to Leeds\n\nLEEDS, 12 May 2026 – Harrowgate Lighting today moved its head office from Sheffield to Leeds, bringing 40 staff under one roof.\n\n",
+            "start": 0,
+            "end": 181
+          },
+          {
+            "text": "\"We are delighted to announce the move, because it puts our designers and engineers in the same building,\" said Priya Lennox, Managing Director of Harrowgate Lighting.\n\n",
+            "start": 181,
+            "end": 350
+          },
+          {
+            "text": "The company is headquartered in Leeds. ",
+            "start": 350,
+            "end": 389
+          },
+          {
+            "text": "The plan was approved last week. ",
+            "start": 389,
+            "end": 422
+          },
+          {
+            "text": "The firm's first product from the new office, the Lumen 2 desk lamp, goes on sale on 1 June 2026 at £35. ",
+            "start": 422,
+            "end": 527
+          },
+          {
+            "text": "The device is designed to cut energy use.\n",
+            "start": 527,
+            "end": 569
+          }
+        ],
+        "sentenceData": [
+          {
+            "sentence": {
+              "text": "Harrowgate Lighting moves its head office to Leeds\n\nLEEDS, 12 May 2026 – Harrowgate Lighting today moved its head office from Sheffield to Leeds, bringing 40 staff under one roof.\n\n",
+              "start": 0,
+              "end": 181
+            },
+            "clippedText": "Harrowgate Lighting moves its head office to Leeds\n\nLEEDS, 12 May 2026 – Harrowgate Lighting today moved its head office from Sheffield to Leeds, bringing 40 staff under one roof.\n\n",
+            "wordCount": 29,
+            "buzz": 0,
+            "hedge": 1,
+            "superlative": 0,
+            "nominal": 0,
+            "acronym": 1,
+            "passive": false,
+            "precise": 0
+          },
+          {
+            "sentence": {
+              "text": "\"We are delighted to announce the move, because it puts our designers and engineers in the same building,\" said Priya Lennox, Managing Director of Harrowgate Lighting.\n\n",
+              "start": 181,
+              "end": 350
+            },
+            "clippedText": "\"We are delighted to announce the move, because it puts our designers and engineers in the same building,\" said Priya Lennox, Managing Director of Harrowgate Lighting.\n\n",
+            "wordCount": 26,
+            "buzz": 1,
+            "hedge": 0,
+            "superlative": 0,
+            "nominal": 0,
+            "acronym": 0,
+            "passive": false,
+            "precise": 0
+          },
+          {
+            "sentence": {
+              "text": "The company is headquartered in Leeds. ",
+              "start": 350,
+              "end": 389
+            },
+            "clippedText": "The company is headquartered in Leeds. ",
+            "wordCount": 6,
+            "buzz": 0,
+            "hedge": 0,
+            "superlative": 0,
+            "nominal": 0,
+            "acronym": 0,
+            "passive": false,
+            "precise": 0
+          },
+          {
+            "sentence": {
+              "text": "The plan was approved last week. ",
+              "start": 389,
+              "end": 422
+            },
+            "clippedText": "The plan was approved last week. ",
+            "wordCount": 6,
+            "buzz": 0,
+            "hedge": 0,
+            "superlative": 0,
+            "nominal": 0,
+            "acronym": 0,
+            "passive": true,
+            "precise": 0
+          },
+          {
+            "sentence": {
+              "text": "The firm's first product from the new office, the Lumen 2 desk lamp, goes on sale on 1 June 2026 at £35. ",
+              "start": 422,
+              "end": 527
+            },
+            "clippedText": "The firm's first product from the new office, the Lumen 2 desk lamp, goes on sale on 1 June 2026 at £35. ",
+            "wordCount": 22,
+            "buzz": 0,
+            "hedge": 0,
+            "superlative": 0,
+            "nominal": 0,
+            "acronym": 0,
+            "passive": false,
+            "precise": 0
+          },
+          {
+            "sentence": {
+              "text": "The device is designed to cut energy use.\n",
+              "start": 527,
+              "end": 569
+            },
+            "clippedText": "The device is designed to cut energy use.\n",
+            "wordCount": 8,
+            "buzz": 0,
+            "hedge": 1,
+            "superlative": 0,
+            "nominal": 0,
+            "acronym": 0,
+            "passive": true,
+            "precise": 1
+          }
+        ],
+        "paragraphs": [
+          {
+            "start": 0,
+            "end": 50,
+            "text": "Harrowgate Lighting moves its head office to Leeds"
+          },
+          {
+            "start": 52,
+            "end": 179,
+            "text": "LEEDS, 12 May 2026 – Harrowgate Lighting today moved its head office from Sheffield to Leeds, bringing 40 staff under one roof."
+          },
+          {
+            "start": 181,
+            "end": 348,
+            "text": "\"We are delighted to announce the move, because it puts our designers and engineers in the same building,\" said Priya Lennox, Managing Director of Harrowgate Lighting."
+          },
+          {
+            "start": 350,
+            "end": 569,
+            "text": "The company is headquartered in Leeds. The plan was approved last week. The firm's first product from the new office, the Lumen 2 desk lamp, goes on sale on 1 June 2026 at £35. The device is designed to cut energy use.\n"
+          }
+        ],
+        "zones": {
+          "headline": {
+            "start": 0,
+            "end": 50
+          },
+          "lede": {
+            "text": "\"We are delighted to announce the move, because it puts our designers and engineers in the same building,\" said Priya Lennox, Managing Director of Harrowgate Lighting.\n\n",
+            "start": 181,
+            "end": 350
+          },
+          "boilerplate": null,
+          "bodyStart": 50
+        },
+        "boilerplate": null,
+        "boilerplateInfo": null,
+        "scoringEnd": 569,
+        "totalWords": 97,
+        "contentWords": 64,
+        "limit": 30,
+        "overLimit": [],
+        "avgLength": 16.166666666666668,
+        "buzzMatches": [
+          {
+            "start": 189,
+            "end": 198,
+            "label": "delighted"
+          }
+        ],
+        "buzz": {
+          "density": 1.5625,
+          "score": 81.25
+        },
+        "grade": 6.772731958762886,
+        "readScore": 100,
+        "passiveMatches": [
+          {
+            "start": 398,
+            "end": 410,
+            "label": "was approved"
+          },
+          {
+            "start": 538,
+            "end": 549,
+            "label": "is designed"
+          }
+        ],
+        "passivePercent": 33.33333333333333,
+        "passiveSentenceCount": 2,
+        "passiveScore": 73.33333333333334,
+        "passiveSplit": {
+          "withAgent": [],
+          "noAgent": [
+            {
+              "start": 398,
+              "end": 410,
+              "label": "was approved"
+            },
+            {
+              "start": 538,
+              "end": 549,
+              "label": "is designed"
+            }
+          ]
+        },
+        "hedgeMatches": [
+          {
+            "start": 62,
+            "end": 65,
+            "label": "May"
+          },
+          {
+            "start": 538,
+            "end": 552,
+            "label": "is designed to"
+          }
+        ],
+        "hedge": {
+          "density": 3.125,
+          "score": 60.625
+        },
+        "superlativeMatches": [],
+        "superlative": {
+          "density": 0,
+          "score": 100
+        },
+        "nominalMatches": [],
+        "nominal": {
+          "density": 0,
+          "score": 100
+        },
+        "nominalRewrites": [],
+        "acronymMatches": [
+          {
+            "start": 52,
+            "end": 57,
+            "label": "LEEDS"
+          }
+        ],
+        "acronymFirstUse": [
+          {
+            "start": 52,
+            "end": 57,
+            "label": "LEEDS"
+          }
+        ],
+        "acronymInfo": {
+          "uniqueCount": 1,
+          "neverExpanded": [
+            "LEEDS"
+          ]
+        },
+        "acronymScore": 88,
+        "concreteMatches": [
+          {
+            "start": 59,
+            "end": 70,
+            "label": "12 May 2026"
+          },
+          {
+            "start": 155,
+            "end": 157,
+            "label": "40"
+          },
+          {
+            "start": 478,
+            "end": 479,
+            "label": "2"
+          },
+          {
+            "start": 507,
+            "end": 518,
+            "label": "1 June 2026"
+          },
+          {
+            "start": 522,
+            "end": 525,
+            "label": "£35"
+          }
+        ],
+        "signalsPer100": 5.154639175257731,
+        "concretenessScore": 100,
+        "quoteData": [
+          {
+            "start": 181,
+            "end": 287,
+            "text": "We are delighted to announce the move, because it puts our designers and engineers in the same building,",
+            "words": 18,
+            "buzz": 1,
+            "concrete": 0,
+            "isEmpty": true,
+            "informative": true
+          }
+        ],
+        "emptyQuotes": [
+          {
+            "start": 181,
+            "end": 287,
+            "text": "We are delighted to announce the move, because it puts our designers and engineers in the same building,",
+            "words": 18,
+            "buzz": 1,
+            "concrete": 0,
+            "isEmpty": true,
+            "informative": true
+          }
+        ],
+        "informativeQuotes": [
+          {
+            "start": 181,
+            "end": 287,
+            "text": "We are delighted to announce the move, because it puts our designers and engineers in the same building,",
+            "words": 18,
+            "buzz": 1,
+            "concrete": 0,
+            "isEmpty": true,
+            "informative": true
+          }
+        ],
+        "emptyQuoteScore": 0,
+        "baselineMatches": [],
+        "preciseVerbMatches": [
+          {
+            "start": 553,
+            "end": 556,
+            "label": "cut"
+          }
+        ],
+        "plainWordMatches": [
+          {
+            "start": 42,
+            "end": 44,
+            "label": "to"
+          },
+          {
+            "start": 136,
+            "end": 138,
+            "label": "to"
+          },
+          {
+            "start": 199,
+            "end": 201,
+            "label": "to"
+          },
+          {
+            "start": 550,
+            "end": 552,
+            "label": "to"
+          },
+          {
+            "start": 564,
+            "end": 567,
+            "label": "use"
+          }
+        ],
+        "activeVoiceSentences": [],
+        "strengthSignalCount": 7,
+        "strengthsPer100": 10.9375,
+        "strengthsScore": 100,
+        "wordSwapRewrites": [
+          {
+            "start": 538,
+            "end": 552,
+            "original": "is designed to",
+            "rewrite": "does"
+          }
+        ],
+        "factDepthWords": 9,
+        "ledeHasWho": true,
+        "ledeHasWhen": false,
+        "quoteBeforeNews": false,
+        "densityDeclineOk": false,
+        "firstParaDensity": 0,
+        "lastParaDensity": 7.142857142857142,
+        "pyramidScore": 50,
+        "consistencyIssues": [
+          {
+            "type": "Doubled words",
+            "detail": "Leeds\n\nLEEDS"
+          },
+          {
+            "type": "Inconsistent capitalisation",
+            "detail": "leeds (Leeds / LEEDS)"
+          }
+        ],
+        "consistencyScore": 80,
+        "variant": "british",
+        "variantMismatches": [
+          {
+            "label": "1 quote(s) with punctuation inside",
+            "suggestion": "British style: put periods/commas outside the closing quote unless they're part of what's quoted"
+          }
+        ],
+        "variantScore": 95,
+        "regulatedEnabled": false,
+        "regulatedMatches": [],
+        "regulatedScore": 100,
+        "selfRefCompany": 2,
+        "selfRefAudience": 0,
+        "selfRefThirdParty": 0,
+        "selfRefUnclassified": 3,
+        "selfRefExcludedQuotes": 1,
+        "selfRefClassified": 2,
+        "selfRefCompanySharePercent": 100,
+        "selfRefScore": 55,
+        "lengthScore": 97.08333333333333,
+        "overall": 81
       }
     }
   ]

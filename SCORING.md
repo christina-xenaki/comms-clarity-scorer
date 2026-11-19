@@ -166,6 +166,12 @@ score = 100 − max(0, grade − 8) × readabilityPenaltyPerGrade (default 8)
 
 **What it looks for:** a "to be" verb (`is/are/was/were/be/been/being/am`), optionally followed by an adverb, followed by a word that either ends in "-ed" or appears in the `irregularVerbs` map (for irregular participles like "written," "given," "shown" — the map also stores each one's base verb form, used for the rewrite suggestions below).
 
+**What it leaves out:** some participles work as adjectives after "be", so they describe a state rather than an action someone did. "We are delighted", "the company is headquartered in Leeds" and "we are committed to" aren't passive voice, and they're among the most common phrases in press releases. Any word on the `passiveAdjectiveExclusions` list in config is never flagged after a "to be" verb, with or without an adverb in between ("are truly delighted"). The starting list is: delighted, thrilled, pleased, excited, honoured, honored, committed, dedicated, based, headquartered, located, positioned, focused, interested, concerned, involved, qualified, experienced, determined, convinced, satisfied, equipped, listed, privileged, humbled. Matching ignores case.
+
+The exclusion is unconditional, by design. It applies even when "by …" follows, so a true passive such as "the error was committed by the supplier" is also missed. That keeps the rule simple and predictable. If a word on the list causes more misses than it prevents, take it off the list. Each sector config carries its own copy of the list, so change it in every `config/config*.json` file you use.
+
+Words that aren't on the list are still flagged, including "is designed to", which hides who did the designing. `tests/fixtures/office-move.txt` checks both sides: "We are delighted to announce…" and "The company is headquartered in Leeds." are not flagged, while "The plan was approved last week." and "The device is designed to cut energy use." are.
+
 **Scoring:** unlike the other checks, this one is explicitly forgiving, per the spec ("some passive voice is fine and occasionally correct"). Only the **percentage of sentences containing at least one passive construction** above an acceptable threshold (`passiveVoiceAcceptablePercent`, default **20%**) costs points:
 
 ```
@@ -174,7 +180,7 @@ score = 100 − max(0, passivePercent − 20) × passiveVoicePenaltyPerPercent (
 
 **Source note shown in the card:** the 20% threshold is a widely repeated writing convention, not a research finding, and is labelled as such rather than presented as science — claiming otherwise would be exactly the kind of false precision this tool exists to criticise.
 
-**Known limitation:** this is a grammatical heuristic, not a parser. It will occasionally flag an adjective ending in "-ed" as passive (e.g. "we are excited"). It can also miss passive constructions using less common phrasing.
+**Known limitation:** this is a grammatical heuristic, not a parser. It can still flag an adjective ending in "-ed" that isn't on the exclusion list (e.g. "we are overjoyed"). It also misses true passives that use a word on the exclusion list, and passive constructions using less common phrasing.
 
 ### 8. Hedging & weasel words — weight `1`
 
@@ -353,6 +359,8 @@ Buzzwords count for the most per instance (×3) because they're the check with z
 
 An in-page settings panel for editing word lists without touching `config/config.json` directly. The sector switcher itself is now built (the Sector selector at the top of the page); what's still missing is a way to edit a sector's own terms from inside the browser rather than by hand-editing its JSON file. See the README's "Not yet built" list for the interface-copy strings from `COPY.md` that also aren't wired up yet (the Share button, the empty-state message, the full disclaimer link, and the exact Export footer wording).
 
+Follow-up: word lists are duplicated across six config files; consider a shared base list.
+
 ## Editing the numbers
 
 Everything above lives in `config/config.json`. To recalibrate:
@@ -360,7 +368,7 @@ Everything above lives in `config/config.json`. To recalibrate:
 - Change a `target` value to make a check stricter (lower target) or more forgiving (higher target).
 - Change a `penaltyPerPercent`/`penaltyPerGrade`/`penaltyPerWordOverAverage`/`penaltyEach`/`penaltyPerMismatch`/`penaltyPerIssueType`/`penaltyPerMatch`/`penaltyPerSharePoint` value to make the score fall faster or slower once past the target. (Exception: `clusteringMinMatches` and `clusteringShareThreshold` are currently hardcoded in `js/render.js`, not read from this file — see the "Clustering" known limitation in section A above.)
 - Change a value in `weights` to make a check matter more or less to the overall grade, or set it to `0` to turn it off entirely. (`regulatedClaims` is deliberately not a `weights` key — see section E.)
-- Add or remove words from any list (`buzzwords`, `hedges`, `superlativesAndAbsolutes`, `companyFacingTerms`, `audienceFacingTerms`, `thirdPartyTerms`, `irregularVerbs`, `nominalisationSuffixes`, `nominalisationVerbMap`, `acronymAllowlist`, `wordSwaps`, `baselineIndicators`, `preciseVerbs`, `vagueTimeframes`, `reasonIndicators`, `decisionIndicators`, `confusionGroups`, `variantWordPairs`, `alwaysIseWords`, `titleAbbreviations`, `stopwords`, `boilerplateHeadingPatterns`, `contactIndicators`) to match your own house style or sector.
+- Add or remove words from any list (`buzzwords`, `hedges`, `superlativesAndAbsolutes`, `companyFacingTerms`, `audienceFacingTerms`, `thirdPartyTerms`, `irregularVerbs`, `passiveAdjectiveExclusions`, `nominalisationSuffixes`, `nominalisationVerbMap`, `acronymAllowlist`, `wordSwaps`, `baselineIndicators`, `preciseVerbs`, `vagueTimeframes`, `reasonIndicators`, `decisionIndicators`, `confusionGroups`, `variantWordPairs`, `alwaysIseWords`, `titleAbbreviations`, `stopwords`, `boilerplateHeadingPatterns`, `contactIndicators`) to match your own house style or sector.
 - Build a new sector config for regulated claims by copying `config/config.json`, changing `sectorName`/`disclaimer`/`sourceUrl`, and setting `regulatedClaims.enabled: true` with your own `terms` list — then load it with `?config=<yourname>` (matching a file named `config/config.<yourname>.json`) until it earns a permanent spot in the Sector selector's dropdown.
 
 No code changes required for any of that — reload the page after editing `config/config.json` and the new numbers take effect immediately.

@@ -33,7 +33,7 @@ function analyze() {
   var buzzMatchesAll = genericPhraseMatches(rawText, CONFIG.buzzwords);
   var hedgeMatchesAll = genericPhraseMatches(rawText, CONFIG.hedges);
   var superlativeMatchesAll = genericPhraseMatches(rawText, CONFIG.superlativesAndAbsolutes);
-  var passiveMatchesAll = findPassiveMatches(rawText, CONFIG.irregularVerbs);
+  var passiveMatchesAll = findPassiveMatches(rawText, CONFIG.irregularVerbs, CONFIG.passiveAdjectiveExclusions);
   var nominalMatchesAll = findNominalisationMatches(rawText, CONFIG.nominalisationSuffixes);
   var acronymMatchesAll = findAcronymMatches(rawText, CONFIG.acronymAllowlist);
   var concreteMatchesAll = findConcreteSignals(rawText, CONFIG.monthNames);

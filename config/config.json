@@ -65,6 +65,14 @@
     "woven": "weave"
   },
 
+  "passiveAdjectiveExclusions": [
+    "delighted", "thrilled", "pleased", "excited", "honoured", "honored",
+    "committed", "dedicated", "based", "headquartered", "located", "positioned",
+    "focused", "interested", "concerned", "involved", "qualified", "experienced",
+    "determined", "convinced", "satisfied", "equipped", "listed", "privileged",
+    "humbled"
+  ],
+
   "nominalisationSuffixes": ["tion", "ment", "ance", "ence"],
   "nominalisationVerbMap": {
     "implementation": "implement", "provision": "provide", "utilisation": "use",
